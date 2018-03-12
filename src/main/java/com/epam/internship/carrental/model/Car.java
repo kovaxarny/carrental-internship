@@ -29,4 +29,11 @@ public class Car {
     public void setType(String type) {
         this.type = type;
     }
+
+    @Override
+    public String toString() {
+        return "Car{" +
+                "type='" + type + '\'' +
+                '}';
+    }
 }
