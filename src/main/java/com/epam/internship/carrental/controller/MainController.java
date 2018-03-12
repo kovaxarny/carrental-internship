@@ -4,10 +4,7 @@ import com.epam.internship.carrental.model.Car;
 import com.epam.internship.carrental.repository.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping(path = "/api/v1")
@@ -25,8 +22,13 @@ public class MainController {
     }
 
     @GetMapping(path="/all")
-    public @ResponseBody Iterable<Car> getAllUsers() {
-        // This returns a JSON or XML with the users
+    public @ResponseBody Iterable<Car> getAllCars() {
+        // This returns a JSON or XML with the cars
         return carRepository.findAll();
+    }
+
+    @PostMapping(path="/echo", consumes = "application/json")
+    public @ResponseBody String echoCar (@RequestBody Car car){
+        return car.toString();
     }
 }
