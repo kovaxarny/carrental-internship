@@ -24,7 +24,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @RunWith(SpringRunner.class)
-//@SpringBootTest
 @EnableWebMvc
 @WebMvcTest(value = MainController.class, secure = false)
 public class CarrentalApplicationTests {
@@ -36,7 +35,32 @@ public class CarrentalApplicationTests {
     private MainController mainController;
 
     @Test
-    public void retrieveCarData() throws Exception{
+    public void testAddNewCarAsJSONObjectPostService() throws Exception{
+        JSONObject exampleCarJson = new JSONObject();
+        exampleCarJson.put("id",1);
+        exampleCarJson.put("make", "Volvo");
+        exampleCarJson.put("model", "V60");
+        exampleCarJson.put("carType", "Sedan");
+        exampleCarJson.put("seats", 5);
+        exampleCarJson.put("fuelUsage", 5.4);
+        exampleCarJson.put(	"gearbox", "Automatic");
+        String expectedString = "Saved";
+
+        Mockito.when(mainController.addNewCar(Mockito.any(Car.class))).thenReturn(expectedString);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/v1/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(exampleCarJson.toString());
+
+        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+        MockHttpServletResponse response = result.getResponse();
+
+        Assert.assertEquals(HttpStatus.OK.value(), response.getStatus());
+        Assert.assertEquals(expectedString,response.getContentAsString());
+    }
+
+    @Test
+    public void testEchoCarService() throws Exception{
         JSONObject exampleCarJson = new JSONObject();
         exampleCarJson.put("id",1);
         exampleCarJson.put("make", "Volvo");
@@ -70,16 +94,12 @@ public class CarrentalApplicationTests {
         MockHttpServletResponse response = result.getResponse();
 
         Assert.assertEquals(HttpStatus.OK.value(), response.getStatus());
-        JSONAssert.assertEquals("Yay",expectedString,response.getContentAsString(),false);
+        JSONAssert.assertEquals(expectedString,response.getContentAsString(),false);
 
     }
 
 	@Test
-	public void contextLoads() {
-	}
-
-	@Test
-	public void CarCreation() {
+	public void CarCreationWithEmptyConstructor() {
 		Car car = new Car();
 		car.setId(1L);
 		car.setMake("Volvo");
@@ -89,7 +109,26 @@ public class CarrentalApplicationTests {
 		car.setFuelUsage(5.4);
 		car.setGearbox(Gearbox.Automatic);
 
-		Assert.assertEquals("It's fine ", car.toString(),"Car{make='Volvo', model='V60', carType=Sedan, seats=5, fuelUsage=5.4, gearbox=Automatic}" );
+        String expectedCarToString = "Car{make='Volvo', model='V60', carType=Sedan, seats=5, fuelUsage=5.4, gearbox=Automatic}";
+
+        String carToString = car.toString();
+
+        Assert.assertEquals(carToString,expectedCarToString);
 	}
+
+    @Test
+    public void CarCreationWithParameterConstructor() {
+        Car car = new Car("Volvo","V60",CarType.Sedan,5,5.4,Gearbox.Automatic);
+        String expectedCarToString = "Car{make='Volvo', model='V60', carType=Sedan, seats=5, fuelUsage=5.4, gearbox=Automatic}";
+
+        String carToString = car.toString();
+
+        Assert.assertEquals(carToString, expectedCarToString);
+    }
+
+    @Test
+    public void contextLoads() {
+    }
+
 
 }

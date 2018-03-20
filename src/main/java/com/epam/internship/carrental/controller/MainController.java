@@ -42,19 +42,16 @@ public class MainController {
 
     @GetMapping(path="/search")
     public @ResponseBody Iterable<Car> getCarsByMake(@RequestParam String make) {
-        // This returns a JSON or XML with the cars
         return carRepository.findByMake(make);
     }
 
     @GetMapping(path="/all")
     public @ResponseBody Iterable<Car> getAllCars() {
-        // This returns a JSON or XML with the cars
         return carRepository.findAll();
     }
 
     @GetMapping(path="/all/pages")
     public @ResponseBody List<Car> getAllCars(@PageableDefault Pageable pageable) {
-        // This returns a JSON or XML with the cars
         Page<Car> page = carRepository.findAll(pageable);
         return page.getContent();
     }
