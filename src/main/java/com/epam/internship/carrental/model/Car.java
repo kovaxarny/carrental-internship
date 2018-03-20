@@ -40,6 +40,16 @@ public class Car {
         this.gearbox = gearbox;
     }
 
+    public static Car updateCar(Car carToUpdate, Car newCarParams) {
+        if (newCarParams.getCarType() != null) carToUpdate.setCarType(newCarParams.getCarType());
+        if (newCarParams.getFuelUsage() != 0.0) carToUpdate.setFuelUsage(newCarParams.getFuelUsage());
+        if (newCarParams.getGearbox() != null) carToUpdate.setGearbox(newCarParams.getGearbox());
+        if (newCarParams.getMake() != null) carToUpdate.setMake(newCarParams.getMake());
+        if (newCarParams.getModel() != null) carToUpdate.setModel(newCarParams.getModel());
+        if (newCarParams.getSeats() != 0) carToUpdate.setSeats(newCarParams.getSeats());
+        return carToUpdate;
+    }
+
     public Long getId() {
         return id;
     }

@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
-public interface CarRepository extends PagingAndSortingRepository<Car,Long> {
+public interface CarRepository extends PagingAndSortingRepository<Car, Long> {
 
     @Query(value = "SELECT car FROM Car AS car " +
             "WHERE car.make = :make")
