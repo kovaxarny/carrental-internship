@@ -1,7 +1,7 @@
-package com.epam.internship.carrental.model;
+package com.epam.internship.carrental.car;
 
-import com.epam.internship.carrental.enums.CarType;
-import com.epam.internship.carrental.enums.Gearbox;
+import com.epam.internship.carrental.car.enums.CarType;
+import com.epam.internship.carrental.car.enums.CarGearbox;
 
 import javax.persistence.*;
 
@@ -25,12 +25,12 @@ public class Car {
     private double fuelUsage;
 
     @Enumerated(EnumType.STRING)
-    private Gearbox gearbox;
+    private CarGearbox gearbox;
 
     public Car() {
     }
 
-    public Car(String make, String model, CarType carType, int seats, double fuelUsage, Gearbox gearbox) {
+    public Car(String make, String model, CarType carType, int seats, double fuelUsage, CarGearbox gearbox) {
         super();
         this.make = make;
         this.model = model;
@@ -98,11 +98,11 @@ public class Car {
         this.fuelUsage = fuelUsage;
     }
 
-    public Gearbox getGearbox() {
+    public CarGearbox getGearbox() {
         return gearbox;
     }
 
-    public void setGearbox(Gearbox gearbox) {
+    public void setGearbox(CarGearbox gearbox) {
         this.gearbox = gearbox;
     }
 

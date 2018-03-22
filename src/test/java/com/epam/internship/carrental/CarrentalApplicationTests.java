@@ -1,9 +1,9 @@
 package com.epam.internship.carrental;
 
-import com.epam.internship.carrental.controller.MainController;
-import com.epam.internship.carrental.enums.CarType;
-import com.epam.internship.carrental.enums.Gearbox;
-import com.epam.internship.carrental.model.Car;
+import com.epam.internship.carrental.car.CarController;
+import com.epam.internship.carrental.car.enums.CarType;
+import com.epam.internship.carrental.car.enums.CarGearbox;
+import com.epam.internship.carrental.car.Car;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
@@ -28,21 +28,21 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @RunWith(SpringRunner.class)
 @EnableWebMvc
 @EnableSpringDataWebSupport
-@WebMvcTest(value = MainController.class, secure = false)
+@WebMvcTest(value = CarController.class, secure = false)
 public class CarrentalApplicationTests {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private MainController mainController;
+    private CarController carController;
 
 
     @Test
     public void AllCarsWithAuthorizationServiceTest() throws Exception {
         ResponseEntity expectedResponseEntity = new ResponseEntity(HttpStatus.OK);
 
-        Mockito.when(mainController.getAllCarsWithAuthorization(Mockito.any(Pageable.class), Mockito.anyString()))
+        Mockito.when(carController.getAllCarsWithAuthorization(Mockito.any(Pageable.class), Mockito.anyString()))
                 .thenReturn(expectedResponseEntity);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/v1/car").header("Authorization",
@@ -58,7 +58,7 @@ public class CarrentalApplicationTests {
     public void FailingAllCarsWithAuthorizationServiceTest() throws Exception {
         ResponseEntity expectedResponseEntity = new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        Mockito.when(mainController.getAllCarsWithAuthorization(Mockito.any(Pageable.class), Mockito.anyString()))
+        Mockito.when(carController.getAllCarsWithAuthorization(Mockito.any(Pageable.class), Mockito.anyString()))
                 .thenReturn(expectedResponseEntity);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/v1/car").header("Authorization",
@@ -83,7 +83,7 @@ public class CarrentalApplicationTests {
         exampleCarJson.put("gearbox", "Automatic");
         String expectedString = "Saved";
 
-        Mockito.when(mainController.addNewCar(Mockito.any(Car.class))).thenReturn(expectedString);
+        Mockito.when(carController.addNewCar(Mockito.any(Car.class))).thenReturn(expectedString);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/v1/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -116,10 +116,10 @@ public class CarrentalApplicationTests {
                 "\t\"gearbox\": \"Automatic\"\n" +
                 "}";
 
-        Car mockCar = new Car("Volvo", "V60", CarType.Sedan, 5, 5.4, Gearbox.Automatic);
+        Car mockCar = new Car("Volvo", "V60", CarType.Sedan, 5, 5.4, CarGearbox.Automatic);
 
         Mockito.when(
-                mainController.echoCar(Mockito.any(Car.class))
+                carController.echoCar(Mockito.any(Car.class))
         ).thenReturn(mockCar);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/v1/echo")
@@ -144,7 +144,7 @@ public class CarrentalApplicationTests {
         car.setCarType(CarType.Sedan);
         car.setSeats(5);
         car.setFuelUsage(5.4);
-        car.setGearbox(Gearbox.Automatic);
+        car.setGearbox(CarGearbox.Automatic);
 
         String expectedCarToString = "Car{make='Volvo', model='V60', carType=Sedan, seats=5, fuelUsage=5.4, gearbox=Automatic}";
 
@@ -155,7 +155,7 @@ public class CarrentalApplicationTests {
 
     @Test
     public void CarCreationWithParameterConstructor() {
-        Car car = new Car("Volvo", "V60", CarType.Sedan, 5, 5.4, Gearbox.Automatic);
+        Car car = new Car("Volvo", "V60", CarType.Sedan, 5, 5.4, CarGearbox.Automatic);
         String expectedCarToString = "Car{make='Volvo', model='V60', carType=Sedan, seats=5, fuelUsage=5.4, gearbox=Automatic}";
 
         String carToString = car.toString();

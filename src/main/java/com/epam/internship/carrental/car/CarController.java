@@ -1,9 +1,7 @@
-package com.epam.internship.carrental.controller;
+package com.epam.internship.carrental.car;
 
-import com.epam.internship.carrental.enums.CarType;
-import com.epam.internship.carrental.enums.Gearbox;
-import com.epam.internship.carrental.model.Car;
-import com.epam.internship.carrental.repository.CarRepository;
+import com.epam.internship.carrental.car.enums.CarType;
+import com.epam.internship.carrental.car.enums.CarGearbox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +16,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping(path = "/api/v1")
-public class MainController {
+public class CarController {
 
     private static final String AUTH_HEADER = "Token ";
     private static final String AUTH_TOKEN = AUTH_HEADER + "token";
@@ -29,7 +27,7 @@ public class MainController {
     @GetMapping(path = "/add")
     public @ResponseBody
     String addNewCar(@RequestParam String make, @RequestParam String model, @RequestParam CarType carType,
-                     @RequestParam int seats, @RequestParam double fuelUsage, @RequestParam Gearbox gearbox) {
+                     @RequestParam int seats, @RequestParam double fuelUsage, @RequestParam CarGearbox gearbox) {
         Car car = new Car();
         car.setMake(make);
         car.setModel(model);
@@ -41,6 +39,11 @@ public class MainController {
         return "Saved";
     }
 
+    /**
+     *
+     * @param car
+     * @return
+     */
     @PostMapping(path = "/add", consumes = "application/json")
     public @ResponseBody
     String addNewCar(@RequestBody Car car) {
@@ -115,5 +118,11 @@ public class MainController {
             Car updatedCar = Car.updateCar(carToUpdate, newCarParams);
             return new ResponseEntity<>(carRepository.save(updatedCar), HttpStatus.OK);
         }
+    }
+
+    @GetMapping(path = "/free")
+    public @ResponseBody
+    ResponseEntity<?> getAllFreeCars(@PageableDefault Pageable pageable){
+        return new ResponseEntity<>(carRepository.findAllFree(pageable),HttpStatus.OK);
     }
 }
