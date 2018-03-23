@@ -1,6 +1,7 @@
 package com.epam.internship.carrental;
 
 import com.epam.internship.carrental.car.CarController;
+import com.epam.internship.carrental.car.CarServiceImpl;
 import com.epam.internship.carrental.car.enums.CarType;
 import com.epam.internship.carrental.car.enums.CarGearbox;
 import com.epam.internship.carrental.car.Car;
@@ -35,14 +36,14 @@ public class CarrentalApplicationTests {
     private MockMvc mockMvc;
 
     @MockBean
-    private CarController carController;
+    private CarServiceImpl carService;
 
 
     @Test
     public void AllCarsWithAuthorizationServiceTest() throws Exception {
         ResponseEntity expectedResponseEntity = new ResponseEntity(HttpStatus.OK);
 
-        Mockito.when(carController.getAllCarsWithAuthorization(Mockito.any(Pageable.class), Mockito.anyString()))
+        Mockito.when(carService.getAllCarsWithAuthorization(Mockito.any(Pageable.class), Mockito.anyString()))
                 .thenReturn(expectedResponseEntity);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/v1/car").header("Authorization",
@@ -56,9 +57,9 @@ public class CarrentalApplicationTests {
 
     @Test
     public void FailingAllCarsWithAuthorizationServiceTest() throws Exception {
-        ResponseEntity expectedResponseEntity = new ResponseEntity(HttpStatus.FORBIDDEN);
+        ResponseEntity expectedResponseEntity = new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
-        Mockito.when(carController.getAllCarsWithAuthorization(Mockito.any(Pageable.class), Mockito.anyString()))
+        Mockito.when(carService.getAllCarsWithAuthorization(Mockito.any(Pageable.class), Mockito.anyString()))
                 .thenReturn(expectedResponseEntity);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/v1/car").header("Authorization",
@@ -83,7 +84,7 @@ public class CarrentalApplicationTests {
         exampleCarJson.put("gearbox", "Automatic");
         String expectedString = "Saved";
 
-        Mockito.when(carController.addNewCar(Mockito.any(Car.class))).thenReturn(expectedString);
+        Mockito.when(carService.addNewCar(Mockito.any(Car.class))).thenReturn(new ResponseEntity(HttpStatus.OK));
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/v1/add")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -93,7 +94,6 @@ public class CarrentalApplicationTests {
         MockHttpServletResponse response = result.getResponse();
 
         Assert.assertEquals(HttpStatus.OK.value(), response.getStatus());
-        Assert.assertEquals(expectedString, response.getContentAsString());
     }
 
     @Test
@@ -119,8 +119,8 @@ public class CarrentalApplicationTests {
         Car mockCar = new Car("Volvo", "V60", CarType.Sedan, 5, 5.4, CarGearbox.Automatic);
 
         Mockito.when(
-                carController.echoCar(Mockito.any(Car.class))
-        ).thenReturn(mockCar);
+                carService.echoCar(Mockito.any(Car.class))
+        ).thenReturn(new ResponseEntity<>(mockCar,HttpStatus.OK));
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/v1/echo")
                 .contentType(MediaType.APPLICATION_JSON)

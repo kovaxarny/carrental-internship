@@ -10,9 +10,9 @@ public interface CarRepository extends PagingAndSortingRepository<Car, Long> {
 
     @Query(value = "SELECT car FROM Car AS car " +
             "WHERE car.make = :make")
-    public Iterable<Car> findByMake(@Param("make") String make);
+    Iterable<Car> findByMake(@Param("make") String make);
 
     @Query(value = "SELECT car FROM Car AS car " +
             "LEFT JOIN RentedCar AS rented ON car.id=rented.carId WHERE rented.carId IS NULL")
-    public Page<Car> findAllFree(Pageable pageable);
+    Page<Car> findAllFree(Pageable pageable);
 }

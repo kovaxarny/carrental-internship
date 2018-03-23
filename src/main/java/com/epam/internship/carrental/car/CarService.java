@@ -18,4 +18,6 @@ public interface CarService {
     ResponseEntity insertNewCarWithAuthorization(Car car, String authorization);
     ResponseEntity updateCarByGivenParametersWithAuthorization(Long carId, Car newCarParams, String authorization);
     ResponseEntity getAllFreeCars(Pageable pageable);
+    ResponseEntity<?> getAllCarViewObject(Pageable pageable);
+    ResponseEntity insertNewCarFromViewObject(CarViewObject carViewObject);
 }
