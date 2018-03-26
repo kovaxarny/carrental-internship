@@ -8,6 +8,8 @@ import javax.validation.constraints.NotNull;
  * Converter utility class, which enables conversion between a Car and a CarViewObject
  */
 public class CarConverter {
+
+    private CarConverter(){};
     /**
      * The method converts the CarViewObject given in the parameter into a Car.
      *
@@ -15,14 +17,15 @@ public class CarConverter {
      * @return converted Car object
      */
     public static Car CarFromCarViewObject (@NotNull CarViewObject carViewObject){
-        Car car = new Car();
         String[] splitedCarViewObjectName = carViewObject.getFullName().split("\\s+");
-        car.setMake(splitedCarViewObjectName[0]);
-        car.setModel(splitedCarViewObjectName[1]);
-        car.setCarType(CarType.valueOf(splitedCarViewObjectName[2]));
-        car.setSeats(carViewObject.getSeats());
-        car.setFuelUsage(carViewObject.getFuelUsage());
-        car.setGearbox(carViewObject.getGearbox());
+        Car car = Car.builder()
+                .make(splitedCarViewObjectName[0])
+                .model(splitedCarViewObjectName[1])
+                .carType(CarType.valueOf(splitedCarViewObjectName[2]))
+                .seats(carViewObject.getSeats())
+                .fuelUsage(carViewObject.getFuelUsage())
+                .gearbox(carViewObject.getGearbox())
+                .build();
         return car;
     }
 

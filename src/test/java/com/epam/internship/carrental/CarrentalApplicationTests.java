@@ -116,7 +116,14 @@ public class CarrentalApplicationTests {
                 "\t\"gearbox\": \"Automatic\"\n" +
                 "}";
 
-        Car mockCar = new Car("Volvo", "V60", CarType.Sedan, 5, 5.4, CarGearbox.Automatic);
+        Car mockCar = Car.builder()
+                .make("Volvo")
+                .model("V60")
+                .carType(CarType.Sedan)
+                .fuelUsage(5.4)
+                .seats(5)
+                .gearbox(CarGearbox.Automatic)
+                .build();
 
         Mockito.when(
                 carService.echoCar(Mockito.any(Car.class))
@@ -137,30 +144,36 @@ public class CarrentalApplicationTests {
 
     @Test
     public void CarCreationWithEmptyConstructor() {
-        Car car = new Car();
-        car.setId(1L);
-        car.setMake("Volvo");
-        car.setModel("V60");
-        car.setCarType(CarType.Sedan);
-        car.setSeats(5);
-        car.setFuelUsage(5.4);
-        car.setGearbox(CarGearbox.Automatic);
-
-        String expectedCarToString = "Car{make='Volvo', model='V60', carType=Sedan, seats=5, fuelUsage=5.4, gearbox=Automatic}";
+        Car car = Car.builder()
+                .make("Volvo")
+                .model("V60")
+                .carType(CarType.Sedan)
+                .fuelUsage(5.4)
+                .seats(5)
+                .gearbox(CarGearbox.Automatic)
+                .build();
+        String expectedCarToString = "Car(id=null, make=Volvo, model=V60, carType=Sedan, seats=5, fuelUsage=5.4, gearbox=Automatic)";
 
         String carToString = car.toString();
 
-        Assert.assertEquals(carToString, expectedCarToString);
+        Assert.assertEquals(expectedCarToString, carToString);
     }
 
     @Test
     public void CarCreationWithParameterConstructor() {
-        Car car = new Car("Volvo", "V60", CarType.Sedan, 5, 5.4, CarGearbox.Automatic);
-        String expectedCarToString = "Car{make='Volvo', model='V60', carType=Sedan, seats=5, fuelUsage=5.4, gearbox=Automatic}";
+        Car car = Car.builder()
+                .make("Volvo")
+                .model("V60")
+                .carType(CarType.Sedan)
+                .fuelUsage(5.4)
+                .seats(5)
+                .gearbox(CarGearbox.Automatic)
+                .build();
+        String expectedCarToString = "Car(id=null, make=Volvo, model=V60, carType=Sedan, seats=5, fuelUsage=5.4, gearbox=Automatic)";
 
         String carToString = car.toString();
 
-        Assert.assertEquals(carToString, expectedCarToString);
+        Assert.assertEquals(expectedCarToString,carToString);
     }
 
     @Test

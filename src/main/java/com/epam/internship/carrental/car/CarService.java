@@ -107,7 +107,7 @@ public interface CarService {
      * @param pageable standard pageable parameter
      * @return ResponseEntity with all cars in CarViewObject format and Response Code 200 on success
      */
-    ResponseEntity<?> getAllCarViewObject(Pageable pageable);
+    ResponseEntity getAllCarViewObject(Pageable pageable);
 
     /**
      * Inserts a new Car into the database after converting a CarViewObject into a Car object.

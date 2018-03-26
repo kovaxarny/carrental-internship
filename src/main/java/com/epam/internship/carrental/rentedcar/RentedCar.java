@@ -1,5 +1,10 @@
 package com.epam.internship.carrental.rentedcar;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -7,7 +12,11 @@ import java.util.Date;
  * The entity class for the RentedCar table which contains currently rented cars
  */
 @Entity
-public class RentedCar {
+public @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+class RentedCar {
 
     /**
      * The id is used for identifying the records in the database.
@@ -35,46 +44,4 @@ public class RentedCar {
      */
     @Column(nullable = false)
     private Date endOfRental;
-
-    public RentedCar() {
-    }
-
-    public RentedCar(Long id, Long carId, Date startOfRental, Date endOfRental) {
-        this.id = id;
-        this.carId = carId;
-        this.startOfRental = startOfRental;
-        this.endOfRental = endOfRental;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Date getStartOfRental() {
-        return startOfRental;
-    }
-
-    public void setStartOfRental(Date startOfRental) {
-        this.startOfRental = startOfRental;
-    }
-
-    public Long getCarId() {
-        return carId;
-    }
-
-    public void setCarId(Long carId) {
-        this.carId = carId;
-    }
-
-    public Date getEndOfRental() {
-        return endOfRental;
-    }
-
-    public void setEndOfRental(Date endOfRental) {
-        this.endOfRental = endOfRental;
-    }
 }

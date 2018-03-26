@@ -1,7 +1,11 @@
 package com.epam.internship.carrental.car;
 
-import com.epam.internship.carrental.car.enums.CarType;
 import com.epam.internship.carrental.car.enums.CarGearbox;
+import com.epam.internship.carrental.car.enums.CarType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -9,10 +13,11 @@ import javax.persistence.*;
  * This is a simple entity class which models a Car object, which we use in the database.
  */
 @Entity
-public class Car {
+public @Data @Builder @NoArgsConstructor @AllArgsConstructor
+class Car {
     /**
      * The id is used for identifying the records in the database.
-     *
+     * <p>
      * It's value is generated automatically.
      */
     @Id
@@ -57,24 +62,11 @@ public class Car {
     @Enumerated(EnumType.STRING)
     private CarGearbox gearbox;
 
-    public Car() {
-    }
-
-    public Car(String make, String model, CarType carType, int seats, double fuelUsage, CarGearbox gearbox) {
-        super();
-        this.make = make;
-        this.model = model;
-        this.carType = carType;
-        this.seats = seats;
-        this.fuelUsage = fuelUsage;
-        this.gearbox = gearbox;
-    }
-
     /**
      * Updates the car defined as the first parameter, with the parameters of the second car
      * which is the second parameter.
      *
-     * @param carToUpdate updateable car
+     * @param carToUpdate  updateable car
      * @param newCarParams car with the new parameters
      * @return updated Car object
      */
@@ -86,73 +78,5 @@ public class Car {
         if (newCarParams.getModel() != null) carToUpdate.setModel(newCarParams.getModel());
         if (newCarParams.getSeats() != 0) carToUpdate.setSeats(newCarParams.getSeats());
         return carToUpdate;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getMake() {
-        return make;
-    }
-
-    public void setMake(String make) {
-        this.make = make;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
-    }
-
-    public CarType getCarType() {
-        return carType;
-    }
-
-    public void setCarType(CarType carType) {
-        this.carType = carType;
-    }
-
-    public int getSeats() {
-        return seats;
-    }
-
-    public void setSeats(int seats) {
-        this.seats = seats;
-    }
-
-    public double getFuelUsage() {
-        return fuelUsage;
-    }
-
-    public void setFuelUsage(double fuelUsage) {
-        this.fuelUsage = fuelUsage;
-    }
-
-    public CarGearbox getGearbox() {
-        return gearbox;
-    }
-
-    public void setGearbox(CarGearbox gearbox) {
-        this.gearbox = gearbox;
-    }
-
-    @Override
-    public String toString() {
-        return "Car{" +
-                "make='" + make + '\'' +
-                ", model='" + model + '\'' +
-                ", carType=" + carType +
-                ", seats=" + seats +
-                ", fuelUsage=" + fuelUsage +
-                ", gearbox=" + gearbox +
-                '}';
     }
 }
