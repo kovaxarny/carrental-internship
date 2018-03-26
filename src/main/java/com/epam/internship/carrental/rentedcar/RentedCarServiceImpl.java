@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * Implementation of the {@link com.epam.internship.carrental.rentedcar.RentedCarService} interface.
+ */
 @Service
 @Qualifier("rentedCarService")
 public class RentedCarServiceImpl implements RentedCarService{
@@ -22,6 +25,12 @@ public class RentedCarServiceImpl implements RentedCarService{
         this.rentedCarRepository = rentedCarRepository;
     }
 
+    /**
+     * {@inheritDoc}
+     * @param rentedCar the insertable rentedCar object
+     * @param authorization authorization token from the header of the request
+     * @return ResponseEntity with Response Code 200 on success, or 403 if unauthorized
+     */
     @Override
     public ResponseEntity bookCarRentalWithAuthorization(RentedCar rentedCar, String authorization) {
         if (!authorization.equals(AUTH_TOKEN)) {
@@ -31,6 +40,12 @@ public class RentedCarServiceImpl implements RentedCarService{
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    /**
+     *
+     * @param id id of the removable record
+     * @param authorization authorization token from the header of the request
+     * @return ResponseEntity with Response Code 200 on success, or 403 if unauthorized or the id doesn't exist
+     */
     @Override
     public ResponseEntity endCarRentalWithAuthorization(Long id, String authorization) {
         if (!authorization.equals(AUTH_TOKEN)) {

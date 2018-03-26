@@ -74,9 +74,9 @@ public class Car {
      * Updates the car defined as the first parameter, with the parameters of the second car
      * which is the second parameter.
      *
-     * @param carToUpdate The updateable car
-     * @param newCarParams The car with the new parameters
-     * @return the updated Car object
+     * @param carToUpdate updateable car
+     * @param newCarParams car with the new parameters
+     * @return updated Car object
      */
     public static Car updateCar(Car carToUpdate, Car newCarParams) {
         if (newCarParams.getCarType() != null) carToUpdate.setCarType(newCarParams.getCarType());
