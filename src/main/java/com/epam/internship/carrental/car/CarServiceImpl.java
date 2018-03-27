@@ -25,7 +25,7 @@ public class CarServiceImpl implements CarService {
     private final CarRepository carRepository;
 
     @Autowired
-    public CarServiceImpl(CarRepository carRepository) {
+    public CarServiceImpl(final CarRepository carRepository) {
         this.carRepository = carRepository;
     }
 
@@ -41,7 +41,9 @@ public class CarServiceImpl implements CarService {
      * @return ResponseEntity with Response Code 200 on success, 403 on failure.
      */
     @Override
-    public ResponseEntity addNewCar(String make, String model, CarType carType, int seats, double fuelUsage, CarGearbox carGearbox) {
+    public ResponseEntity addNewCar(final String make, final String model,
+                                    final CarType carType, final int seats,
+                                    final double fuelUsage, final CarGearbox carGearbox) {
         if (carRepository.existByCar(make, model, carType, seats, fuelUsage, carGearbox)) {
             return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
@@ -64,8 +66,9 @@ public class CarServiceImpl implements CarService {
      * @return ResponseEntity with Response Code 200 on success.
      */
     @Override
-    public ResponseEntity addNewCar(Car car) {
-        if (carRepository.existByCar(car.getMake(), car.getModel(), car.getCarType(), car.getSeats(), car.getFuelUsage(), car.getGearbox())) {
+    public ResponseEntity addNewCar(final Car car) {
+        if (carRepository.existByCar(car.getMake(), car.getModel(), car.getCarType(),
+                car.getSeats(), car.getFuelUsage(), car.getGearbox())) {
             return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
         carRepository.save(car);
@@ -89,7 +92,7 @@ public class CarServiceImpl implements CarService {
      * @return ResponseEntity containing all cars made by the maker and Response Code 200 on success.
      */
     @Override
-    public ResponseEntity<Iterable<Car>> getCarsByMake(String make) {
+    public ResponseEntity<Iterable<Car>> getCarsByMake(final String make) {
         return new ResponseEntity<>(carRepository.findByMake(make), HttpStatus.OK);
     }
 
@@ -100,7 +103,7 @@ public class CarServiceImpl implements CarService {
      * @return ResponseEntity with Page of Cars and Response Code 200 on success.
      */
     @Override
-    public ResponseEntity<Page<Car>> getAllCars(Pageable pageable) {
+    public ResponseEntity<Page<Car>> getAllCars(final Pageable pageable) {
         return new ResponseEntity<>(carRepository.findAll(pageable), HttpStatus.OK);
     }
 
@@ -111,7 +114,7 @@ public class CarServiceImpl implements CarService {
      * @return ResponseEntity containing the Car and Response Code 200 on success.
      */
     @Override
-    public ResponseEntity<Car> echoCar(Car car) {
+    public ResponseEntity<Car> echoCar(final Car car) {
         return new ResponseEntity<>(car, HttpStatus.OK);
     }
 
@@ -124,7 +127,8 @@ public class CarServiceImpl implements CarService {
      * or Response Code 403 if there is no token specified in the request.
      */
     @Override
-    public ResponseEntity<Page<Car>> getAllCarsWithAuthorization(Pageable pageable, String authorization) {
+    public ResponseEntity<Page<Car>> getAllCarsWithAuthorization(final Pageable pageable,
+                                                                 final String authorization) {
         if (!authorization.equals(AUTH_TOKEN)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
@@ -140,7 +144,8 @@ public class CarServiceImpl implements CarService {
      * or Response Code 403 if unauthorized, or the car with carId doesn't exist
      */
     @Override
-    public ResponseEntity<Optional<Car>> getCarByIdWithAuthorization(Long carId, String authorization) {
+    public ResponseEntity<Optional<Car>> getCarByIdWithAuthorization(final Long carId,
+                                                                     final String authorization) {
         if (!authorization.equals(AUTH_TOKEN)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
@@ -156,7 +161,8 @@ public class CarServiceImpl implements CarService {
      * or Response Code 403 if unauthorized
      */
     @Override
-    public ResponseEntity<Car> insertNewCarWithAuthorization(Car car, String authorization) {
+    public ResponseEntity<Car> insertNewCarWithAuthorization(final Car car,
+                                                             final String authorization) {
         if (!authorization.equals(AUTH_TOKEN)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
@@ -173,7 +179,9 @@ public class CarServiceImpl implements CarService {
      * or Response Code 403 if unauthorized or the car doesn't exist
      */
     @Override
-    public ResponseEntity<Car> updateCarByGivenParametersWithAuthorization(Long carId, Car newCarParams, String authorization) {
+    public ResponseEntity<Car> updateCarByGivenParametersWithAuthorization(final Long carId,
+                                                                           final Car newCarParams,
+                                                                           final String authorization) {
         if (!authorization.equals(AUTH_TOKEN)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
@@ -194,7 +202,7 @@ public class CarServiceImpl implements CarService {
      * @return ResponseEntity with the free cars in a pageable format and Response Code 200 on success
      */
     @Override
-    public ResponseEntity<Page<Car>> getAllFreeCars(Pageable pageable) {
+    public ResponseEntity<Page<Car>> getAllFreeCars(final Pageable pageable) {
         return new ResponseEntity<>(carRepository.findAllFree(pageable), HttpStatus.OK);
     }
 
@@ -205,7 +213,7 @@ public class CarServiceImpl implements CarService {
      * @return ResponseEntity with all cars in CarViewObject format and Response Code 200 on success
      */
     @Override
-    public ResponseEntity<Page<CarViewObject>> getAllCarViewObject(Pageable pageable) {
+    public ResponseEntity<Page<CarViewObject>> getAllCarViewObject(final Pageable pageable) {
         Page<CarViewObject> carViewObjectPage = carRepository.findAll(pageable)
                 .map(CarConverter::carViewObjectFromCar);
         return new ResponseEntity<>(carViewObjectPage, HttpStatus.OK);
@@ -218,7 +226,7 @@ public class CarServiceImpl implements CarService {
      * @return ResponseEntity with Response Code 200 on success
      */
     @Override
-    public ResponseEntity insertNewCarFromViewObject(CarViewObject carViewObject) {
+    public ResponseEntity insertNewCarFromViewObject(final CarViewObject carViewObject) {
         Car carToSave = CarConverter.carFromCarViewObject(carViewObject);
         carRepository.save(carToSave);
         return new ResponseEntity(HttpStatus.OK);

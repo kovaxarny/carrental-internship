@@ -9,7 +9,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
 /**
- * Interface to access the database of cars
+ * Interface to access the database of cars.
  */
 public interface CarRepository extends PagingAndSortingRepository<Car, Long> {
 
@@ -34,7 +34,7 @@ public interface CarRepository extends PagingAndSortingRepository<Car, Long> {
     Page<Car> findAllFree(Pageable pageable);
 
     /**
-     * Used to search for a single car in the database, defined by the parameters
+     * Used to search for a single car in the database, defined by the parameters.
      *
      * @param make      maker of the searched car
      * @param model     model of the searched car

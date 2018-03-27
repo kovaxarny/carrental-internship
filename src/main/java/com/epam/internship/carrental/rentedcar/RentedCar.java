@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * The entity class for the RentedCar table which contains currently rented cars
+ * The entity class for the RentedCar table which contains currently rented cars.
  */
 @Entity
 public @Data
@@ -20,7 +20,6 @@ class RentedCar {
 
     /**
      * The id is used for identifying the records in the database.
-     * <p>
      * It's value is generated automatically.
      */
     @Id
@@ -28,13 +27,13 @@ class RentedCar {
     private Long id;
 
     /**
-     * The rented car's ID
+     * The rented car's ID.
      */
     @Column(nullable = false)
     private Long carId;
 
     /**
-     * The date when the rent of the car begins
+     * The date when the rent of the car begins.
      */
     @Column(nullable = false)
     private Date startOfRental;

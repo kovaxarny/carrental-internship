@@ -31,7 +31,7 @@ class CarViewObject {
     private double fuelUsage;
 
     /**
-     * Gearbox of a car, with possible values from {@link com.epam.internship.carrental.car.enums.CarGearbox}
+     * Gearbox of a car, with possible values from {@link com.epam.internship.carrental.car.enums.CarGearbox}.
      */
     private CarGearbox gearbox;
 }

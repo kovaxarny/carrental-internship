@@ -26,7 +26,7 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -109,7 +109,7 @@ public class CarControllerTests {
                 .seats(5)
                 .gearbox(CarGearbox.AUTOMATIC)
                 .build();
-        Iterable<Car> iterable = Arrays.asList(mockCar);
+        Iterable<Car> iterable = Collections.singletonList(mockCar);
 
         ResponseEntity<Iterable<Car>> responseEntity = new ResponseEntity<>(iterable, HttpStatus.OK);
 
@@ -136,7 +136,7 @@ public class CarControllerTests {
                 .seats(5)
                 .gearbox(CarGearbox.AUTOMATIC)
                 .build();
-        Iterable<Car> iterable = Arrays.asList(mockCar);
+        Iterable<Car> iterable = Collections.singletonList(mockCar);
         ResponseEntity<Iterable<Car>> responseEntity = new ResponseEntity<>(iterable, HttpStatus.OK);
 
         Mockito.when(carService.getAllCars()).thenReturn(responseEntity);
@@ -159,8 +159,8 @@ public class CarControllerTests {
                 .seats(5)
                 .gearbox(CarGearbox.AUTOMATIC)
                 .build();
-        List<Car> list = Arrays.asList(mockCar);
-        Page<Car> page = new PageImpl<Car>(list);
+        List<Car> list = Collections.singletonList(mockCar);
+        Page<Car> page = new PageImpl<>(list);
         ResponseEntity<Page<Car>> responseEntity = new ResponseEntity<>(page, HttpStatus.OK);
 
         Mockito.when(carService.getAllCars(Mockito.any(Pageable.class))).thenReturn(responseEntity);
@@ -230,8 +230,8 @@ public class CarControllerTests {
                 .seats(5)
                 .gearbox(CarGearbox.AUTOMATIC)
                 .build();
-        List<Car> list = Arrays.asList(mockCar);
-        Page<Car> page = new PageImpl<Car>(list);
+        List<Car> list = Collections.singletonList(mockCar);
+        Page<Car> page = new PageImpl<>(list);
         ResponseEntity<Page<Car>> responseEntity = new ResponseEntity<>(page, HttpStatus.OK);
 
         Mockito.when(carService.getAllCarsWithAuthorization(Mockito.any(Pageable.class), Mockito.anyString()))
@@ -358,8 +358,8 @@ public class CarControllerTests {
                 .seats(5)
                 .gearbox(CarGearbox.AUTOMATIC)
                 .build();
-        List<Car> list = Arrays.asList(mockCar);
-        Page<Car> page = new PageImpl<Car>(list);
+        List<Car> list = Collections.singletonList(mockCar);
+        Page<Car> page = new PageImpl<>(list);
         ResponseEntity<Page<Car>> responseEntity = new ResponseEntity<>(page, HttpStatus.OK);
 
         Mockito.when(carService.getAllCars(Mockito.any(Pageable.class))).thenReturn(responseEntity);
@@ -381,8 +381,8 @@ public class CarControllerTests {
                 .seats(5)
                 .gearbox(CarGearbox.AUTOMATIC)
                 .build();
-        List<CarViewObject> list = Arrays.asList(mockCarViewObject);
-        Page<CarViewObject> page = new PageImpl<CarViewObject>(list);
+        List<CarViewObject> list = Collections.singletonList(mockCarViewObject);
+        Page<CarViewObject> page = new PageImpl<>(list);
         ResponseEntity<Page<CarViewObject>> responseEntity = new ResponseEntity<>(page, HttpStatus.OK);
 
         Mockito.when(carService.getAllCarViewObject(Mockito.any(Pageable.class))).thenReturn(responseEntity);

@@ -17,16 +17,13 @@ public class RentedCarController {
      */
     private RentedCarServiceImpl rentedCarService;
 
-    public RentedCarController() {
-    }
-
     /**
      * Autowired constructor for the class.
      *
      * @param rentedCarService service which provides access to the service layer.
      */
     @Autowired
-    public RentedCarController(RentedCarServiceImpl rentedCarService) {
+    public RentedCarController(final RentedCarServiceImpl rentedCarService) {
         this.rentedCarService = rentedCarService;
     }
 
@@ -45,7 +42,8 @@ public class RentedCarController {
      */
     @PutMapping(path = "/hire", consumes = "application/json")
     public @ResponseBody
-    ResponseEntity bookCarRentalWithAuthorization(@RequestBody RentedCar rentedCar, @RequestHeader("Authorization") String authorization) {
+    ResponseEntity bookCarRentalWithAuthorization(@RequestBody final RentedCar rentedCar,
+                                                  @RequestHeader("Authorization") final String authorization) {
         return rentedCarService.bookCarRentalWithAuthorization(rentedCar, authorization);
     }
 
@@ -63,7 +61,8 @@ public class RentedCarController {
      */
     @PostMapping(path = "/endrental/{id}")
     public @ResponseBody
-    ResponseEntity endCarRentalWithAuthorization(@PathVariable Long id, @RequestHeader("Authorization") String authorization) {
+    ResponseEntity endCarRentalWithAuthorization(@PathVariable final Long id,
+                                                 @RequestHeader("Authorization") final String authorization) {
         return rentedCarService.endCarRentalWithAuthorization(id, authorization);
     }
 }

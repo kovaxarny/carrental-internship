@@ -38,7 +38,7 @@ class Car {
     private String model;
 
     /**
-     * The carType can have only predefined values from
+     * The carType can have only predefined values from.
      * {@link com.epam.internship.carrental.car.enums.CarType}
      */
     @Enumerated(EnumType.STRING)
@@ -57,7 +57,7 @@ class Car {
     private double fuelUsage;
 
     /**
-     * Gearbox field has its values declared in
+     * Gearbox field has its values declared in.
      * {@link com.epam.internship.carrental.car.enums.CarGearbox}
      */
     @Enumerated(EnumType.STRING)

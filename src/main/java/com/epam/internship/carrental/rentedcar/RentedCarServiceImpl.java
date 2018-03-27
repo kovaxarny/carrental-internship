@@ -21,7 +21,7 @@ public class RentedCarServiceImpl implements RentedCarService {
     private final RentedCarRepository rentedCarRepository;
 
     @Autowired
-    public RentedCarServiceImpl(RentedCarRepository rentedCarRepository) {
+    public RentedCarServiceImpl(final RentedCarRepository rentedCarRepository) {
         this.rentedCarRepository = rentedCarRepository;
     }
 
@@ -33,7 +33,8 @@ public class RentedCarServiceImpl implements RentedCarService {
      * @return ResponseEntity with Response Code 200 on success, or 403 if unauthorized
      */
     @Override
-    public ResponseEntity bookCarRentalWithAuthorization(RentedCar rentedCar, String authorization) {
+    public ResponseEntity bookCarRentalWithAuthorization(final RentedCar rentedCar,
+                                                         final String authorization) {
         if (!authorization.equals(AUTH_TOKEN)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
@@ -44,10 +45,12 @@ public class RentedCarServiceImpl implements RentedCarService {
     /**
      * @param id            id of the removable record
      * @param authorization authorization token from the header of the request
-     * @return ResponseEntity with Response Code 200 on success, or 403 if unauthorized or the id doesn't exist
+     * @return ResponseEntity with Response Code 200 on success,
+     *          or 403 if unauthorized or the id doesn't exist
      */
     @Override
-    public ResponseEntity endCarRentalWithAuthorization(Long id, String authorization) {
+    public ResponseEntity endCarRentalWithAuthorization(final Long id,
+                                                        final String authorization) {
         if (!authorization.equals(AUTH_TOKEN)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }

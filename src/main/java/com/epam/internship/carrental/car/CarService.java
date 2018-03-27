@@ -87,7 +87,7 @@ public interface CarService {
     ResponseEntity<Optional<Car>> getCarByIdWithAuthorization(Long carId, String authorization);
 
     /**
-     * Inserts a new Car into the database, if the user has authorization
+     * Inserts a new Car into the database, if the user has authorization.
      *
      * @param car           Car object to be added to the database
      * @param authorization authorization token contained in the header of the request
@@ -97,7 +97,7 @@ public interface CarService {
     ResponseEntity<Car> insertNewCarWithAuthorization(Car car, String authorization);
 
     /**
-     * Updates the Car object in the database, with the parameters specified in the request body
+     * Updates the Car object in the database, with the parameters specified in the request body.
      *
      * @param carId         the updateable car's id
      * @param newCarParams  the new parameters of the car
@@ -116,7 +116,7 @@ public interface CarService {
     ResponseEntity<Page<Car>> getAllFreeCars(Pageable pageable);
 
     /**
-     * Retrieves all cars from the database and converts them into CarViewObjects
+     * Retrieves all cars from the database and converts them into CarViewObjects.
      *
      * @param pageable standard pageable parameter
      * @return ResponseEntity with all cars in CarViewObject format and Response Code 200 on success

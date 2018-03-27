@@ -22,7 +22,7 @@ public class CarController {
     /**
      * This field stores the instance of a CarService.
      */
-    private CarServiceImpl carService;
+    private final CarServiceImpl carService;
 
     /**
      * Autowired constructor for the class.
@@ -30,7 +30,7 @@ public class CarController {
      * @param carService service which provides access to the service layer.
      */
     @Autowired
-    public CarController(CarServiceImpl carService) {
+    public CarController(final CarServiceImpl carService) {
         this.carService = carService;
     }
 
@@ -52,9 +52,14 @@ public class CarController {
      */
     @GetMapping(path = "/add")
     public @ResponseBody
-    ResponseEntity addNewCar(@RequestParam String make, @RequestParam String model, @RequestParam CarType carType,
-                             @RequestParam int seats, @RequestParam double fuelUsage, @RequestParam CarGearbox carGearbox) {
-        return carService.addNewCar(make, model, carType, seats, fuelUsage, carGearbox);
+    ResponseEntity addNewCar(@RequestParam final String make,
+                             @RequestParam final String model,
+                             @RequestParam final CarType carType,
+                             @RequestParam final int seats,
+                             @RequestParam final double fuelUsage,
+                             @RequestParam final CarGearbox carGearbox) {
+        return carService.addNewCar(make, model, carType,
+                seats, fuelUsage, carGearbox);
     }
 
     /**
@@ -70,7 +75,7 @@ public class CarController {
      */
     @PostMapping(path = "/add", consumes = "application/json")
     public @ResponseBody
-    ResponseEntity addNewCar(@RequestBody Car car) {
+    ResponseEntity addNewCar(@RequestBody final Car car) {
         return carService.addNewCar(car);
     }
 
@@ -88,7 +93,7 @@ public class CarController {
      */
     @GetMapping(path = "/search")
     public @ResponseBody
-    ResponseEntity<Iterable<Car>> getCarsByMake(@RequestParam String make) {
+    ResponseEntity<Iterable<Car>> getCarsByMake(@RequestParam final String make) {
         return carService.getCarsByMake(make);
     }
 
@@ -123,7 +128,7 @@ public class CarController {
      */
     @GetMapping(path = "/all/pages")
     public @ResponseBody
-    ResponseEntity<Page<Car>> getAllCars(@PageableDefault Pageable pageable) {
+    ResponseEntity<Page<Car>> getAllCars(@PageableDefault final Pageable pageable) {
         return carService.getAllCars(pageable);
     }
 
@@ -140,7 +145,7 @@ public class CarController {
      */
     @PostMapping(path = "/echo", consumes = "application/json")
     public @ResponseBody
-    ResponseEntity<Car> echoCar(@RequestBody Car car) {
+    ResponseEntity<Car> echoCar(@RequestBody final Car car) {
         return carService.echoCar(car);
     }
 
@@ -160,7 +165,8 @@ public class CarController {
      */
     @GetMapping(path = "/car")
     public @ResponseBody
-    ResponseEntity<Page<Car>> getAllCarsWithAuthorization(@PageableDefault Pageable pageable, @RequestHeader("Authorization") String authorization) {
+    ResponseEntity<Page<Car>> getAllCarsWithAuthorization(@PageableDefault final Pageable pageable,
+                                                          @RequestHeader("Authorization") final String authorization) {
         return carService.getAllCarsWithAuthorization(pageable, authorization);
     }
 
@@ -180,7 +186,8 @@ public class CarController {
      */
     @GetMapping(path = "/car/{carId}")
     public @ResponseBody
-    ResponseEntity<Optional<Car>> getCarByIdWithAuthorization(@PathVariable Long carId, @RequestHeader("Authorization") String authorization) {
+    ResponseEntity<Optional<Car>> getCarByIdWithAuthorization(@PathVariable final Long carId,
+                                                              @RequestHeader("Authorization") final String authorization) {
         return carService.getCarByIdWithAuthorization(carId, authorization);
     }
 
@@ -200,7 +207,8 @@ public class CarController {
      */
     @PutMapping(path = "/car", consumes = "application/json")
     public @ResponseBody
-    ResponseEntity<Car> insertNewCarWithAuthorization(@RequestBody Car car, @RequestHeader("Authorization") String authorization) {
+    ResponseEntity<Car> insertNewCarWithAuthorization(@RequestBody final Car car,
+                                                      @RequestHeader("Authorization") final String authorization) {
         return carService.insertNewCarWithAuthorization(car, authorization);
     }
 
@@ -222,7 +230,9 @@ public class CarController {
      */
     @PostMapping(path = "/updatecar/{carId}", consumes = "application/json")
     public @ResponseBody
-    ResponseEntity<Car> updateCarByGivenParametersWithAuthorization(@PathVariable Long carId, @RequestBody Car newCarParams, @RequestHeader("Authorization") String authorization) {
+    ResponseEntity<Car> updateCarByGivenParametersWithAuthorization(@PathVariable final Long carId,
+                                                                    @RequestBody final Car newCarParams,
+                                                                    @RequestHeader("Authorization") final String authorization) {
         return carService.updateCarByGivenParametersWithAuthorization(carId, newCarParams, authorization);
     }
 
@@ -240,7 +250,7 @@ public class CarController {
      */
     @GetMapping(path = "/free")
     public @ResponseBody
-    ResponseEntity<Page<Car>> getAllFreeCars(@PageableDefault Pageable pageable) {
+    ResponseEntity<Page<Car>> getAllFreeCars(@PageableDefault final Pageable pageable) {
         return carService.getAllFreeCars(pageable);
     }
 
@@ -258,7 +268,7 @@ public class CarController {
      */
     @GetMapping(path = "/car/allCarVo")
     public @ResponseBody
-    ResponseEntity<Page<CarViewObject>> getAllCarViewObject(@PageableDefault Pageable pageable) {
+    ResponseEntity<Page<CarViewObject>> getAllCarViewObject(@PageableDefault final Pageable pageable) {
         return carService.getAllCarViewObject(pageable);
     }
 
@@ -276,7 +286,7 @@ public class CarController {
      */
     @PutMapping(path = "/car/carVO", consumes = "application/json")
     public @ResponseBody
-    ResponseEntity insertNewCarFromViewObject(@RequestBody CarViewObject carViewObject) {
+    ResponseEntity insertNewCarFromViewObject(@RequestBody final CarViewObject carViewObject) {
         return carService.insertNewCarFromViewObject(carViewObject);
     }
 }
