@@ -38,14 +38,15 @@ public class RentedCarController {
      *     URL /api/v2/hire
      * </pre>
      * Sample call /api/v2/hire
-     * @param rentedCar RentedCar object
+     *
+     * @param rentedCar     RentedCar object
      * @param authorization authorization token from the header of the request
      * @return ResponseEntity with Response Code 200 on success, or 403 if unauthorized
      */
     @PutMapping(path = "/hire", consumes = "application/json")
     public @ResponseBody
-    ResponseEntity<?> bookCarRentalWithAuthorization(@RequestBody RentedCar rentedCar, @RequestHeader("Authorization") String authorization){
-        return rentedCarService.bookCarRentalWithAuthorization(rentedCar,authorization);
+    ResponseEntity bookCarRentalWithAuthorization(@RequestBody RentedCar rentedCar, @RequestHeader("Authorization") String authorization) {
+        return rentedCarService.bookCarRentalWithAuthorization(rentedCar, authorization);
     }
 
     /**
@@ -55,13 +56,14 @@ public class RentedCarController {
      *     URL /api/v2/endrental/{id}
      * </pre>
      * Sample call /api/v2/endrental/1
-     * @param id id of the record
+     *
+     * @param id            id of the record
      * @param authorization authorization token from the header of the request
      * @return ResponseEntity with Response Code 200 on success, or 403 if unauthorized
      */
     @PostMapping(path = "/endrental/{id}")
     public @ResponseBody
-    ResponseEntity<?> endCarRentalWithAuthorization(@PathVariable Long id,@RequestHeader("Authorization") String authorization){
-        return rentedCarService.endCarRentalWithAuthorization(id,authorization);
+    ResponseEntity endCarRentalWithAuthorization(@PathVariable Long id, @RequestHeader("Authorization") String authorization) {
+        return rentedCarService.endCarRentalWithAuthorization(id, authorization);
     }
 }

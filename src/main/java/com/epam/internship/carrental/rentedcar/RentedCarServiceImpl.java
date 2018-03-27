@@ -13,7 +13,7 @@ import java.util.Optional;
  */
 @Service
 @Qualifier("rentedCarService")
-public class RentedCarServiceImpl implements RentedCarService{
+public class RentedCarServiceImpl implements RentedCarService {
 
     private static final String AUTH_HEADER = "Token ";
     private static final String AUTH_TOKEN = AUTH_HEADER + "employee_token";
@@ -27,7 +27,8 @@ public class RentedCarServiceImpl implements RentedCarService{
 
     /**
      * {@inheritDoc}
-     * @param rentedCar the insertable rentedCar object
+     *
+     * @param rentedCar     the insertable rentedCar object
      * @param authorization authorization token from the header of the request
      * @return ResponseEntity with Response Code 200 on success, or 403 if unauthorized
      */
@@ -41,8 +42,7 @@ public class RentedCarServiceImpl implements RentedCarService{
     }
 
     /**
-     *
-     * @param id id of the removable record
+     * @param id            id of the removable record
      * @param authorization authorization token from the header of the request
      * @return ResponseEntity with Response Code 200 on success, or 403 if unauthorized or the id doesn't exist
      */

@@ -2,10 +2,7 @@ package com.epam.internship.carrental.car;
 
 import com.epam.internship.carrental.car.enums.CarGearbox;
 import com.epam.internship.carrental.car.enums.CarType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -13,7 +10,11 @@ import javax.persistence.*;
  * This is a simple entity class which models a Car object, which we use in the database.
  */
 @Entity
-public @Data @Builder @NoArgsConstructor @AllArgsConstructor
+public @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(exclude = "id")
 class Car {
     /**
      * The id is used for identifying the records in the database.
@@ -61,22 +62,4 @@ class Car {
      */
     @Enumerated(EnumType.STRING)
     private CarGearbox gearbox;
-
-    /**
-     * Updates the car defined as the first parameter, with the parameters of the second car
-     * which is the second parameter.
-     *
-     * @param carToUpdate  updateable car
-     * @param newCarParams car with the new parameters
-     * @return updated Car object
-     */
-    public static Car updateCar(Car carToUpdate, Car newCarParams) {
-        if (newCarParams.getCarType() != null) carToUpdate.setCarType(newCarParams.getCarType());
-        if (newCarParams.getFuelUsage() != 0.0) carToUpdate.setFuelUsage(newCarParams.getFuelUsage());
-        if (newCarParams.getGearbox() != null) carToUpdate.setGearbox(newCarParams.getGearbox());
-        if (newCarParams.getMake() != null) carToUpdate.setMake(newCarParams.getMake());
-        if (newCarParams.getModel() != null) carToUpdate.setModel(newCarParams.getModel());
-        if (newCarParams.getSeats() != 0) carToUpdate.setSeats(newCarParams.getSeats());
-        return carToUpdate;
-    }
 }

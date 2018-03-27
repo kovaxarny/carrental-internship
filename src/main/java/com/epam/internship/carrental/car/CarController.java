@@ -3,11 +3,14 @@ package com.epam.internship.carrental.car;
 import com.epam.internship.carrental.car.enums.CarGearbox;
 import com.epam.internship.carrental.car.enums.CarType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 /**
  * CarController providing a REST Api endpoint.
@@ -20,12 +23,6 @@ public class CarController {
      * This field stores the instance of a CarService.
      */
     private CarServiceImpl carService;
-
-    /**
-     * Empty constructor for the class.
-     */
-    public CarController() {
-    }
 
     /**
      * Autowired constructor for the class.
@@ -45,19 +42,19 @@ public class CarController {
      * </pre>
      * Sample call: /api/v1/add?make=Dacia&model=1310&carType=Sedan&seats=5&fuelUsage=12.7&carGearbox=Manual
      *
-     * @param make maker of the car to be added.
-     * @param model model of the car to be added.
-     * @param carType carType of the car to be added.
-     * @param seats number of seats in the car to be added.
-     * @param fuelUsage fuel usage in liter/100km of the car to be added.
+     * @param make       maker of the car to be added.
+     * @param model      model of the car to be added.
+     * @param carType    carType of the car to be added.
+     * @param seats      number of seats in the car to be added.
+     * @param fuelUsage  fuel usage in liter/100km of the car to be added.
      * @param carGearbox gearbox of the car to be added.
      * @return ResponseEntity with Response Code 200 on success.
      */
     @GetMapping(path = "/add")
     public @ResponseBody
-    ResponseEntity<?> addNewCar(@RequestParam String make, @RequestParam String model, @RequestParam CarType carType,
-                     @RequestParam int seats, @RequestParam double fuelUsage, @RequestParam CarGearbox carGearbox) {
-        return carService.addNewCar(make,model,carType,seats,fuelUsage,carGearbox);
+    ResponseEntity addNewCar(@RequestParam String make, @RequestParam String model, @RequestParam CarType carType,
+                             @RequestParam int seats, @RequestParam double fuelUsage, @RequestParam CarGearbox carGearbox) {
+        return carService.addNewCar(make, model, carType, seats, fuelUsage, carGearbox);
     }
 
     /**
@@ -73,7 +70,7 @@ public class CarController {
      */
     @PostMapping(path = "/add", consumes = "application/json")
     public @ResponseBody
-    ResponseEntity<?> addNewCar(@RequestBody Car car) {
+    ResponseEntity addNewCar(@RequestBody Car car) {
         return carService.addNewCar(car);
     }
 
@@ -87,11 +84,11 @@ public class CarController {
      *
      * @param make maker of cars to be retrieved
      * @return ResponseEntity which contains an Iterable list of cars made by the maker,
-     *          and Response Code 200 on success.
+     * and Response Code 200 on success.
      */
     @GetMapping(path = "/search")
     public @ResponseBody
-    ResponseEntity<?> getCarsByMake(@RequestParam String make) {
+    ResponseEntity<Iterable<Car>> getCarsByMake(@RequestParam String make) {
         return carService.getCarsByMake(make);
     }
 
@@ -104,11 +101,11 @@ public class CarController {
      * Sample call /api/v1/all
      *
      * @return ResponseEntity which contains an Iterable list of all cars,
-     *          and Response Code 200 on success.
+     * and Response Code 200 on success.
      */
     @GetMapping(path = "/all")
     public @ResponseBody
-    ResponseEntity<?> getAllCars() {
+    ResponseEntity<Iterable<Car>> getAllCars() {
         return carService.getAllCars();
     }
 
@@ -122,11 +119,11 @@ public class CarController {
      *
      * @param pageable standard paging parameters in the request
      * @return ResponseEntity which contains an Pageable list of all cars,
-     *          and Response Code 200 on success.
+     * and Response Code 200 on success.
      */
     @GetMapping(path = "/all/pages")
     public @ResponseBody
-    ResponseEntity<?> getAllCars(@PageableDefault Pageable pageable) {
+    ResponseEntity<Page<Car>> getAllCars(@PageableDefault Pageable pageable) {
         return carService.getAllCars(pageable);
     }
 
@@ -155,15 +152,16 @@ public class CarController {
      *     URL /api/v1/car
      * </pre>
      * Sample call /api/v1/car
-     * @param pageable standard paging parameters in the request
+     *
+     * @param pageable      standard paging parameters in the request
      * @param authorization authorization token from the header of the request
      * @return ResponseEntity which contains an Pageable list of all cars
-     *          and Response Code 200 on success, or Response Code 403 if the token doesn't match.
+     * and Response Code 200 on success, or Response Code 403 if the token doesn't match.
      */
     @GetMapping(path = "/car")
     public @ResponseBody
-    ResponseEntity<?> getAllCarsWithAuthorization(@PageableDefault Pageable pageable, @RequestHeader("Authorization") String authorization) {
-        return carService.getAllCarsWithAuthorization(pageable,authorization);
+    ResponseEntity<Page<Car>> getAllCarsWithAuthorization(@PageableDefault Pageable pageable, @RequestHeader("Authorization") String authorization) {
+        return carService.getAllCarsWithAuthorization(pageable, authorization);
     }
 
     /**
@@ -174,15 +172,16 @@ public class CarController {
      *     URL /api/v1/car/{carId}
      * </pre>
      * Sample call /api/v1/car/1
-     * @param carId id of the searched car
+     *
+     * @param carId         id of the searched car
      * @param authorization authorization token from the header of the request
      * @return ResponseEntity which contains a single Car
-     *          and Response Code 200 on success, or Response Code 403 if the token doesn't match.
+     * and Response Code 200 on success, or Response Code 403 if the token doesn't match.
      */
     @GetMapping(path = "/car/{carId}")
     public @ResponseBody
-    ResponseEntity<?> getCarByIdWithAuthorization(@PathVariable Long carId, @RequestHeader("Authorization") String authorization) {
-        return carService.getCarByIdWithAuthorization(carId,authorization);
+    ResponseEntity<Optional<Car>> getCarByIdWithAuthorization(@PathVariable Long carId, @RequestHeader("Authorization") String authorization) {
+        return carService.getCarByIdWithAuthorization(carId, authorization);
     }
 
     /**
@@ -193,15 +192,16 @@ public class CarController {
      *     URL /api/v1/car
      * </pre>
      * Sample call /api/v1/car
-     * @param car insertable Car object
+     *
+     * @param car           insertable Car object
      * @param authorization authorization token from the header of the request
      * @return ResponseEntity which contains the inserted Car
-     *          and Response Code 200 on success, or Response Code 403 if the token doesn't match.
+     * and Response Code 200 on success, or Response Code 403 if the token doesn't match.
      */
     @PutMapping(path = "/car", consumes = "application/json")
     public @ResponseBody
-    ResponseEntity<?> insertNewCarWithAuthorization(@RequestBody Car car, @RequestHeader("Authorization") String authorization) {
-        return carService.insertNewCarWithAuthorization(car,authorization);
+    ResponseEntity<Car> insertNewCarWithAuthorization(@RequestBody Car car, @RequestHeader("Authorization") String authorization) {
+        return carService.insertNewCarWithAuthorization(car, authorization);
     }
 
     /**
@@ -212,17 +212,18 @@ public class CarController {
      *     URL /api/v1/car/{carId}
      * </pre>
      * Sample call /api/v1/car/1
-     * @param carId updateable car's ID
-     * @param newCarParams updateable parameters
+     *
+     * @param carId         updateable car's ID
+     * @param newCarParams  updateable parameters
      * @param authorization authorization token from the header of the request
      * @return ResponseEntity which contains the updated Car
-     *          and Response Code 200 on success, or Response Code 403 if the token doesn't match,
-     *          or if there is no car with given ID.
+     * and Response Code 200 on success, or Response Code 403 if the token doesn't match,
+     * or if there is no car with given ID.
      */
-    @PostMapping(path = "/car/{carId}", consumes = "application/json")
+    @PostMapping(path = "/updatecar/{carId}", consumes = "application/json")
     public @ResponseBody
-    ResponseEntity<?> updateCarByGivenParametersWithAuthorization(@PathVariable Long carId, @RequestBody Car newCarParams, @RequestHeader("Authorization") String authorization) {
-        return carService.updateCarByGivenParametersWithAuthorization(carId,newCarParams,authorization);
+    ResponseEntity<Car> updateCarByGivenParametersWithAuthorization(@PathVariable Long carId, @RequestBody Car newCarParams, @RequestHeader("Authorization") String authorization) {
+        return carService.updateCarByGivenParametersWithAuthorization(carId, newCarParams, authorization);
     }
 
     /**
@@ -232,13 +233,14 @@ public class CarController {
      *     URL /api/v1/free
      * </pre>
      * Sample call /api/v1/free?page=0
+     *
      * @param pageable standard paging parameters in the request
      * @return ResponseEntity which contains an Pageable list of all free cars
-     *          and Response Code 200 on success.
+     * and Response Code 200 on success.
      */
     @GetMapping(path = "/free")
     public @ResponseBody
-    ResponseEntity<?> getAllFreeCars(@PageableDefault Pageable pageable){
+    ResponseEntity<Page<Car>> getAllFreeCars(@PageableDefault Pageable pageable) {
         return carService.getAllFreeCars(pageable);
     }
 
@@ -249,13 +251,14 @@ public class CarController {
      *     URL /api/v1/car/allCarVo
      * </pre>
      * Sample call /api/v1/car/allCarVo
+     *
      * @param pageable standard paging parameters in the request
      * @return ResponseEntity which contains an Pageable list of all cars in a viewObject format
-     *          and Response Code 200 on success.
+     * and Response Code 200 on success.
      */
     @GetMapping(path = "/car/allCarVo")
     public @ResponseBody
-    ResponseEntity<?> getAllCarViewObject(@PageableDefault Pageable pageable){
+    ResponseEntity<Page<CarViewObject>> getAllCarViewObject(@PageableDefault Pageable pageable) {
         return carService.getAllCarViewObject(pageable);
     }
 
@@ -267,12 +270,13 @@ public class CarController {
      *     URL /api/v1/car/carVO
      * </pre>
      * Sample call /api/v1/car/carVO
+     *
      * @param carViewObject insertable car in ViewObject format
      * @return ResponseEntity with Response Code 200 on success.
      */
     @PutMapping(path = "/car/carVO", consumes = "application/json")
     public @ResponseBody
-    ResponseEntity<?> insertNewCarFromViewObject(@RequestBody CarViewObject carViewObject) {
+    ResponseEntity insertNewCarFromViewObject(@RequestBody CarViewObject carViewObject) {
         return carService.insertNewCarFromViewObject(carViewObject);
     }
 }

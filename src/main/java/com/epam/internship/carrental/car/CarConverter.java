@@ -9,16 +9,18 @@ import javax.validation.constraints.NotNull;
  */
 public class CarConverter {
 
-    private CarConverter(){};
+    private CarConverter() {
+    }
+
     /**
      * The method converts the CarViewObject given in the parameter into a Car.
      *
      * @param carViewObject CarViewObject to be converted
      * @return converted Car object
      */
-    public static Car CarFromCarViewObject (@NotNull CarViewObject carViewObject){
+    public static Car carFromCarViewObject(@NotNull CarViewObject carViewObject) {
         String[] splitedCarViewObjectName = carViewObject.getFullName().split("\\s+");
-        Car car = Car.builder()
+        return Car.builder()
                 .make(splitedCarViewObjectName[0])
                 .model(splitedCarViewObjectName[1])
                 .carType(CarType.valueOf(splitedCarViewObjectName[2]))
@@ -26,7 +28,6 @@ public class CarConverter {
                 .fuelUsage(carViewObject.getFuelUsage())
                 .gearbox(carViewObject.getGearbox())
                 .build();
-        return car;
     }
 
     /**
@@ -35,7 +36,7 @@ public class CarConverter {
      * @param car Car to be converted
      * @return converted CarViewObject
      */
-    public static CarViewObject carViewObjectFromCar (@NotNull Car car){
+    public static CarViewObject carViewObjectFromCar(@NotNull Car car) {
         CarViewObject carViewObject = new CarViewObject();
         carViewObject.setFullName(car.getMake() + " " + car.getModel() + " " + car.getCarType());
         carViewObject.setFuelUsage(car.getFuelUsage());

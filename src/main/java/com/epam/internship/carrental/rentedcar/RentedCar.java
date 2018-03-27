@@ -20,7 +20,7 @@ class RentedCar {
 
     /**
      * The id is used for identifying the records in the database.
-     *
+     * <p>
      * It's value is generated automatically.
      */
     @Id
