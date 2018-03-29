@@ -2,6 +2,9 @@ package com.epam.internship.carrental.rentedcar;
 
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * RentedCarController provides a REST Api endpoint for managing the RentedCar repository.
  */
-@Api(tags="Rented Cars")
+@Api(tags = "Rented Cars")
 @Controller
 @RequestMapping(path = "/api/v2")
 public class RentedCarController {
@@ -67,4 +70,45 @@ public class RentedCarController {
                                                  @RequestHeader("Authorization") final String authorization) {
         return rentedCarService.endCarRentalWithAuthorization(id, authorization);
     }
+
+    /**
+     * Endpoint for modifying a rent's parameters defined in the request body with authorization.
+     * <pre>
+     *     Method POST
+     *     URL /api/v1/modify/{id}
+     * </pre>
+     * Sample call /api/v2/modify/1
+     *
+     * @param id updateable record's id
+     * @param updatedRentedCarParams updatable parameters
+     * @param authorization authorization token from the header of the request
+     * @return ResponseEntity with Response Code 200 on success, or 403 if unauthorized or the id doesn't exist
+     */
+    @PostMapping(path = "/modify/{id}", consumes = "application/json")
+    public @ResponseBody
+    ResponseEntity modifyCarRentalWithAuthorization(@PathVariable final Long id,
+                                                    @RequestBody final RentedCar updatedRentedCarParams,
+                                                    @RequestHeader("Authorization") final String authorization){
+        return rentedCarService.modifyCarRentalWithAuthorization(id,updatedRentedCarParams,authorization);
+    }
+
+    /**
+     * Endpoint for listing all rented Car, with authorization.
+     * <pre>
+     *     Method GET
+     *     URL /api/v2/rentedcar/all
+     * </pre>
+     * Sample call /api/v2/rentedcar/all?page=0
+     * @param pageable standard paging parameters in the request
+     * @param authorization authorization token from the header of the request
+     * @return ResponseEntity containing Page of RentedCars with Response Code 200 on success, or 403 if unauthorized
+     */
+    @GetMapping(path = "/rentedcar/all")
+    public @ResponseBody
+    ResponseEntity<Page<RentedCar>> listAllCarRentalWithAuthorization(@PageableDefault final Pageable pageable,
+                                                                      @RequestHeader("Authorization") final String authorization){
+        return rentedCarService.listAllCarRentalWithAuthorization(pageable,authorization);
+    }
+
+
 }

@@ -1,5 +1,7 @@
 package com.epam.internship.carrental.rentedcar;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 /**
@@ -23,4 +25,21 @@ public interface RentedCarService {
      * @return ResponseEntity with Response Code 200 on success, or 403 if unauthorized or the id doesn't exist
      */
     ResponseEntity endCarRentalWithAuthorization(Long id, String authorization);
+
+    /**
+     * Modifies a record in the RentedCar database.
+     *
+     * @param id modifiable rented car records is
+     * @param authorization authorization token from the header of the request
+     * @return ResponseEntity with Response Code 200 on success, or 403 if unauthorized or the id doesn't exist
+     */
+    ResponseEntity modifyCarRentalWithAuthorization(Long id,RentedCar rentedCar, String authorization);
+
+    /**
+     * Lists all record from the RentedCar database in a pageable format.
+     * @param pageable standard pageable parameters
+     * @param authorization authorization token from the header of the request
+     * @return ResponseEntity containing Page of RentedCars with Response Code 200 on success, or 403 if unauthorized
+     */
+    ResponseEntity<Page<RentedCar>> listAllCarRentalWithAuthorization(Pageable pageable, String authorization);
 }
