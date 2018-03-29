@@ -1,5 +1,6 @@
 package com.epam.internship.carrental.rentedcar;
 
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * RentedCarController provides a REST Api endpoint for managing the RentedCar repository.
  */
+@Api(tags="Rented Cars")
 @Controller
 @RequestMapping(path = "/api/v2")
 public class RentedCarController {

@@ -2,6 +2,7 @@ package com.epam.internship.carrental.car;
 
 import com.epam.internship.carrental.car.enums.CarGearbox;
 import com.epam.internship.carrental.car.enums.CarType;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,7 @@ import java.util.Optional;
 /**
  * CarController providing a REST Api endpoint.
  */
+@Api(tags="Cars")
 @Controller
 @RequestMapping(path = "/api/v1")
 public class CarController {
