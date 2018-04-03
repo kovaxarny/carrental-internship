@@ -3,6 +3,7 @@ package com.epam.internship.carrental.car;
 import com.epam.internship.carrental.car.enums.CarGearbox;
 import com.epam.internship.carrental.car.enums.CarType;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -52,6 +53,7 @@ public class CarController {
      * @param carGearbox gearbox of the car to be added.
      * @return ResponseEntity with Response Code 200 on success.
      */
+    @ApiOperation(value = "", tags="Add")
     @GetMapping(path = "/add")
     public @ResponseBody
     ResponseEntity addNewCar(@RequestParam final String make,
@@ -75,6 +77,7 @@ public class CarController {
      * @param car car to be added
      * @return ResponseEntity with Response Code 200 on success.
      */
+    @ApiOperation(value = "", tags="Add")
     @PostMapping(path = "/add", consumes = "application/json")
     public @ResponseBody
     ResponseEntity addNewCar(@RequestBody final Car car) {
