@@ -1,4 +1,4 @@
-package com.epam.internship.carrental;
+package com.epam.internship.carrental.configuration;
 
 import com.google.common.base.Predicates;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +30,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfo(
                 "Carrental REST API",
-                "Managing a carrental company.",
+                "Managing a Car rental company.",
                 "API TOS",
                 "Terms of service",
                 new Contact("Arnold Szilveszter Kovacs", "www.mylittlecarrentalcompany.com", "email@company.com"),

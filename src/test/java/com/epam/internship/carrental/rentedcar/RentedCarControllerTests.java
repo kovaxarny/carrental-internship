@@ -2,6 +2,8 @@ package com.epam.internship.carrental.rentedcar;
 
 import com.epam.internship.carrental.car.CarController;
 import com.epam.internship.carrental.car.CarServiceImpl;
+import org.junit.Assert;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -23,5 +25,8 @@ public class RentedCarControllerTests {
     @MockBean
     private CarServiceImpl carService;
 
-
+    @Test
+    public void test(){
+        Assert.assertEquals(1L,1L);
+    }
 }
