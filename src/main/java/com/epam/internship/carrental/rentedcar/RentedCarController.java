@@ -1,6 +1,8 @@
 package com.epam.internship.carrental.rentedcar;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * RentedCarController provides a REST Api endpoint for managing the RentedCar repository.
  */
-@Api(tags = "Rented Cars")
+@Api(tags = "Rental Controls")
 @Controller
 @RequestMapping(path = "/api/v2")
 public class RentedCarController {
@@ -104,6 +106,16 @@ public class RentedCarController {
      * @return ResponseEntity containing Page of RentedCars with Response Code 200 on success, or 403 if unauthorized
      */
     @GetMapping(path = "/rentedcar/all")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query",
+                    value = "Results page you want to retrieve (0..N)"),
+            @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query",
+                    value = "Number of records per page."),
+            @ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query",
+                    value = "Sorting criteria in the format: property (asc|desc). " +
+                            "Default sort order is ascending. " +
+                            "Multiple sort criteria are supported.")
+    })
     public @ResponseBody
     ResponseEntity<Page<RentedCar>> listAllCarRentalWithAuthorization(@PageableDefault final Pageable pageable,
                                                                       @RequestHeader("Authorization") final String authorization){

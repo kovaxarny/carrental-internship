@@ -2,7 +2,8 @@ package com.epam.internship.carrental.car;
 
 import com.epam.internship.carrental.car.enums.CarGearbox;
 import com.epam.internship.carrental.car.enums.CarType;
-import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,13 +12,14 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.Optional;
 
 /**
  * CarController providing a REST Api endpoint.
  */
-@Api(tags="Cars")
+//@Api(tags="Cars")
 @Controller
 @RequestMapping(path = "/api/v1")
 public class CarController {
@@ -53,7 +55,7 @@ public class CarController {
      * @param carGearbox gearbox of the car to be added.
      * @return ResponseEntity with Response Code 200 on success.
      */
-    @ApiOperation(value = "", tags="Add")
+    @ApiOperation(value = "", tags="New Car")
     @GetMapping(path = "/add")
     public @ResponseBody
     ResponseEntity addNewCar(@RequestParam final String make,
@@ -77,7 +79,7 @@ public class CarController {
      * @param car car to be added
      * @return ResponseEntity with Response Code 200 on success.
      */
-    @ApiOperation(value = "", tags="Add")
+    @ApiOperation(value = "", tags="New Car")
     @PostMapping(path = "/add", consumes = "application/json")
     public @ResponseBody
     ResponseEntity addNewCar(@RequestBody final Car car) {
@@ -96,6 +98,7 @@ public class CarController {
      * @return ResponseEntity which contains an Iterable list of cars made by the maker,
      * and Response Code 200 on success.
      */
+    @ApiOperation(value = "", tags="Searching")
     @GetMapping(path = "/search")
     public @ResponseBody
     ResponseEntity<Iterable<Car>> getCarsByMake(@RequestParam final String make) {
@@ -113,6 +116,8 @@ public class CarController {
      * @return ResponseEntity which contains an Iterable list of all cars,
      * and Response Code 200 on success.
      */
+
+    @ApiOperation(value = "", tags="All Car Listing")
     @GetMapping(path = "/all")
     public @ResponseBody
     ResponseEntity<Iterable<Car>> getAllCars() {
@@ -131,6 +136,17 @@ public class CarController {
      * @return ResponseEntity which contains an Pageable list of all cars,
      * and Response Code 200 on success.
      */
+    @ApiOperation(value = "", tags="All Car Listing")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query",
+                    value = "Results page you want to retrieve (0..N)"),
+            @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query",
+                    value = "Number of records per page."),
+            @ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query",
+                    value = "Sorting criteria in the format: property (asc|desc). " +
+                            "Default sort order is ascending. " +
+                            "Multiple sort criteria are supported.")
+    })
     @GetMapping(path = "/all/pages")
     public @ResponseBody
     ResponseEntity<Page<Car>> getAllCars(@PageableDefault final Pageable pageable) {
@@ -148,6 +164,7 @@ public class CarController {
      * @param car car JSON Object to be returned
      * @return ResponseEntity which contains a Car and Response Code 200 on success.
      */
+    @ApiIgnore
     @PostMapping(path = "/echo", consumes = "application/json")
     public @ResponseBody
     ResponseEntity<Car> echoCar(@RequestBody final Car car) {
@@ -168,6 +185,18 @@ public class CarController {
      * @return ResponseEntity which contains an Pageable list of all cars
      * and Response Code 200 on success, or Response Code 403 if the token doesn't match.
      */
+
+    @ApiOperation(value = "", tags="All Car Listing")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query",
+                    value = "Results page you want to retrieve (0..N)"),
+            @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query",
+                    value = "Number of records per page."),
+            @ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query",
+                    value = "Sorting criteria in the format: property (asc|desc). " +
+                            "Default sort order is ascending. " +
+                            "Multiple sort criteria are supported.")
+    })
     @GetMapping(path = "/car")
     public @ResponseBody
     ResponseEntity<Page<Car>> getAllCarsWithAuthorization(@PageableDefault final Pageable pageable,
@@ -189,6 +218,7 @@ public class CarController {
      * @return ResponseEntity which contains a single Car
      * and Response Code 200 on success, or Response Code 403 if the token doesn't match.
      */
+    @ApiOperation(value = "", tags="Searching")
     @GetMapping(path = "/car/{carId}")
     public @ResponseBody
     ResponseEntity<Optional<Car>> getCarByIdWithAuthorization(@PathVariable final Long carId,
@@ -210,6 +240,7 @@ public class CarController {
      * @return ResponseEntity which contains the inserted Car
      * and Response Code 200 on success, or Response Code 403 if the token doesn't match.
      */
+    @ApiOperation(value = "", tags="New Car")
     @PutMapping(path = "/car", consumes = "application/json")
     public @ResponseBody
     ResponseEntity<Car> insertNewCarWithAuthorization(@RequestBody final Car car,
@@ -233,6 +264,7 @@ public class CarController {
      * and Response Code 200 on success, or Response Code 403 if the token doesn't match,
      * or if there is no car with given ID.
      */
+    @ApiOperation(value = "", tags="Car Modification")
     @PostMapping(path = "/updatecar/{carId}", consumes = "application/json")
     public @ResponseBody
     ResponseEntity<Car> updateCarByGivenParametersWithAuthorization(@PathVariable final Long carId,
@@ -253,6 +285,17 @@ public class CarController {
      * @return ResponseEntity which contains an Pageable list of all free cars
      * and Response Code 200 on success.
      */
+    @ApiOperation(value = "", tags="Free Car Listing")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query",
+                    value = "Results page you want to retrieve (0..N)"),
+            @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query",
+                    value = "Number of records per page."),
+            @ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query",
+                    value = "Sorting criteria in the format: property (asc|desc). " +
+                            "Default sort order is ascending. " +
+                            "Multiple sort criteria are supported.")
+    })
     @GetMapping(path = "/free")
     public @ResponseBody
     ResponseEntity<Page<Car>> getAllFreeCars(@PageableDefault final Pageable pageable) {
@@ -271,6 +314,17 @@ public class CarController {
      * @return ResponseEntity which contains an Pageable list of all cars in a viewObject format
      * and Response Code 200 on success.
      */
+    @ApiOperation(value = "", tags="View Object Operations")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query",
+                    value = "Results page you want to retrieve (0..N)"),
+            @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query",
+                    value = "Number of records per page."),
+            @ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query",
+                    value = "Sorting criteria in the format: property (asc|desc). " +
+                            "Default sort order is ascending. " +
+                            "Multiple sort criteria are supported.")
+    })
     @GetMapping(path = "/car/allCarVo")
     public @ResponseBody
     ResponseEntity<Page<CarViewObject>> getAllCarViewObject(@PageableDefault final Pageable pageable) {
@@ -289,6 +343,7 @@ public class CarController {
      * @param carViewObject insertable car in ViewObject format
      * @return ResponseEntity with Response Code 200 on success.
      */
+    @ApiOperation(value = "", tags={"View Object Operations","New Car"})
     @PutMapping(path = "/car/carVO", consumes = "application/json")
     public @ResponseBody
     ResponseEntity insertNewCarFromViewObject(@RequestBody final CarViewObject carViewObject) {
