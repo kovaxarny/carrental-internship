@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.core.RowMapper;
 
 import javax.sql.DataSource;
@@ -54,7 +54,8 @@ public class BatchConfig {
     @Bean
     public FlatFileItemWriter<Car> writer() {
         FlatFileItemWriter<Car> writer = new FlatFileItemWriter<>();
-        writer.setResource(new ClassPathResource("cars.csv"));
+        writer.setResource(new FileSystemResource("cars.csv"));
+//        writer.setResource(new FileSystemResource(getClass().getClassLoader().getResource("cars.csv").getPath()));
 
         DelimitedLineAggregator<Car> lineAggregator = new DelimitedLineAggregator<>();
         lineAggregator.setDelimiter(",");
