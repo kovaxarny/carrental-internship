@@ -55,7 +55,6 @@ public class BatchConfig {
     public FlatFileItemWriter<Car> writer() {
         FlatFileItemWriter<Car> writer = new FlatFileItemWriter<>();
         writer.setResource(new FileSystemResource("cars.csv"));
-//        writer.setResource(new FileSystemResource(getClass().getClassLoader().getResource("cars.csv").getPath()));
 
         DelimitedLineAggregator<Car> lineAggregator = new DelimitedLineAggregator<>();
         lineAggregator.setDelimiter(",");

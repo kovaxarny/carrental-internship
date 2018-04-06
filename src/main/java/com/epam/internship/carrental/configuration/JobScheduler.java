@@ -1,5 +1,7 @@
 package com.epam.internship.carrental.configuration;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
@@ -15,13 +17,14 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
+//Remove these PropertySources before creating JAR
 @PropertySources({
         @PropertySource("classpath:bar.properties"),
         @PropertySource(value = "classpath:bar.properties", ignoreResourceNotFound = true)
 })
-//Remove these PropertySources before creating JAR
 @EnableScheduling
 public class JobScheduler {
+    final static Logger LOGGER = LogManager.getLogger(JobScheduler.class);
 
     @Autowired
     private JobLauncher jobLauncher;
@@ -50,6 +53,7 @@ public class JobScheduler {
                 JobExecutionAlreadyRunningException |
                 JobParametersInvalidException |
                 JobRestartException e) {
+            LOGGER.error("There was a problem executing the exportCarsJob " + e.getMessage());
             e.printStackTrace();
         }
     }
