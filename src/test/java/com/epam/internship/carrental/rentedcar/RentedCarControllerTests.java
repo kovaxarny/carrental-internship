@@ -1,6 +1,5 @@
 package com.epam.internship.carrental.rentedcar;
 
-import com.epam.internship.carrental.car.CarController;
 import com.epam.internship.carrental.car.CarServiceImpl;
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,7 +15,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @RunWith(SpringRunner.class)
 @EnableWebMvc
 @EnableSpringDataWebSupport
-@WebMvcTest(value = CarController.class, secure = false)
+@WebMvcTest(value = RentedCarController.class, secure = false)
 public class RentedCarControllerTests {
 
     @Autowired

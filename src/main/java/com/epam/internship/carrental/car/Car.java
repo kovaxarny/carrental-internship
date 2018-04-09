@@ -51,7 +51,7 @@ class Car {
     private int seats;
 
     /**
-     * The field fuelUsage is has the cars fuel usage per 100 km.
+     * The field fuelUsage has the cars fuel usage per 100 km.
      */
     @Column(nullable = false)
     private double fuelUsage;

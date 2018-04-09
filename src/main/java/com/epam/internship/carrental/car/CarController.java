@@ -1,5 +1,6 @@
 package com.epam.internship.carrental.car;
 
+import com.epam.internship.carrental.alert.search.Search;
 import com.epam.internship.carrental.car.enums.CarGearbox;
 import com.epam.internship.carrental.car.enums.CarType;
 import io.swagger.annotations.ApiImplicitParam;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -348,5 +350,11 @@ public class CarController {
     public @ResponseBody
     ResponseEntity insertNewCarFromViewObject(@RequestBody final CarViewObject carViewObject) {
         return carService.insertNewCarFromViewObject(carViewObject);
+    }
+
+    @GetMapping(value = "/car/searchbyparameters")
+    public @ResponseBody
+    ResponseEntity<List<Car>> searchCarsByParameters(@RequestBody final Search search){
+        return carService.searchCarsByParameters(search);
     }
 }

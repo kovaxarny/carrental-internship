@@ -1,5 +1,6 @@
 package com.epam.internship.carrental.car;
 
+import com.epam.internship.carrental.alert.search.Search;
 import com.epam.internship.carrental.car.enums.CarGearbox;
 import com.epam.internship.carrental.car.enums.CarType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -230,5 +232,10 @@ public class CarServiceImpl implements CarService {
         Car carToSave = CarConverter.carFromCarViewObject(carViewObject);
         carRepository.save(carToSave);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<List<Car>> searchCarsByParameters(Search search) {
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

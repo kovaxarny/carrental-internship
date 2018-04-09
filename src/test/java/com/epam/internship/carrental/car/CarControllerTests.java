@@ -1,9 +1,12 @@
 package com.epam.internship.carrental.car;
 
+import com.epam.internship.carrental.alert.search.Search;
 import com.epam.internship.carrental.car.enums.CarGearbox;
 import com.epam.internship.carrental.car.enums.CarType;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -433,5 +436,39 @@ public class CarControllerTests {
         String carToString = car.toString();
 
         Assert.assertEquals(expectedCarToString, carToString);
+    }
+
+    private JSONObject exampleSearchJson = new JSONObject();
+
+    @Before
+    public void loadData() throws JSONException {
+        exampleSearchJson.put("searchMake", "Volvo");
+        exampleSearchJson.put("searchModel", "V60");
+        exampleSearchJson.put("searchCarType", "SEDAN");
+    }
+
+    @Test
+    public void SearchCarsByParametersGET() throws Exception {
+        Car mockCar = Car.builder()
+                .make("Volvo")
+                .model("V60")
+                .carType(CarType.SEDAN)
+                .fuelUsage(5.4)
+                .seats(5)
+                .gearbox(CarGearbox.AUTOMATIC)
+                .build();
+        List<Car> list = Collections.singletonList(mockCar);
+        ResponseEntity<List<Car>> responseEntity = new ResponseEntity<>(list, HttpStatus.OK);
+
+        Mockito.when(carService.searchCarsByParameters(Mockito.any(Search.class))).thenReturn(responseEntity);
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/api/v1/car/searchbyparameters")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(exampleSearchJson.toString());
+
+        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+        MockHttpServletResponse response = result.getResponse();
+
+        Assert.assertEquals(HttpStatus.OK.value(),response.getStatus());
     }
 }

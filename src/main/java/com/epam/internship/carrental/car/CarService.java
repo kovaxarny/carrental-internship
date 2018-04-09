@@ -1,11 +1,13 @@
 package com.epam.internship.carrental.car;
 
+import com.epam.internship.carrental.alert.search.Search;
 import com.epam.internship.carrental.car.enums.CarGearbox;
 import com.epam.internship.carrental.car.enums.CarType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -130,4 +132,12 @@ public interface CarService {
      * @return ResponseEntity with Response Code 200 on success
      */
     ResponseEntity insertNewCarFromViewObject(CarViewObject carViewObject);
+
+    /**
+     * Searches for cars which matches the Search parameters.
+     *
+     * @param search search object, containing parameters
+     * @return ResponseEntity with Response Code 200 on success
+     */
+    ResponseEntity<List<Car>> searchCarsByParameters(Search search);
 }
