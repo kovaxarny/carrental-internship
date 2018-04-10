@@ -1,7 +1,5 @@
 package com.epam.internship.carrental.car;
 
-import com.epam.internship.carrental.car.enums.CarGearbox;
-import com.epam.internship.carrental.car.enums.CarType;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -9,12 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
-
-import java.util.Optional;
 
 /**
  * CarController providing a REST API endpoints.
@@ -22,6 +18,9 @@ import java.util.Optional;
 @Controller
 @RequestMapping(path = "/api/v1")
 public class CarController {
+
+    private static final String AUTH_HEADER = "Token ";
+    private static final String AUTH_TOKEN = AUTH_HEADER + "token";
 
     /**
      * This field stores the instance of a CarService.
@@ -39,35 +38,6 @@ public class CarController {
     }
 
     /**
-     * Provides endpoint for adding a new car to the database, where the Car is defined in the request parameters.
-     * <pre>
-     * Method GET
-     * URL /api/v1/add
-     * </pre>
-     * Sample call: /api/v1/add?make=Dacia&model=1310&carType=Sedan&seats=5&fuelUsage=12.7&carGearbox=Manual
-     *
-     * @param make       maker of the car to be added.
-     * @param model      model of the car to be added.
-     * @param carType    carType of the car to be added.
-     * @param seats      number of seats in the car to be added.
-     * @param fuelUsage  fuel usage in liter/100km of the car to be added.
-     * @param carGearbox gearbox of the car to be added.
-     * @return ResponseEntity with Response Code 200 on success.
-     */
-    @ApiOperation(value = "", tags = "New Car")
-    @GetMapping(path = "/add")
-    public @ResponseBody
-    ResponseEntity addNewCar(@RequestParam final String make,
-                             @RequestParam final String model,
-                             @RequestParam final CarType carType,
-                             @RequestParam final int seats,
-                             @RequestParam final double fuelUsage,
-                             @RequestParam final CarGearbox carGearbox) {
-        return carService.addNewCar(make, model, carType,
-                seats, fuelUsage, carGearbox);
-    }
-
-    /**
      * Provides endpoint for adding a new Car to the database, where the car is defined in the request body in JSON format.
      * <pre>
      * Method POST
@@ -75,14 +45,15 @@ public class CarController {
      * </pre>
      * Sample call /api/v1/add
      *
-     * @param car car to be added
+     * @param carViewObject car to be added
      * @return ResponseEntity with Response Code 200 on success.
      */
     @ApiOperation(value = "", tags = "New Car")
     @PostMapping(path = "/add", consumes = "application/json")
     public @ResponseBody
-    ResponseEntity addNewCar(@RequestBody final Car car) {
-        return carService.addNewCar(car);
+    ResponseEntity addNewCar(@RequestBody final CarViewObject carViewObject) {
+        carService.insertNewCar(carViewObject);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     /**
@@ -100,8 +71,8 @@ public class CarController {
     @ApiOperation(value = "", tags = "Searching")
     @GetMapping(path = "/search")
     public @ResponseBody
-    ResponseEntity<Iterable<Car>> getCarsByMake(@RequestParam final String make) {
-        return carService.getCarsByMake(make);
+    ResponseEntity<Iterable<CarViewObject>> getCarsByMake(@RequestParam final String make) {
+        return new ResponseEntity<>(carService.getCarsByMake(make), HttpStatus.OK);
     }
 
     /**
@@ -119,8 +90,8 @@ public class CarController {
     @ApiOperation(value = "", tags = "All Car Listing")
     @GetMapping(path = "/all")
     public @ResponseBody
-    ResponseEntity<Iterable<Car>> getAllCars() {
-        return carService.getAllCars();
+    ResponseEntity<Iterable<CarViewObject>> getAllCars() {
+        return new ResponseEntity<>(carService.getAllCars(), HttpStatus.OK);
     }
 
     /**
@@ -148,26 +119,8 @@ public class CarController {
     })
     @GetMapping(path = "/all/pages")
     public @ResponseBody
-    ResponseEntity<Page<Car>> getAllCars(@PageableDefault final Pageable pageable) {
-        return carService.getAllCars(pageable);
-    }
-
-    /**
-     * Provides endpoint for retrieving back the car object given in the body of the request as a JSON Object.
-     * <pre>
-     * Method POST
-     * URL /api/v1/echo
-     * </pre>
-     * Sample call /api/v1/echo
-     *
-     * @param car car JSON Object to be returned
-     * @return ResponseEntity which contains a Car and Response Code 200 on success.
-     */
-    @ApiIgnore
-    @PostMapping(path = "/echo", consumes = "application/json")
-    public @ResponseBody
-    ResponseEntity<Car> echoCar(@RequestBody final Car car) {
-        return carService.echoCar(car);
+    ResponseEntity<Page<CarViewObject>> getAllCars(@PageableDefault final Pageable pageable) {
+        return new ResponseEntity<>(carService.getAllCars(pageable), HttpStatus.OK);
     }
 
     /**
@@ -184,7 +137,6 @@ public class CarController {
      * @return ResponseEntity which contains an Pageable list of all cars
      * and Response Code 200 on success, or Response Code 403 if the token doesn't match.
      */
-
     @ApiOperation(value = "", tags = "All Car Listing")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query",
@@ -198,9 +150,14 @@ public class CarController {
     })
     @GetMapping(path = "/car")
     public @ResponseBody
-    ResponseEntity<Page<Car>> getAllCarsWithAuthorization(@PageableDefault final Pageable pageable,
-                                                          @RequestHeader("Authorization") final String authorization) {
-        return carService.getAllCarsWithAuthorization(pageable, authorization);
+    ResponseEntity<Page<CarViewObject>> getAllCarsWithAuthorization(@PageableDefault final Pageable pageable,
+                                                                    @RequestHeader("Authorization") final String authorization) {
+        if (!authorization.equals(AUTH_TOKEN)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        } else {
+            return new ResponseEntity<>(carService.getAllCars(pageable), HttpStatus.OK);
+        }
+
     }
 
     /**
@@ -220,9 +177,14 @@ public class CarController {
     @ApiOperation(value = "", tags = "Searching")
     @GetMapping(path = "/car/{carId}")
     public @ResponseBody
-    ResponseEntity<Optional<Car>> getCarByIdWithAuthorization(@PathVariable final Long carId,
+    ResponseEntity<CarViewObject> getCarByIdWithAuthorization(@PathVariable final Long carId,
                                                               @RequestHeader("Authorization") final String authorization) {
-        return carService.getCarByIdWithAuthorization(carId, authorization);
+        if (!authorization.equals(AUTH_TOKEN)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        } else {
+            return new ResponseEntity<>(carService.getCarById(carId), HttpStatus.OK);
+        }
+
     }
 
     /**
@@ -235,7 +197,7 @@ public class CarController {
      * </pre>
      * Sample call /api/v1/car
      *
-     * @param car           insertable Car object
+     * @param carViewObject insertable Car object
      * @param authorization authorization token from the header of the request
      * @return ResponseEntity which contains the inserted Car
      * and Response Code 200 on success, or Response Code 403 if the token doesn't match.
@@ -243,9 +205,14 @@ public class CarController {
     @ApiOperation(value = "", tags = "New Car")
     @PutMapping(path = "/car", consumes = "application/json")
     public @ResponseBody
-    ResponseEntity<Car> insertNewCarWithAuthorization(@RequestBody final Car car,
-                                                      @RequestHeader("Authorization") final String authorization) {
-        return carService.insertNewCarWithAuthorization(car, authorization);
+    ResponseEntity insertNewCarWithAuthorization(@RequestBody final CarViewObject carViewObject,
+                                                 @RequestHeader("Authorization") final String authorization) {
+        if (!authorization.equals(AUTH_TOKEN)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        } else {
+            carService.insertNewCar(carViewObject);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
     }
 
     /**
@@ -267,10 +234,14 @@ public class CarController {
     @ApiOperation(value = "", tags = "Car Modification")
     @PostMapping(path = "/updatecar/{carId}", consumes = "application/json")
     public @ResponseBody
-    ResponseEntity<Car> updateCarByGivenParametersWithAuthorization(@PathVariable final Long carId,
-                                                                    @RequestBody final Car newCarParams,
-                                                                    @RequestHeader("Authorization") final String authorization) {
-        return carService.updateCarByGivenParametersWithAuthorization(carId, newCarParams, authorization);
+    ResponseEntity<CarViewObject> updateCarByGivenParametersWithAuthorization(@PathVariable final Long carId,
+                                                                              @RequestBody final CarViewObject newCarParams,
+                                                                              @RequestHeader("Authorization") final String authorization) {
+        if (!authorization.equals(AUTH_TOKEN)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        } else {
+            return new ResponseEntity<>(carService.updateCarWithParameters(carId, newCarParams), HttpStatus.OK);
+        }
     }
 
     /**
@@ -298,8 +269,8 @@ public class CarController {
     })
     @GetMapping(path = "/free")
     public @ResponseBody
-    ResponseEntity<Page<Car>> getAllFreeCars(@PageableDefault final Pageable pageable) {
-        return carService.getAllFreeCars(pageable);
+    ResponseEntity<Page<CarViewObject>> getAllFreeCars(@PageableDefault final Pageable pageable) {
+        return new ResponseEntity<>(carService.getAllFreeCars(pageable), HttpStatus.OK);
     }
 
     /**
@@ -328,7 +299,7 @@ public class CarController {
     @GetMapping(path = "/car/allCarVo")
     public @ResponseBody
     ResponseEntity<Page<CarViewObject>> getAllCarViewObject(@PageableDefault final Pageable pageable) {
-        return carService.getAllCarViewObject(pageable);
+        return new ResponseEntity<>(carService.getAllCars(pageable), HttpStatus.OK);
     }
 
     /**
@@ -347,6 +318,7 @@ public class CarController {
     @PutMapping(path = "/car/carVO", consumes = "application/json")
     public @ResponseBody
     ResponseEntity insertNewCarFromViewObject(@RequestBody final CarViewObject carViewObject) {
-        return carService.insertNewCarFromViewObject(carViewObject);
+        carService.insertNewCar(carViewObject);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

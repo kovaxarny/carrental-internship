@@ -53,6 +53,6 @@ public interface CarRepository extends PagingAndSortingRepository<Car, Long> {
             "AND car.seats = :seats " +
             "AND car.fuelUsage = :fuelUsage " +
             "AND car.gearbox = :gearbox")
-    boolean existByCar(@Param("make") String make, @Param("model") String model, @Param("carType") CarType carType,
-                       @Param("seats") int seats, @Param("fuelUsage") double fuelUsage, @Param("gearbox") CarGearbox gearbox);
+    boolean existByCarParameters(@Param("make") String make, @Param("model") String model, @Param("carType") CarType carType,
+                                 @Param("seats") int seats, @Param("fuelUsage") double fuelUsage, @Param("gearbox") CarGearbox gearbox);
 }

@@ -2,7 +2,6 @@ package com.epam.internship.carrental.rentedcar;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 
 /**
  * Defines methods for accessing the rented car repository.
@@ -15,7 +14,7 @@ public interface RentedCarService {
      * @param authorization authorization token from the header of the request
      * @return ResponseEntity with Response Code 200 on success, or 403 if unauthorized
      */
-    ResponseEntity bookCarRentalWithAuthorization(RentedCar rentedCar, String authorization);
+    void bookCarRentalWithAuthorization(RentedCar rentedCar, String authorization);
 
     /**
      * Deletes a record form the RentedCar database.
@@ -24,7 +23,7 @@ public interface RentedCarService {
      * @param authorization authorization token from the header of the request
      * @return ResponseEntity with Response Code 200 on success, or 403 if unauthorized or the id doesn't exist
      */
-    ResponseEntity endCarRentalWithAuthorization(Long id, String authorization);
+    void endCarRentalWithAuthorization(Long id, String authorization);
 
     /**
      * Modifies a record in the RentedCar database.
@@ -33,7 +32,7 @@ public interface RentedCarService {
      * @param authorization authorization token from the header of the request
      * @return ResponseEntity with Response Code 200 on success, or 403 if unauthorized or the id doesn't exist
      */
-    ResponseEntity modifyCarRentalWithAuthorization(Long id,RentedCar rentedCar, String authorization);
+    void modifyCarRentalWithAuthorization(Long id,RentedCar rentedCar, String authorization);
 
     /**
      * Lists all record from the RentedCar database in a pageable format.
@@ -41,5 +40,5 @@ public interface RentedCarService {
      * @param authorization authorization token from the header of the request
      * @return ResponseEntity containing Page of RentedCars with Response Code 200 on success, or 403 if unauthorized
      */
-    ResponseEntity<Page<RentedCar>> listAllCarRentalWithAuthorization(Pageable pageable, String authorization);
+    Page<RentedCar> listAllCarRentalWithAuthorization(Pageable pageable, String authorization);
 }

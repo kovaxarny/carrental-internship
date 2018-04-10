@@ -4,8 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -31,50 +29,52 @@ public class RentedCarServiceImpl implements RentedCarService {
      * {@inheritDoc}
      */
     @Override
-    public ResponseEntity bookCarRentalWithAuthorization(final RentedCar rentedCar,
+    public void bookCarRentalWithAuthorization(final RentedCar rentedCar,
                                                          final String authorization) {
-        if (!authorization.equals(AUTH_TOKEN)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
+//        if (!authorization.equals(AUTH_TOKEN)) {
+//            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+//        }
         rentedCarRepository.save(rentedCar);
-        return new ResponseEntity<>(HttpStatus.OK);
+//        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public ResponseEntity endCarRentalWithAuthorization(final Long id,
+    public void endCarRentalWithAuthorization(final Long id,
                                                         final String authorization) {
-        if (!authorization.equals(AUTH_TOKEN)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-        Optional<RentedCar> optionalRentedCar = rentedCarRepository.findById(id);
-        if (!optionalRentedCar.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        } else {
-            rentedCarRepository.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
+//        if (!authorization.equals(AUTH_TOKEN)) {
+//            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+//        }
+//        Optional<RentedCar> optionalRentedCar = rentedCarRepository.findById(id);
+//        if (!optionalRentedCar.isPresent()) {
+//            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+//        } else {
+//
+//            return new ResponseEntity<>(HttpStatus.OK);
+//        }
+        rentedCarRepository.deleteById(id);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public ResponseEntity modifyCarRentalWithAuthorization(final Long id,
+    public void modifyCarRentalWithAuthorization(final Long id,
                                                            final RentedCar rentedCar,
                                                            final String authorization) {
-        if (!authorization.equals(AUTH_TOKEN)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
+//        if (!authorization.equals(AUTH_TOKEN)) {
+//            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+//        }
         Optional<RentedCar> optionalRentedCar = rentedCarRepository.findById(id);
         if (!optionalRentedCar.isPresent()) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+//            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }else {
             RentedCar modifiableRentedCar = optionalRentedCar.get();
             RentedCar modifiedRentedCar = RentedCarUtilities.modifyRentedCar(modifiableRentedCar,rentedCar);
-            return new ResponseEntity<>(rentedCarRepository.save(modifiedRentedCar),HttpStatus.OK);
+            rentedCarRepository.save(modifiedRentedCar);
+//            return new ResponseEntity<>(rentedCarRepository.save(modifiedRentedCar),HttpStatus.OK);
         }
     }
 
@@ -82,11 +82,11 @@ public class RentedCarServiceImpl implements RentedCarService {
      * {@inheritDoc}
      */
     @Override
-    public ResponseEntity<Page<RentedCar>> listAllCarRentalWithAuthorization(final Pageable pageable,
+    public Page<RentedCar> listAllCarRentalWithAuthorization(final Pageable pageable,
                                                                              final String authorization) {
-        if (!authorization.equals(AUTH_TOKEN)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-        return new ResponseEntity<>(rentedCarRepository.findAll(pageable),HttpStatus.OK);
+//        if (!authorization.equals(AUTH_TOKEN)) {
+//            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+//        }
+        return rentedCarRepository.findAll(pageable);
     }
 }
