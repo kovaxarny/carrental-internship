@@ -17,9 +17,8 @@ import springfox.documentation.annotations.ApiIgnore;
 import java.util.Optional;
 
 /**
- * CarController providing a REST Api endpoint.
+ * CarController providing a REST API endpoints.
  */
-//@Api(tags="Cars")
 @Controller
 @RequestMapping(path = "/api/v1")
 public class CarController {
@@ -40,7 +39,7 @@ public class CarController {
     }
 
     /**
-     * Adds a new Car to the database, where the Car is defined in the request parameters.
+     * Provides endpoint for adding a new car to the database, where the Car is defined in the request parameters.
      * <pre>
      * Method GET
      * URL /api/v1/add
@@ -55,7 +54,7 @@ public class CarController {
      * @param carGearbox gearbox of the car to be added.
      * @return ResponseEntity with Response Code 200 on success.
      */
-    @ApiOperation(value = "", tags="New Car")
+    @ApiOperation(value = "", tags = "New Car")
     @GetMapping(path = "/add")
     public @ResponseBody
     ResponseEntity addNewCar(@RequestParam final String make,
@@ -69,7 +68,7 @@ public class CarController {
     }
 
     /**
-     * Adds a new Car to the database. The car is defined in the body of the request in JSON format.
+     * Provides endpoint for adding a new Car to the database, where the car is defined in the request body in JSON format.
      * <pre>
      * Method POST
      * URL /api/v1/add
@@ -79,7 +78,7 @@ public class CarController {
      * @param car car to be added
      * @return ResponseEntity with Response Code 200 on success.
      */
-    @ApiOperation(value = "", tags="New Car")
+    @ApiOperation(value = "", tags = "New Car")
     @PostMapping(path = "/add", consumes = "application/json")
     public @ResponseBody
     ResponseEntity addNewCar(@RequestBody final Car car) {
@@ -87,18 +86,18 @@ public class CarController {
     }
 
     /**
-     * Used to get all cars by a given maker.
+     * The method returns all cars by a single maker, where the maker is specified in the request parameters.
      * <pre>
      * Method GET
      * URL /api/v1/search
      * </pre>
-     * Sample call /api/v1/add?make=Dacia
+     * Sample call /api/v1/search?make=Dacia
      *
      * @param make maker of cars to be retrieved
      * @return ResponseEntity which contains an Iterable list of cars made by the maker,
      * and Response Code 200 on success.
      */
-    @ApiOperation(value = "", tags="Searching")
+    @ApiOperation(value = "", tags = "Searching")
     @GetMapping(path = "/search")
     public @ResponseBody
     ResponseEntity<Iterable<Car>> getCarsByMake(@RequestParam final String make) {
@@ -106,7 +105,7 @@ public class CarController {
     }
 
     /**
-     * Gets all car from the database.
+     * Provides endpoint for retrieving all cars from the database.
      * <pre>
      * Method GET
      * URL /api/v1/all
@@ -117,7 +116,7 @@ public class CarController {
      * and Response Code 200 on success.
      */
 
-    @ApiOperation(value = "", tags="All Car Listing")
+    @ApiOperation(value = "", tags = "All Car Listing")
     @GetMapping(path = "/all")
     public @ResponseBody
     ResponseEntity<Iterable<Car>> getAllCars() {
@@ -125,7 +124,7 @@ public class CarController {
     }
 
     /**
-     * The method returns all car from the database in a pageable format.
+     * Provides endpoint for retrieving all cars from the database in a pageable format.
      * <pre>
      * Method GET
      * URL /api/v1/all/pages
@@ -136,7 +135,7 @@ public class CarController {
      * @return ResponseEntity which contains an Pageable list of all cars,
      * and Response Code 200 on success.
      */
-    @ApiOperation(value = "", tags="All Car Listing")
+    @ApiOperation(value = "", tags = "All Car Listing")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query",
                     value = "Results page you want to retrieve (0..N)"),
@@ -154,7 +153,7 @@ public class CarController {
     }
 
     /**
-     * A simple method which echoes back the car object given in the body of the request as a JSON Object.
+     * Provides endpoint for retrieving back the car object given in the body of the request as a JSON Object.
      * <pre>
      * Method POST
      * URL /api/v1/echo
@@ -172,8 +171,8 @@ public class CarController {
     }
 
     /**
-     * The method returns the list of all cars from the database in a pageable format,
-     * to those who already have the authorization token.
+     * Provides endpoint for retrieving the list of all cars from the database in a pageable format.
+     * Available only to authorized users
      * <pre>
      *     Method GET
      *     URL /api/v1/car
@@ -186,7 +185,7 @@ public class CarController {
      * and Response Code 200 on success, or Response Code 403 if the token doesn't match.
      */
 
-    @ApiOperation(value = "", tags="All Car Listing")
+    @ApiOperation(value = "", tags = "All Car Listing")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query",
                     value = "Results page you want to retrieve (0..N)"),
@@ -205,8 +204,8 @@ public class CarController {
     }
 
     /**
-     * The method returns for a single car defined by an ID in the parameter of the request if the request sender
-     * owns the authorization token.
+     * Provides endpoint for retrieving a single car defined by an ID in the parameter of the request.
+     * Available only to authorized users
      * <pre>
      *     Method GET
      *     URL /api/v1/car/{carId}
@@ -218,7 +217,7 @@ public class CarController {
      * @return ResponseEntity which contains a single Car
      * and Response Code 200 on success, or Response Code 403 if the token doesn't match.
      */
-    @ApiOperation(value = "", tags="Searching")
+    @ApiOperation(value = "", tags = "Searching")
     @GetMapping(path = "/car/{carId}")
     public @ResponseBody
     ResponseEntity<Optional<Car>> getCarByIdWithAuthorization(@PathVariable final Long carId,
@@ -227,8 +226,9 @@ public class CarController {
     }
 
     /**
-     * The method is used for inserting a new Car object into the database, allowed for users with authorization.
-     * The car is defined in the body of the request.
+     * Provides endpoint for inserting a new Car object into the database.
+     * The car is defined in the body of the request
+     * Available only to authorized users
      * <pre>
      *     Method PUT
      *     URL /api/v1/car
@@ -240,7 +240,7 @@ public class CarController {
      * @return ResponseEntity which contains the inserted Car
      * and Response Code 200 on success, or Response Code 403 if the token doesn't match.
      */
-    @ApiOperation(value = "", tags="New Car")
+    @ApiOperation(value = "", tags = "New Car")
     @PutMapping(path = "/car", consumes = "application/json")
     public @ResponseBody
     ResponseEntity<Car> insertNewCarWithAuthorization(@RequestBody final Car car,
@@ -249,8 +249,8 @@ public class CarController {
     }
 
     /**
-     * Updates a single Car object in the database, defined by the ID in the request parameter with the parameters from
-     * the request body.
+     * Provides endpoint for updating a single Car object in the database,which is defined by the ID in the request parameter
+     * with the parameters from the request body.
      * <pre>
      *     Method POST
      *     URL /api/v1/car/{carId}
@@ -264,7 +264,7 @@ public class CarController {
      * and Response Code 200 on success, or Response Code 403 if the token doesn't match,
      * or if there is no car with given ID.
      */
-    @ApiOperation(value = "", tags="Car Modification")
+    @ApiOperation(value = "", tags = "Car Modification")
     @PostMapping(path = "/updatecar/{carId}", consumes = "application/json")
     public @ResponseBody
     ResponseEntity<Car> updateCarByGivenParametersWithAuthorization(@PathVariable final Long carId,
@@ -274,7 +274,7 @@ public class CarController {
     }
 
     /**
-     * Returns all available cars, in a pageable format.
+     * Provides endpoint for retrieving all available cars, in a pageable format.
      * <pre>
      *     Method GET
      *     URL /api/v1/free
@@ -285,7 +285,7 @@ public class CarController {
      * @return ResponseEntity which contains an Pageable list of all free cars
      * and Response Code 200 on success.
      */
-    @ApiOperation(value = "", tags="Free Car Listing")
+    @ApiOperation(value = "", tags = "Free Car Listing")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query",
                     value = "Results page you want to retrieve (0..N)"),
@@ -303,7 +303,7 @@ public class CarController {
     }
 
     /**
-     * Returns all cars from the database in a predefined ViewObject format.
+     * Provides endpoint for retrieving all cars from the database in a predefined ViewObject format.
      * <pre>
      *     Method GET
      *     URL /api/v1/car/allCarVo
@@ -314,7 +314,7 @@ public class CarController {
      * @return ResponseEntity which contains an Pageable list of all cars in a viewObject format
      * and Response Code 200 on success.
      */
-    @ApiOperation(value = "", tags="View Object Operations")
+    @ApiOperation(value = "", tags = "View Object Operations")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query",
                     value = "Results page you want to retrieve (0..N)"),
@@ -332,7 +332,7 @@ public class CarController {
     }
 
     /**
-     * The method is used for inserting a new Car object into the database, defined in the body of
+     * Provides endpoint for inserting a new Car object into the database, defined in the body of
      * the request in a carViewObject format.
      * <pre>
      *     Method PUT
@@ -343,7 +343,7 @@ public class CarController {
      * @param carViewObject insertable car in ViewObject format
      * @return ResponseEntity with Response Code 200 on success.
      */
-    @ApiOperation(value = "", tags={"View Object Operations","New Car"})
+    @ApiOperation(value = "", tags = {"View Object Operations", "New Car"})
     @PutMapping(path = "/car/carVO", consumes = "application/json")
     public @ResponseBody
     ResponseEntity insertNewCarFromViewObject(@RequestBody final CarViewObject carViewObject) {

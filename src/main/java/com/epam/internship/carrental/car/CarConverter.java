@@ -34,7 +34,7 @@ public final class CarConverter {
     }
 
     /**
-     * Converts a Car object into a CarViewObject.
+     * The method converts a Car object given in the parameter into a CarViewObject.
      *
      * @param car Car to be converted
      * @return converted CarViewObject

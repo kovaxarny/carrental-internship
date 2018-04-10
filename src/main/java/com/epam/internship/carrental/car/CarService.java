@@ -58,8 +58,7 @@ public interface CarService {
     ResponseEntity<Page<Car>> getAllCars(Pageable pageable);
 
     /**
-     * Simple echo Service which puts the Car object specified in the body, into a ResponseEntity and returns
-     * it back to the request sender.
+     * Returns the Car object specified in the body, as a ResponseEntity.
      *
      * @param car Car object
      * @return ResponseEntity containing the Car and Response Code 200 on success.

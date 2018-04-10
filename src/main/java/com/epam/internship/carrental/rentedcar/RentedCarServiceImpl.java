@@ -29,10 +29,6 @@ public class RentedCarServiceImpl implements RentedCarService {
 
     /**
      * {@inheritDoc}
-     *
-     * @param rentedCar     the insertable rentedCar object
-     * @param authorization authorization token from the header of the request
-     * @return ResponseEntity with Response Code 200 on success, or 403 if unauthorized
      */
     @Override
     public ResponseEntity bookCarRentalWithAuthorization(final RentedCar rentedCar,
@@ -46,11 +42,6 @@ public class RentedCarServiceImpl implements RentedCarService {
 
     /**
      * {@inheritDoc}
-     *
-     * @param id            id of the removable record
-     * @param authorization authorization token from the header of the request
-     * @return ResponseEntity with Response Code 200 on success,
-     *          or 403 if unauthorized or the id doesn't exist
      */
     @Override
     public ResponseEntity endCarRentalWithAuthorization(final Long id,
@@ -69,10 +60,6 @@ public class RentedCarServiceImpl implements RentedCarService {
 
     /**
      * {@inheritDoc}
-     *
-     * @param id modifiable rented car records is
-     * @param authorization authorization token from the header of the request
-     * @return ResponseEntity with Response Code 200 on success, or 403 if unauthorized or the id doesn't exist
      */
     @Override
     public ResponseEntity modifyCarRentalWithAuthorization(final Long id,
@@ -93,10 +80,6 @@ public class RentedCarServiceImpl implements RentedCarService {
 
     /**
      * {@inheritDoc}
-     *
-     * @param pageable standard pageable parameters
-     * @param authorization authorization token from the header of the request
-     * @return ResponseEntity containing Page of RentedCars with Response Code 200 on success, or 403 if unauthorized
      */
     @Override
     public ResponseEntity<Page<RentedCar>> listAllCarRentalWithAuthorization(final Pageable pageable,

@@ -26,7 +26,7 @@ class Car {
     private Long id;
 
     /**
-     * The make field is used for defining the maker of the car.
+     * The make field is represents the maker of the car.
      */
     @Column(nullable = false)
     private String make;
@@ -38,26 +38,28 @@ class Car {
     private String model;
 
     /**
-     * The carType can have only predefined values from.
+     * The carType field represents the car's type
+     * The carType can have only predefined values from
      * {@link com.epam.internship.carrental.car.enums.CarType}
      */
     @Enumerated(EnumType.STRING)
     private CarType carType;
 
     /**
-     * The seats field holds the number of seats in a car.
+     * The seats field represents the number of seats in a car.
      */
     @Column(nullable = false)
     private int seats;
 
     /**
-     * The field fuelUsage is has the cars fuel usage per 100 km.
+     * The fuelUsage represents the cars fuel usage per 100 km.
      */
     @Column(nullable = false)
     private double fuelUsage;
 
     /**
-     * Gearbox field has its values declared in.
+     * The gearbox field represents the cars gearbox type.
+     * Gearbox field has its values declared in
      * {@link com.epam.internship.carrental.car.enums.CarGearbox}
      */
     @Enumerated(EnumType.STRING)

@@ -1,5 +1,7 @@
 package com.epam.internship.carrental.car;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Utility class for the car class.
  */
@@ -12,14 +14,14 @@ public final class CarUtilities {
     }
 
     /**
-     * Updates the car defined as the first parameter, with the parameters of the second car
+     * The method updates the car defined as the first parameter, with the parameters of the second car
      * which is the second parameter.
      *
      * @param carToUpdate  updateable car
      * @param newCarParams car with the new parameters
      * @return updated Car object
      */
-    public static Car updateCar(final Car carToUpdate, final Car newCarParams) {
+    public static Car updateCar(@NotNull final Car carToUpdate,@NotNull final Car newCarParams) {
         if (newCarParams.getCarType() != null) {
             carToUpdate.setCarType(newCarParams.getCarType());
         }

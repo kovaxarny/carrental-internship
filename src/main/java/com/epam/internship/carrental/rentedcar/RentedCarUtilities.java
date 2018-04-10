@@ -1,5 +1,7 @@
 package com.epam.internship.carrental.rentedcar;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Utility class for RentedCar modifications.
  */
@@ -16,7 +18,7 @@ public class RentedCarUtilities {
      * @param paramsRentedCar new RentedCar parameters
      * @return modified Rented Car
      */
-    public static RentedCar modifyRentedCar(RentedCar modifiableRentedCar, RentedCar paramsRentedCar){
+    public static RentedCar modifyRentedCar(@NotNull RentedCar modifiableRentedCar,@NotNull RentedCar paramsRentedCar){
         if (!paramsRentedCar.getCarId().equals(null)){
             modifiableRentedCar.setCarId(paramsRentedCar.getCarId());
         }

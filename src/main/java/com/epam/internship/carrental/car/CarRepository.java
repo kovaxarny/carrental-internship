@@ -14,7 +14,7 @@ import org.springframework.data.repository.query.Param;
 public interface CarRepository extends PagingAndSortingRepository<Car, Long> {
 
     /**
-     * The query is used to retrieve all cars made by the maker specified in the parameter.
+     * The query retrieves all cars made by the maker specified in the parameter.
      *
      * @param make make of cars to be searched to
      * @return Iterable which contains the cars by the maker
@@ -24,7 +24,7 @@ public interface CarRepository extends PagingAndSortingRepository<Car, Long> {
     Iterable<Car> findByMake(@Param("make") String make);
 
     /**
-     * Retrieves all free cars from the database.
+     *  The query retrieves all free cars from the database.
      *
      * @param pageable standard pageable parameter
      * @return Page of cars
@@ -34,7 +34,7 @@ public interface CarRepository extends PagingAndSortingRepository<Car, Long> {
     Page<Car> findAllFree(Pageable pageable);
 
     /**
-     * Used to search for a single car in the database, defined by the parameters.
+     * The query searches for a single car in the database, defined by the parameters.
      *
      * @param make      maker of the searched car
      * @param model     model of the searched car

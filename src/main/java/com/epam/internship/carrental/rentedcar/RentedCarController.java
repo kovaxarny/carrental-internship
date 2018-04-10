@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * RentedCarController provides a REST Api endpoint for managing the RentedCar repository.
+ * RentedCarController provides a REST API endpoint for managing the RentedCar repository.
  */
 @Api(tags = "Rental Controls")
 @Controller
@@ -35,8 +35,8 @@ public class RentedCarController {
     }
 
     /**
-     * Provides endpoint for the authorized users to insert a new carrental record into the database,
-     * defined in the request body.
+     * Provides endpoint for inserting a new carrental record into the database.
+     * Available to authorized users only
      * <pre>
      *     Method PUT
      *     URL /api/v2/hire
@@ -55,7 +55,8 @@ public class RentedCarController {
     }
 
     /**
-     * Provides endpoint for removal of a record from the database, defined in the path of the request.
+     * Provides endpoint for removing of a record from the database, defined in the path of the request.
+     * Available to authorized users only
      * <pre>
      *     Method POST
      *     URL /api/v2/endrental/{id}
@@ -74,7 +75,8 @@ public class RentedCarController {
     }
 
     /**
-     * Endpoint for modifying a rent's parameters defined in the request body with authorization.
+     * Provides endpoint for modifying a rent's parameters defined in the request body.
+     * Available to authorized users only
      * <pre>
      *     Method POST
      *     URL /api/v1/modify/{id}
@@ -95,7 +97,8 @@ public class RentedCarController {
     }
 
     /**
-     * Endpoint for listing all rented Car, with authorization.
+     * Provides endpoint for listing all rented Car.
+     * Available to authorized users only
      * <pre>
      *     Method GET
      *     URL /api/v2/rentedcar/all
