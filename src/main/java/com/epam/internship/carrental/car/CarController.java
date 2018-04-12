@@ -154,10 +154,8 @@ public class CarController {
                                                                     @RequestHeader("Authorization") final String authorization) {
         if (!authorization.equals(AUTH_TOKEN)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        } else {
-            return new ResponseEntity<>(carService.getAllCars(pageable), HttpStatus.OK);
         }
-
+        return new ResponseEntity<>(carService.getAllCars(pageable), HttpStatus.OK);
     }
 
     /**

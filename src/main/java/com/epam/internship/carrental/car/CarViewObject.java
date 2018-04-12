@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * A ViewObject class for the {@link com.epam.internship.carrental.car.Car} class, for masking some information.
+ * A ViewObject class for the {@link com.epam.internship.carrental.rentedcar.RentedCar} class, for masking some information.
  */
 public @Data
 @Builder

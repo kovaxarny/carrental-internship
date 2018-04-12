@@ -10,35 +10,34 @@ public interface RentedCarService {
     /**
      * Inserts a new rentedCar object into the RentedCar database.
      *
-     * @param rentedCar     the insertable rentedCar object
-     * @param authorization authorization token from the header of the request
-     * @return ResponseEntity with Response Code 200 on success, or 403 if unauthorized
+     * @param rentedCarViewObject     the insertable rentedCarViewObject
      */
-    void bookCarRentalWithAuthorization(RentedCar rentedCar, String authorization);
+    void bookCarRental(RentedCarViewObject rentedCarViewObject);
 
     /**
      * Deletes a record form the RentedCar database.
      *
      * @param id            id of the removable record
-     * @param authorization authorization token from the header of the request
-     * @return ResponseEntity with Response Code 200 on success, or 403 if unauthorized or the id doesn't exist
      */
-    void endCarRentalWithAuthorization(Long id, String authorization);
+    void endCarRental(Long id);
 
     /**
      * Modifies a record in the RentedCar database.
      *
      * @param id modifiable rented car records is
-     * @param authorization authorization token from the header of the request
-     * @return ResponseEntity with Response Code 200 on success, or 403 if unauthorized or the id doesn't exist
      */
-    void modifyCarRentalWithAuthorization(Long id,RentedCar rentedCar, String authorization);
+    RentedCarViewObject modifyCarRental(Long id,RentedCarViewObject rentedCarViewObject);
+
+
+
+
+
 
     /**
      * Lists all record from the RentedCar database in a pageable format.
+     *
      * @param pageable standard pageable parameters
-     * @param authorization authorization token from the header of the request
-     * @return ResponseEntity containing Page of RentedCars with Response Code 200 on success, or 403 if unauthorized
+     * @return Page of RentedCarsViewObjcets
      */
-    Page<RentedCar> listAllCarRentalWithAuthorization(Pageable pageable, String authorization);
+    Page<RentedCarViewObject> listAllCarRental(Pageable pageable);
 }

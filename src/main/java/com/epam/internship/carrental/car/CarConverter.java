@@ -40,11 +40,11 @@ public final class CarConverter {
      * @return converted CarViewObject
      */
     public static CarViewObject carViewObjectFromCar(@NotNull final Car car) {
-        CarViewObject carViewObject = new CarViewObject();
-        carViewObject.setFullName(car.getMake() + " " + car.getModel() + " " + car.getCarType());
-        carViewObject.setFuelUsage(car.getFuelUsage());
-        carViewObject.setSeats(car.getSeats());
-        carViewObject.setGearbox(car.getGearbox());
-        return carViewObject;
+        return CarViewObject.builder()
+                .fullName(car.getMake() + " " + car.getModel() + " " + car.getCarType())
+                .seats(car.getSeats())
+                .fuelUsage(car.getFuelUsage())
+                .gearbox(car.getGearbox())
+                .build();
     }
 }

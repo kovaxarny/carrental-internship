@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,9 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping(path = "/api/v2")
 public class RentedCarController {
+
+    private static final String AUTH_HEADER = "Token ";
+    private static final String AUTH_TOKEN = AUTH_HEADER + "employee_token";
 
     /**
      * Stores and instance of a RentedCarService.
@@ -35,7 +39,7 @@ public class RentedCarController {
     }
 
     /**
-     * Provides endpoint for inserting a new carrental record into the database.
+     * Provides endpoint for renting a Car.
      * Available to authorized users only
      * <pre>
      *     Method PUT
@@ -43,15 +47,19 @@ public class RentedCarController {
      * </pre>
      * Sample call /api/v2/hire
      *
-     * @param rentedCar     RentedCar object
+     * @param rentedCarViewObject     RentedCarViewObject object
      * @param authorization authorization token from the header of the request
      * @return ResponseEntity with Response Code 200 on success, or 403 if unauthorized
      */
     @PutMapping(path = "/hire", consumes = "application/json")
     public @ResponseBody
-    ResponseEntity bookCarRentalWithAuthorization(@RequestBody final RentedCar rentedCar,
+    ResponseEntity bookCarRentalWithAuthorization(@RequestBody final RentedCarViewObject rentedCarViewObject,
                                                   @RequestHeader("Authorization") final String authorization) {
-        return rentedCarService.bookCarRentalWithAuthorization(rentedCar, authorization);
+        if (!authorization.equals(AUTH_TOKEN)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        rentedCarService.bookCarRental(rentedCarViewObject);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     /**
@@ -71,7 +79,11 @@ public class RentedCarController {
     public @ResponseBody
     ResponseEntity endCarRentalWithAuthorization(@PathVariable final Long id,
                                                  @RequestHeader("Authorization") final String authorization) {
-        return rentedCarService.endCarRentalWithAuthorization(id, authorization);
+        if (!authorization.equals(AUTH_TOKEN)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        rentedCarService.endCarRental(id);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     /**
@@ -84,16 +96,20 @@ public class RentedCarController {
      * Sample call /api/v2/modify/1
      *
      * @param id updateable record's id
-     * @param updatedRentedCarParams updatable parameters
+     * @param rentedCarViewObject updatable parameters
      * @param authorization authorization token from the header of the request
      * @return ResponseEntity with Response Code 200 on success, or 403 if unauthorized or the id doesn't exist
      */
     @PostMapping(path = "/modify/{id}", consumes = "application/json")
     public @ResponseBody
     ResponseEntity modifyCarRentalWithAuthorization(@PathVariable final Long id,
-                                                    @RequestBody final RentedCar updatedRentedCarParams,
+                                                    @RequestBody final RentedCarViewObject rentedCarViewObject,
                                                     @RequestHeader("Authorization") final String authorization){
-        return rentedCarService.modifyCarRentalWithAuthorization(id,updatedRentedCarParams,authorization);
+        if (!authorization.equals(AUTH_TOKEN)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        rentedCarService.modifyCarRental(id,rentedCarViewObject);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     /**
@@ -120,9 +136,12 @@ public class RentedCarController {
                             "Multiple sort criteria are supported.")
     })
     public @ResponseBody
-    ResponseEntity<Page<RentedCar>> listAllCarRentalWithAuthorization(@PageableDefault final Pageable pageable,
+    ResponseEntity<Page<RentedCarViewObject>> listAllCarRentalWithAuthorization(@PageableDefault final Pageable pageable,
                                                                       @RequestHeader("Authorization") final String authorization){
-        return rentedCarService.listAllCarRentalWithAuthorization(pageable,authorization);
+        if (!authorization.equals(AUTH_TOKEN)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>(rentedCarService.listAllCarRental(pageable),HttpStatus.OK);
     }
 
 
