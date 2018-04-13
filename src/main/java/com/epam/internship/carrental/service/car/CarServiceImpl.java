@@ -1,4 +1,4 @@
-package com.epam.internship.carrental.car;
+package com.epam.internship.carrental.service.car;
 
 import com.epam.internship.carrental.exceptions.CarAlreadyExistsException;
 import com.epam.internship.carrental.exceptions.CarNotFoundException;
@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 /**
- * Implementation of the {@link com.epam.internship.carrental.car.CarService} interface.
+ * Implementation of the {@link CarService} interface.
  */
 @Service
 @Qualifier("carService")
@@ -30,21 +30,21 @@ public class CarServiceImpl implements CarService {
      * {@inheritDoc}
      */
     @Override
-    public Iterable<CarViewObject> getAllCars() {
+    public Iterable<CarVO> getAllCars() {
         Collection<Car> carCollection = new ArrayList<>();
-        Collection<CarViewObject> carViewObjectCollection = new ArrayList<>();
+        Collection<CarVO> carVOCollection = new ArrayList<>();
         carRepository.findAll().forEach(carCollection::add);
         for (Car car : carCollection) {
-            carViewObjectCollection.add(CarConverter.carViewObjectFromCar(car));
+            carVOCollection.add(CarConverter.carViewObjectFromCar(car));
         }
-        return carViewObjectCollection;
+        return carVOCollection;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Page<CarViewObject> getAllCars(final Pageable pageable) {
+    public Page<CarVO> getAllCars(final Pageable pageable) {
         return carRepository.findAll(pageable)
                 .map(CarConverter::carViewObjectFromCar);
     }
@@ -53,7 +53,7 @@ public class CarServiceImpl implements CarService {
      * {@inheritDoc}
      */
     @Override
-    public Page<CarViewObject> getAllFreeCars(final Pageable pageable) {
+    public Page<CarVO> getAllFreeCars(final Pageable pageable) {
         return carRepository.findAllFree(pageable)
                 .map(CarConverter::carViewObjectFromCar);
     }
@@ -62,7 +62,7 @@ public class CarServiceImpl implements CarService {
      * {@inheritDoc}
      */
     @Override
-    public CarViewObject getCarById(final Long carId) {
+    public CarVO getCarById(final Long carId) {
         Optional<Car> optionalCar = carRepository.findById(carId);
         if (!optionalCar.isPresent()) {
             throw new CarNotFoundException();
@@ -75,22 +75,22 @@ public class CarServiceImpl implements CarService {
      * {@inheritDoc}
      */
     @Override
-    public Iterable<CarViewObject> getCarsByMake(final String make) {
+    public Iterable<CarVO> getCarsByMake(final String make) {
         Collection<Car> carCollection = new ArrayList<>();
-        Collection<CarViewObject> carViewObjectCollection = new ArrayList<>();
+        Collection<CarVO> carVOCollection = new ArrayList<>();
         carRepository.findByMake(make).forEach(carCollection::add);
         for (Car car : carCollection) {
-            carViewObjectCollection.add(CarConverter.carViewObjectFromCar(car));
+            carVOCollection.add(CarConverter.carViewObjectFromCar(car));
         }
-        return carViewObjectCollection;
+        return carVOCollection;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void insertNewCar(final CarViewObject carViewObject) {
-        Car insertableCar = CarConverter.carFromCarViewObject(carViewObject);
+    public void insertNewCar(final CarVO carVO) {
+        Car insertableCar = CarConverter.carFromCarViewObject(carVO);
         if (!carRepository.existByCarParameters(insertableCar.getMake(),insertableCar.getModel(),
                 insertableCar.getCarType(),insertableCar.getSeats(),
                 insertableCar.getFuelUsage(),insertableCar.getGearbox())){
@@ -105,14 +105,14 @@ public class CarServiceImpl implements CarService {
      * {@inheritDoc}
      */
     @Override
-    public CarViewObject updateCarWithParameters(final Long carId, final CarViewObject carViewObject) {
+    public CarVO updateCarWithParameters(final Long carId, final CarVO carVO) {
         Optional<Car> optionalCar = carRepository.findById(carId);
         if (!optionalCar.isPresent()) {
             throw new CarNotFoundException();
         } else {
             Car carToUpdate = optionalCar.get();
-            Car updatedCar = CarUtilities.updateCar(carToUpdate,
-                    CarConverter.carFromCarViewObject(carViewObject));
+            Car updatedCar = CarUtil.updateCar(carToUpdate,
+                    CarConverter.carFromCarViewObject(carVO));
             return CarConverter.carViewObjectFromCar(carRepository.save(updatedCar));
         }
     }

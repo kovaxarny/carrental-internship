@@ -1,5 +1,8 @@
-package com.epam.internship.carrental.rentedcar;
+package com.epam.internship.carrental.api;
 
+import com.epam.internship.carrental.exceptions.ReservationNotFoundException;
+import com.epam.internship.carrental.service.reservation.ReservationServiceImpl;
+import com.epam.internship.carrental.service.reservation.ReservationVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -13,20 +16,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * RentedCarController provides a REST API endpoint for managing the RentedCar repository.
+ * ReservationController provides a REST API endpoint for managing the Reservation repository.
  */
 @Api(tags = "Rental Controls")
 @Controller
-@RequestMapping(path = "/api/v2")
-public class RentedCarController {
+@RequestMapping(path = "/api/v1/reservation")
+public class ReservationController {
 
     private static final String AUTH_HEADER = "Token ";
     private static final String AUTH_TOKEN = AUTH_HEADER + "employee_token";
 
     /**
-     * Stores and instance of a RentedCarService.
+     * Stores and instance of a ReservationService.
      */
-    private RentedCarServiceImpl rentedCarService;
+    private ReservationServiceImpl rentedCarService;
 
     /**
      * Autowired constructor for the class.
@@ -34,7 +37,7 @@ public class RentedCarController {
      * @param rentedCarService service which provides access to the service layer.
      */
     @Autowired
-    public RentedCarController(final RentedCarServiceImpl rentedCarService) {
+    public ReservationController(final ReservationServiceImpl rentedCarService) {
         this.rentedCarService = rentedCarService;
     }
 
@@ -47,18 +50,13 @@ public class RentedCarController {
      * </pre>
      * Sample call /api/v2/hire
      *
-     * @param rentedCarViewObject     RentedCarViewObject object
-     * @param authorization authorization token from the header of the request
-     * @return ResponseEntity with Response Code 200 on success, or 403 if unauthorized
+     * @param reservationVO     ReservationVO object
+     * @return ResponseEntity with Response Code 200 on success
      */
-    @PutMapping(path = "/hire", consumes = "application/json")
+    @PutMapping(path = "/reserve", consumes = "application/json")
     public @ResponseBody
-    ResponseEntity bookCarRentalWithAuthorization(@RequestBody final RentedCarViewObject rentedCarViewObject,
-                                                  @RequestHeader("Authorization") final String authorization) {
-        if (!authorization.equals(AUTH_TOKEN)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
-        rentedCarService.bookCarRental(rentedCarViewObject);
+    ResponseEntity bookCarRental(@RequestBody final ReservationVO reservationVO){
+        rentedCarService.bookCarRental(reservationVO);
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -75,15 +73,21 @@ public class RentedCarController {
      * @param authorization authorization token from the header of the request
      * @return ResponseEntity with Response Code 200 on success, or 403 if unauthorized
      */
-    @PostMapping(path = "/endrental/{id}")
+    @PostMapping(path = "/end/{id}")
     public @ResponseBody
     ResponseEntity endCarRentalWithAuthorization(@PathVariable final Long id,
                                                  @RequestHeader("Authorization") final String authorization) {
         if (!authorization.equals(AUTH_TOKEN)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }else {
+            try {
+                rentedCarService.endCarRental(id);
+                return new ResponseEntity(HttpStatus.OK);
+            }catch (ReservationNotFoundException e){
+                e.printStackTrace();
+                return new ResponseEntity(HttpStatus.FORBIDDEN);
+            }
         }
-        rentedCarService.endCarRental(id);
-        return new ResponseEntity(HttpStatus.OK);
     }
 
     /**
@@ -96,19 +100,19 @@ public class RentedCarController {
      * Sample call /api/v2/modify/1
      *
      * @param id updateable record's id
-     * @param rentedCarViewObject updatable parameters
+     * @param reservationVO updatable parameters
      * @param authorization authorization token from the header of the request
      * @return ResponseEntity with Response Code 200 on success, or 403 if unauthorized or the id doesn't exist
      */
     @PostMapping(path = "/modify/{id}", consumes = "application/json")
     public @ResponseBody
     ResponseEntity modifyCarRentalWithAuthorization(@PathVariable final Long id,
-                                                    @RequestBody final RentedCarViewObject rentedCarViewObject,
+                                                    @RequestBody final ReservationVO reservationVO,
                                                     @RequestHeader("Authorization") final String authorization){
         if (!authorization.equals(AUTH_TOKEN)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-        rentedCarService.modifyCarRental(id,rentedCarViewObject);
+        rentedCarService.modifyCarRental(id, reservationVO);
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -124,7 +128,7 @@ public class RentedCarController {
      * @param authorization authorization token from the header of the request
      * @return ResponseEntity containing Page of RentedCars with Response Code 200 on success, or 403 if unauthorized
      */
-    @GetMapping(path = "/rentedcar/all")
+    @GetMapping(path = "/reservations")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query",
                     value = "Results page you want to retrieve (0..N)"),
@@ -136,8 +140,8 @@ public class RentedCarController {
                             "Multiple sort criteria are supported.")
     })
     public @ResponseBody
-    ResponseEntity<Page<RentedCarViewObject>> listAllCarRentalWithAuthorization(@PageableDefault final Pageable pageable,
-                                                                      @RequestHeader("Authorization") final String authorization){
+    ResponseEntity<Page<ReservationVO>> listAllCarRentalWithAuthorization(@PageableDefault final Pageable pageable,
+                                                                          @RequestHeader("Authorization") final String authorization){
         if (!authorization.equals(AUTH_TOKEN)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }

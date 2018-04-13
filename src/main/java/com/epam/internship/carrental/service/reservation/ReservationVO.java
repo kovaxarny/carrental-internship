@@ -1,4 +1,4 @@
-package com.epam.internship.carrental.rentedcar;
+package com.epam.internship.carrental.service.reservation;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ public @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-class RentedCarViewObject {
+class ReservationVO {
     /**
      * The rented car's ID.
      */

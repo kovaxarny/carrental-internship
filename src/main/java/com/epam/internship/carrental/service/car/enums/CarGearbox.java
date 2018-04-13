@@ -1,4 +1,4 @@
-package com.epam.internship.carrental.car.enums;
+package com.epam.internship.carrental.service.car.enums;
 
 /**
  * Possible CarGearbox values.

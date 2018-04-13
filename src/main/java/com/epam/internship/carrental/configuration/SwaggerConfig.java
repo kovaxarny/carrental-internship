@@ -1,4 +1,4 @@
-package com.epam.internship.carrental.util;
+package com.epam.internship.carrental.configuration;
 
 import com.google.common.base.Predicates;
 import org.springframework.context.annotation.Bean;

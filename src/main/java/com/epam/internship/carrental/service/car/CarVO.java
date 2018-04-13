@@ -1,19 +1,20 @@
-package com.epam.internship.carrental.car;
+package com.epam.internship.carrental.service.car;
 
-import com.epam.internship.carrental.car.enums.CarGearbox;
+import com.epam.internship.carrental.service.car.enums.CarGearbox;
+import com.epam.internship.carrental.service.reservation.Reservation;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * A ViewObject class for the {@link com.epam.internship.carrental.rentedcar.RentedCar} class, for masking some information.
+ * A ViewObject class for the {@link Reservation} class, for masking some information.
  */
 public @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-class CarViewObject {
+class CarVO {
 
     /**
      * Full name of a car in a maker model carType format.
@@ -31,7 +32,7 @@ class CarViewObject {
     private double fuelUsage;
 
     /**
-     * Gearbox of a car, with possible values from {@link com.epam.internship.carrental.car.enums.CarGearbox}.
+     * Gearbox of a car, with possible values from {@link com.epam.internship.carrental.service.car.enums.CarGearbox}.
      */
     private CarGearbox gearbox;
 }

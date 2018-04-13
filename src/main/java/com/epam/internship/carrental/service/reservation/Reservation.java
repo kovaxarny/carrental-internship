@@ -1,4 +1,4 @@
-package com.epam.internship.carrental.rentedcar;
+package com.epam.internship.carrental.service.reservation;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,14 +9,14 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * The entity class for the RentedCar table which contains currently rented cars.
+ * The entity class for the Reservation table which contains currently rented cars.
  */
 @Entity
 public @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-class RentedCar {
+class Reservation {
 
     /**
      * The id is used for identifying the records in the database.

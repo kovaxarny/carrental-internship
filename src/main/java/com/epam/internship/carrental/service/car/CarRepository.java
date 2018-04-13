@@ -1,7 +1,7 @@
-package com.epam.internship.carrental.car;
+package com.epam.internship.carrental.service.car;
 
-import com.epam.internship.carrental.car.enums.CarGearbox;
-import com.epam.internship.carrental.car.enums.CarType;
+import com.epam.internship.carrental.service.car.enums.CarGearbox;
+import com.epam.internship.carrental.service.car.enums.CarType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -30,7 +30,7 @@ public interface CarRepository extends PagingAndSortingRepository<Car, Long> {
      * @return Page of cars
      */
     @Query(value = "SELECT car FROM Car AS car " +
-            "LEFT JOIN RentedCar AS rented ON car.id=rented.carId WHERE rented.carId IS NULL")
+            "LEFT JOIN Reservation AS rented ON car.id=rented.carId WHERE rented.carId IS NULL")
     Page<Car> findAllFree(Pageable pageable);
 
     /**

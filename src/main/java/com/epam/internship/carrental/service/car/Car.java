@@ -1,7 +1,7 @@
-package com.epam.internship.carrental.car;
+package com.epam.internship.carrental.service.car;
 
-import com.epam.internship.carrental.car.enums.CarGearbox;
-import com.epam.internship.carrental.car.enums.CarType;
+import com.epam.internship.carrental.service.car.enums.CarGearbox;
+import com.epam.internship.carrental.service.car.enums.CarType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -40,7 +40,7 @@ class Car {
     /**
      * The carType field represents the car's type
      * The carType can have only predefined values from
-     * {@link com.epam.internship.carrental.car.enums.CarType}
+     * {@link com.epam.internship.carrental.service.car.enums.CarType}
      */
     @Enumerated(EnumType.STRING)
     private CarType carType;
@@ -60,7 +60,7 @@ class Car {
     /**
      * The gearbox field represents the cars gearbox type.
      * Gearbox field has its values declared in
-     * {@link com.epam.internship.carrental.car.enums.CarGearbox}
+     * {@link com.epam.internship.carrental.service.car.enums.CarGearbox}
      */
     @Enumerated(EnumType.STRING)
     private CarGearbox gearbox;

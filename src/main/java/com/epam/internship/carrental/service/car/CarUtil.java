@@ -1,16 +1,16 @@
-package com.epam.internship.carrental.car;
+package com.epam.internship.carrental.service.car;
 
 import javax.validation.constraints.NotNull;
 
 /**
  * Utility class for the car class.
  */
-public final class CarUtilities {
+public final class CarUtil {
 
     /**
      * Final constructor to prevent instantiation.
      */
-    private CarUtilities() {
+    private CarUtil() {
     }
 
     /**
@@ -21,7 +21,7 @@ public final class CarUtilities {
      * @param newCarParams car with the new parameters
      * @return updated Car object
      */
-    public static Car updateCar(@NotNull final Car carToUpdate,@NotNull final Car newCarParams) {
+    public static Car updateCar(@NotNull final Car carToUpdate, @NotNull final Car newCarParams) {
         if (newCarParams.getCarType() != null) {
             carToUpdate.setCarType(newCarParams.getCarType());
         }

@@ -1,4 +1,4 @@
-package com.epam.internship.carrental.car;
+package com.epam.internship.carrental.service.car;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +13,7 @@ public interface CarService {
      *
      * @return An Iterable containing all Cars as CarViewObjects
      */
-    Iterable<CarViewObject> getAllCars();
+    Iterable<CarVO> getAllCars();
 
     /**
      * Returns all cars from the database in a pageable format.
@@ -21,7 +21,7 @@ public interface CarService {
      * @param pageable standard pageable parameter
      * @return All Cars as CarViewObjects in a pageable format
      */
-    Page<CarViewObject> getAllCars(Pageable pageable);
+    Page<CarVO> getAllCars(Pageable pageable);
 
     /**
      * Retrieves all free cars form the database.
@@ -29,15 +29,15 @@ public interface CarService {
      * @param pageable standard pageable parameter
      * @return Free cars in a pageable format
      */
-    Page<CarViewObject> getAllFreeCars(Pageable pageable);
+    Page<CarVO> getAllFreeCars(Pageable pageable);
 
     /**
      * Retrieves all data about a single car specified by the id.
      *
      * @param carId         a single carId
-     * @return A single CarViewObject
+     * @return A single CarVO
      */
-    CarViewObject getCarById(Long carId);
+    CarVO getCarById(Long carId);
 
     /**
      * Retrieves all Cars by a given maker.
@@ -45,25 +45,25 @@ public interface CarService {
      * @param make maker of the Cars.
      * @return An Iterable containing all Cars as CarViewObjects made by the maker
      */
-    Iterable<CarViewObject> getCarsByMake(String make);
+    Iterable<CarVO> getCarsByMake(String make);
 
 
     /**
      * Inserts a new Car into the database
      *
-     * @param carViewObject           CarViewObject object to be added to the database
-     * @return The inserted CarViewObject
+     * @param carVO           CarVO object to be added to the database
+     * @return The inserted CarVO
      */
-    void insertNewCar(CarViewObject carViewObject);
+    void insertNewCar(CarVO carVO);
 
     /**
      * Updates the Car object in the database, with the parameters specified in the request body.
      *
      * @param carId         the updateable car's id
-     * @param carViewObject  the new parameters of the car
-     * @return The updated CarViewObject
+     * @param carVO  the new parameters of the car
+     * @return The updated CarVO
      */
-    CarViewObject updateCarWithParameters(Long carId, CarViewObject carViewObject);
+    CarVO updateCarWithParameters(Long carId, CarVO carVO);
 
 
 }
