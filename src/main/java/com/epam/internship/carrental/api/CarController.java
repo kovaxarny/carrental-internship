@@ -46,9 +46,9 @@ public class CarController {
      * Provides endpoint for retrieving all cars from the database in a pageable format.
      * <pre>
      * Method GET
-     * URL /api/v1/all/pages
+     * URL /api/v1/car/cars/pages
      * </pre>
-     * Sample call /api/v1/all/pages?page=0
+     * Sample call /api/v1/car/cars/pages?page=1
      *
      * @param pageable standard paging parameters in the request
      * @return ResponseEntity which contains an Pageable list of all cars,
@@ -75,9 +75,9 @@ public class CarController {
      * The method returns all cars by a single maker, where the maker is specified in the request parameters.
      * <pre>
      * Method GET
-     * URL /api/v1/search
+     * URL /api/v1/car/cars/make
      * </pre>
-     * Sample call /api/v1/search?make=Dacia
+     * Sample call /api/v1/car/cars/make?make=Dacia
      *
      * @param make maker of cars to be retrieved
      * @return ResponseEntity which contains an Iterable list of cars made by the maker,
@@ -94,9 +94,9 @@ public class CarController {
      * Provides endpoint for retrieving all available cars, in a pageable format.
      * <pre>
      *     Method GET
-     *     URL /api/v1/free
+     *     URL /api/v1/car/free
      * </pre>
-     * Sample call /api/v1/free?page=0
+     * Sample call /api/v1/car/free?page=0
      *
      * @param pageable standard paging parameters in the request
      * @return ResponseEntity which contains an Pageable list of all free cars
@@ -125,9 +125,9 @@ public class CarController {
      * Available only to authorized users
      * <pre>
      *     Method PUT
-     *     URL /api/v1/car
+     *     URL /api/v1/car/new
      * </pre>
-     * Sample call /api/v1/car
+     * Sample call /api/v1/car/new
      *
      * @param carVO         insertable Car object
      * @param authorization authorization token from the header of the request
@@ -157,9 +157,9 @@ public class CarController {
      * Available only to authorized users
      * <pre>
      *     Method GET
-     *     URL /api/v1/car
+     *     URL /api/v1/car/cars
      * </pre>
-     * Sample call /api/v1/car
+     * Sample call /api/v1/car/cars?page=1
      *
      * @param pageable      standard paging parameters in the request
      * @param authorization authorization token from the header of the request
@@ -192,9 +192,9 @@ public class CarController {
      * Available only to authorized users
      * <pre>
      *     Method GET
-     *     URL /api/v1/car/{carId}
+     *     URL /api/v1/car/car/{carId}
      * </pre>
-     * Sample call /api/v1/car/1
+     * Sample call /api/v1/car/car/1
      *
      * @param carId         id of the searched car
      * @param authorization authorization token from the header of the request
@@ -223,9 +223,9 @@ public class CarController {
      * with the parameters from the request body.
      * <pre>
      *     Method POST
-     *     URL /api/v1/car/{carId}
+     *     URL /api/v1/car/update/{carId}
      * </pre>
-     * Sample call /api/v1/car/1
+     * Sample call /api/v1/car/update/1
      *
      * @param carId         updateable car's ID
      * @param newCarParams  updateable parameters

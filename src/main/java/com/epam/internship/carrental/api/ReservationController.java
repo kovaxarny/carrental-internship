@@ -34,11 +34,11 @@ public class ReservationController {
     /**
      * Autowired constructor for the class.
      *
-     * @param rentedCarService service which provides access to the service layer.
+     * @param reservationService service which provides access to the service layer.
      */
     @Autowired
-    public ReservationController(final ReservationServiceImpl rentedCarService) {
-        this.rentedCarService = rentedCarService;
+    public ReservationController(final ReservationServiceImpl reservationService) {
+        this.rentedCarService = reservationService;
     }
 
     /**
@@ -46,9 +46,9 @@ public class ReservationController {
      * Available to authorized users only
      * <pre>
      *     Method PUT
-     *     URL /api/v2/hire
+     *     URL /api/v1/reservation/reserve
      * </pre>
-     * Sample call /api/v2/hire
+     * Sample call /api/v1/reservation/reserve
      *
      * @param reservationVO     ReservationVO object
      * @return ResponseEntity with Response Code 200 on success
@@ -65,9 +65,9 @@ public class ReservationController {
      * Available to authorized users only
      * <pre>
      *     Method POST
-     *     URL /api/v2/endrental/{id}
+     *     URL /api/v1/reservation/{id}
      * </pre>
-     * Sample call /api/v2/endrental/1
+     * Sample call /api/v1/reservation/1
      *
      * @param id            id of the record
      * @param authorization authorization token from the header of the request
@@ -95,9 +95,9 @@ public class ReservationController {
      * Available to authorized users only
      * <pre>
      *     Method POST
-     *     URL /api/v1/modify/{id}
+     *     URL /api/v1/reservation/modify/{id}
      * </pre>
-     * Sample call /api/v2/modify/1
+     * Sample call /api/v1/reservation/modify/1
      *
      * @param id updateable record's id
      * @param reservationVO updatable parameters
@@ -111,9 +111,14 @@ public class ReservationController {
                                                     @RequestHeader("Authorization") final String authorization){
         if (!authorization.equals(AUTH_TOKEN)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }try {
+            rentedCarService.modifyCarRental(id, reservationVO);
+            return new ResponseEntity(HttpStatus.OK);
+        }catch (ReservationNotFoundException e){
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
-        rentedCarService.modifyCarRental(id, reservationVO);
-        return new ResponseEntity(HttpStatus.OK);
+
     }
 
     /**
@@ -121,9 +126,9 @@ public class ReservationController {
      * Available to authorized users only
      * <pre>
      *     Method GET
-     *     URL /api/v2/rentedcar/all
+     *     URL /api/v1/reservation/reservations
      * </pre>
-     * Sample call /api/v2/rentedcar/all?page=0
+     * Sample call /api/v1/reservation/reservations?page=0
      * @param pageable standard paging parameters in the request
      * @param authorization authorization token from the header of the request
      * @return ResponseEntity containing Page of RentedCars with Response Code 200 on success, or 403 if unauthorized
