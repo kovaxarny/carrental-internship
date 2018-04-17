@@ -1,18 +1,16 @@
 package com.epam.internship.carrental.service.car;
 
-import com.epam.internship.carrental.service.car.enums.CarType;
-
 import javax.validation.constraints.NotNull;
 
 /**
  * Converter utility class, which enables conversion between a Car and a CarVO.
  */
-public final class CarConverter {
+public final class CarToVOConverter {
 
     /**
      * Private constructor to prevent instantiation.
      */
-    private CarConverter() {
+    private CarToVOConverter() {
     }
 
     /**
@@ -26,7 +24,7 @@ public final class CarConverter {
         return Car.builder()
                 .make(splitCarViewObjectName[0])
                 .model(splitCarViewObjectName[1])
-                .carType(CarType.valueOf(splitCarViewObjectName[2]))
+                .carType(Car.CarType.valueOf(splitCarViewObjectName[2]))
                 .seats(carVO.getSeats())
                 .fuelUsage(carVO.getFuelUsage())
                 .gearbox(carVO.getGearbox())

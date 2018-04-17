@@ -1,16 +1,16 @@
 package com.epam.internship.carrental.service.car;
 
-import com.epam.internship.carrental.service.car.enums.CarGearbox;
-import com.epam.internship.carrental.service.car.enums.CarType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 /**
  * Interface to access the database of cars.
  */
+@Repository
 public interface CarRepository extends PagingAndSortingRepository<Car, Long> {
 
     /**
@@ -53,6 +53,6 @@ public interface CarRepository extends PagingAndSortingRepository<Car, Long> {
             "AND car.seats = :seats " +
             "AND car.fuelUsage = :fuelUsage " +
             "AND car.gearbox = :gearbox")
-    boolean existByCarParameters(@Param("make") String make, @Param("model") String model, @Param("carType") CarType carType,
-                                 @Param("seats") int seats, @Param("fuelUsage") double fuelUsage, @Param("gearbox") CarGearbox gearbox);
+    boolean existByCarParameters(@Param("make") String make, @Param("model") String model, @Param("carType") Car.CarType carType,
+                                 @Param("seats") int seats, @Param("fuelUsage") double fuelUsage, @Param("gearbox") Car.CarGearbox gearbox);
 }

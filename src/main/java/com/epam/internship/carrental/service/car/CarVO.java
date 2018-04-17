@@ -1,6 +1,6 @@
 package com.epam.internship.carrental.service.car;
 
-import com.epam.internship.carrental.service.car.enums.CarGearbox;
+import com.epam.internship.carrental.service.car.Car.CarGearbox;
 import com.epam.internship.carrental.service.reservation.Reservation;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,7 +32,7 @@ class CarVO {
     private double fuelUsage;
 
     /**
-     * Gearbox of a car, with possible values from {@link com.epam.internship.carrental.service.car.enums.CarGearbox}.
+     * Gearbox of a car, with possible values from {@link com.epam.internship.carrental.service.car.Car.CarGearbox}.
      */
     private CarGearbox gearbox;
 }

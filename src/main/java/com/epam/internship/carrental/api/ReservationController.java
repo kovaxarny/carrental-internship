@@ -1,6 +1,6 @@
 package com.epam.internship.carrental.api;
 
-import com.epam.internship.carrental.exceptions.ReservationNotFoundException;
+import com.epam.internship.carrental.service.reservation.exception.ReservationNotFoundException;
 import com.epam.internship.carrental.service.reservation.ReservationServiceImpl;
 import com.epam.internship.carrental.service.reservation.ReservationVO;
 import io.swagger.annotations.Api;

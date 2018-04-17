@@ -1,8 +1,10 @@
 package com.epam.internship.carrental.service.reservation;
 
-import com.epam.internship.carrental.exceptions.ReservationNotFoundException;
+import com.epam.internship.carrental.service.reservation.exception.ReservationNotFoundException;
+import com.epam.internship.carrental.service.reservation.exception.ReservationRepositoryException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -29,7 +31,12 @@ public class ReservationServiceImpl implements ReservationService {
      */
     @Override
     public void bookCarRental(final ReservationVO reservationVO) {
-        reservationRepository.save(ReservationConverter.rentedCarFromRentedCarViewObject(reservationVO));
+        try {
+            reservationRepository.save(ReservationToVOConverter.rentedCarFromRentedCarViewObject(reservationVO));
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            throw new ReservationRepositoryException("Something went wrong in the Reservation Repository");
+        }
     }
 
     /**
@@ -37,7 +44,13 @@ public class ReservationServiceImpl implements ReservationService {
      */
     @Override
     public void endCarRental(final Long id) {
-        Optional<Reservation> optionalRentedCar = reservationRepository.findById(id);
+        Optional<Reservation> optionalRentedCar;
+        try {
+            optionalRentedCar = reservationRepository.findById(id);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            throw new ReservationRepositoryException("Something went wrong in the Reservation Repository");
+        }
         if (!optionalRentedCar.isPresent()) {
             throw new ReservationNotFoundException();
         }
@@ -50,15 +63,21 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public ReservationVO modifyCarRental(final Long id,
                                          final ReservationVO reservationVO) {
-        Optional<Reservation> optionalRentedCar = reservationRepository.findById(id);
+        Optional<Reservation> optionalRentedCar;
+        try {
+            optionalRentedCar = reservationRepository.findById(id);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            throw new ReservationRepositoryException("Something went wrong in the Reservation Repository");
+        }
         if (!optionalRentedCar.isPresent()) {
             throw new ReservationNotFoundException();
-        } else {
-            Reservation modifiableReservation = optionalRentedCar.get();
-            Reservation updatedReservation = ReservationConverter.rentedCarFromRentedCarViewObject(reservationVO);
-            Reservation modifiedReservation = ReservationUtil.modifyRentedCar(modifiableReservation, updatedReservation);
-            return ReservationConverter.rentedCarViewObjectFromRentedCar(reservationRepository.save(modifiedReservation));
         }
+        Reservation modifiableReservation = optionalRentedCar.get();
+        Reservation updatedReservation = ReservationToVOConverter.rentedCarFromRentedCarViewObject(reservationVO);
+        Reservation modifiedReservation = ReservationUtil.modifyRentedCar(modifiableReservation, updatedReservation);
+        return ReservationToVOConverter.rentedCarViewObjectFromRentedCar(reservationRepository.save(modifiedReservation));
+
     }
 
     /**
@@ -66,7 +85,12 @@ public class ReservationServiceImpl implements ReservationService {
      */
     @Override
     public Page<ReservationVO> listAllCarRental(final Pageable pageable) {
-        return reservationRepository.findAll(pageable)
-                .map(ReservationConverter::rentedCarViewObjectFromRentedCar);
+        try {
+            return reservationRepository.findAll(pageable)
+                    .map(ReservationToVOConverter::rentedCarViewObjectFromRentedCar);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            throw new ReservationRepositoryException("Something went wrong in the Reservation Repository");
+        }
     }
 }

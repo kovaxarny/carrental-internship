@@ -1,4 +1,4 @@
-package com.epam.internship.carrental.exceptions;
+package com.epam.internship.carrental.service.car.exception;
 
 public class CarNotFoundException extends RuntimeException{
 }

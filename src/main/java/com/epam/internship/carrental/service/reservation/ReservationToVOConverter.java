@@ -2,12 +2,12 @@ package com.epam.internship.carrental.service.reservation;
 
 import javax.validation.constraints.NotNull;
 
-public final class ReservationConverter {
+public final class ReservationToVOConverter {
 
     /**
      * Private constructor to prevent instantiation.
      */
-    private ReservationConverter(){
+    private ReservationToVOConverter(){
 
     }
 

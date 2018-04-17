@@ -1,9 +1,10 @@
 package com.epam.internship.carrental.api;
 
-import com.epam.internship.carrental.exceptions.CarAlreadyExistsException;
-import com.epam.internship.carrental.exceptions.CarNotFoundException;
 import com.epam.internship.carrental.service.car.CarServiceImpl;
 import com.epam.internship.carrental.service.car.CarVO;
+import com.epam.internship.carrental.service.car.exception.CarAlreadyExistsException;
+import com.epam.internship.carrental.service.car.exception.CarNotFoundException;
+import com.epam.internship.carrental.service.car.exception.CarRepositoryException;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -68,7 +69,15 @@ public class CarController {
     @GetMapping(path = "/cars/pages")
     public @ResponseBody
     ResponseEntity<Page<CarVO>> getAllCars(@PageableDefault final Pageable pageable) {
-        return new ResponseEntity<>(carService.getAllCars(pageable), HttpStatus.OK);
+        HttpStatus httpStatus;
+        Page<CarVO> page = null;
+        try {
+            page = carService.getAllCars(pageable);
+            httpStatus = HttpStatus.OK;
+        }catch (CarRepositoryException e){
+            httpStatus = HttpStatus.FORBIDDEN;
+        }
+        return new ResponseEntity<>(page, httpStatus);
     }
 
     /**
@@ -141,15 +150,15 @@ public class CarController {
                                                  @RequestHeader("Authorization") final String authorization) {
         if (!authorization.equals(AUTH_TOKEN)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        } else {
-            try {
-                carService.insertNewCar(carVO);
-                return new ResponseEntity<>(HttpStatus.OK);
-            } catch (CarAlreadyExistsException e) {
-                e.printStackTrace();
-                return new ResponseEntity(HttpStatus.FORBIDDEN);
-            }
         }
+        try {
+            carService.insertNewCar(carVO);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (CarAlreadyExistsException e) {
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        }
+
     }
 
     /**

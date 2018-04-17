@@ -1,7 +1,5 @@
 package com.epam.internship.carrental.service.car;
 
-import com.epam.internship.carrental.service.car.enums.CarGearbox;
-import com.epam.internship.carrental.service.car.enums.CarType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -16,6 +14,29 @@ public @Data
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = "id")
 class Car {
+
+    /**
+     * Possible CarType values.
+     */
+    public enum CarType {
+        SUV,
+        TRUCK,
+        VAN,
+        CONVERTIBLE,
+        WAGON,
+        SPORT,
+        SEDAN,
+        LUXURY
+    }
+
+    /**
+     * Possible CarGearbox values.
+     */
+    public enum CarGearbox {
+        AUTOMATIC,
+        MANUAL
+    }
+
     /**
      * The id is used for identifying the records in the database.
      * <p>
@@ -40,7 +61,7 @@ class Car {
     /**
      * The carType field represents the car's type
      * The carType can have only predefined values from
-     * {@link com.epam.internship.carrental.service.car.enums.CarType}
+     * {@link com.epam.internship.carrental.service.car.Car.CarType}
      */
     @Enumerated(EnumType.STRING)
     private CarType carType;
@@ -60,7 +81,7 @@ class Car {
     /**
      * The gearbox field represents the cars gearbox type.
      * Gearbox field has its values declared in
-     * {@link com.epam.internship.carrental.service.car.enums.CarGearbox}
+     * {@link com.epam.internship.carrental.service.car.Car.CarGearbox}
      */
     @Enumerated(EnumType.STRING)
     private CarGearbox gearbox;
