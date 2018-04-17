@@ -1,9 +1,9 @@
 package com.epam.internship.carrental.service.reservation.exception;
 
-public class ReservationRepositoryException extends RuntimeException{
+public class ReservationOperationException extends RuntimeException{
     private String exceptionMsg;
 
-    public ReservationRepositoryException(String exceptionMsg) {
+    public ReservationOperationException(String exceptionMsg) {
         this.exceptionMsg = exceptionMsg;
     }
     public String getExceptionMsg(){

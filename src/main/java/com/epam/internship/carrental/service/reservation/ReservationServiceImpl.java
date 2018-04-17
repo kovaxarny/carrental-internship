@@ -1,7 +1,7 @@
 package com.epam.internship.carrental.service.reservation;
 
 import com.epam.internship.carrental.service.reservation.exception.ReservationNotFoundException;
-import com.epam.internship.carrental.service.reservation.exception.ReservationRepositoryException;
+import com.epam.internship.carrental.service.reservation.exception.ReservationOperationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
@@ -35,7 +35,7 @@ public class ReservationServiceImpl implements ReservationService {
             reservationRepository.save(ReservationToVOConverter.rentedCarFromRentedCarViewObject(reservationVO));
         } catch (DataAccessException e) {
             e.printStackTrace();
-            throw new ReservationRepositoryException("Something went wrong in the Reservation Repository");
+            throw new ReservationOperationException("Something went wrong in the Reservation Repository");
         }
     }
 
@@ -49,7 +49,7 @@ public class ReservationServiceImpl implements ReservationService {
             optionalRentedCar = reservationRepository.findById(id);
         } catch (DataAccessException e) {
             e.printStackTrace();
-            throw new ReservationRepositoryException("Something went wrong in the Reservation Repository");
+            throw new ReservationOperationException("Something went wrong in the Reservation Repository");
         }
         if (!optionalRentedCar.isPresent()) {
             throw new ReservationNotFoundException();
@@ -68,7 +68,7 @@ public class ReservationServiceImpl implements ReservationService {
             optionalRentedCar = reservationRepository.findById(id);
         } catch (DataAccessException e) {
             e.printStackTrace();
-            throw new ReservationRepositoryException("Something went wrong in the Reservation Repository");
+            throw new ReservationOperationException("Something went wrong in the Reservation Repository");
         }
         if (!optionalRentedCar.isPresent()) {
             throw new ReservationNotFoundException();
@@ -90,7 +90,7 @@ public class ReservationServiceImpl implements ReservationService {
                     .map(ReservationToVOConverter::rentedCarViewObjectFromRentedCar);
         } catch (DataAccessException e) {
             e.printStackTrace();
-            throw new ReservationRepositoryException("Something went wrong in the Reservation Repository");
+            throw new ReservationOperationException("Something went wrong in the Reservation Repository");
         }
     }
 }

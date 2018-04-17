@@ -2,7 +2,7 @@ package com.epam.internship.carrental.service.car;
 
 import com.epam.internship.carrental.service.car.exception.CarAlreadyExistsException;
 import com.epam.internship.carrental.service.car.exception.CarNotFoundException;
-import com.epam.internship.carrental.service.car.exception.CarRepositoryException;
+import com.epam.internship.carrental.service.car.exception.CarOperationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
@@ -39,7 +39,7 @@ public class CarServiceImpl implements CarService {
             carRepository.findAll().forEach(carCollection::add);
         } catch (DataAccessException e) {
             e.printStackTrace();
-            throw new CarRepositoryException("Something went wrong in the Car Repository");
+            throw new CarOperationException("Something went wrong in the Car Repository");
         }
         for (Car car : carCollection) {
             carVOCollection.add(CarToVOConverter.carViewObjectFromCar(car));
@@ -56,7 +56,7 @@ public class CarServiceImpl implements CarService {
             return carRepository.findAll(pageable)
                     .map(CarToVOConverter::carViewObjectFromCar);
         }catch (DataAccessException e){
-            throw new CarRepositoryException("Something went wrong in the Car Repository");
+            throw new CarOperationException("Something went wrong in the Car Repository");
         }
 
     }
@@ -71,7 +71,7 @@ public class CarServiceImpl implements CarService {
                     .map(CarToVOConverter::carViewObjectFromCar);
         }catch (DataAccessException e){
             e.printStackTrace();
-            throw new CarRepositoryException("Something went wrong in the Car Repository");
+            throw new CarOperationException("Something went wrong in the Car Repository");
         }
     }
 
@@ -85,7 +85,7 @@ public class CarServiceImpl implements CarService {
            optionalCar = carRepository.findById(carId);
         }catch (DataAccessException e){
             e.printStackTrace();
-            throw new CarRepositoryException("Something went wrong in the Car Repository");
+            throw new CarOperationException("Something went wrong in the Car Repository");
         }
         if (!optionalCar.isPresent()) {
             throw new CarNotFoundException();
@@ -105,7 +105,7 @@ public class CarServiceImpl implements CarService {
             carRepository.findByMake(make).forEach(carCollection::add);
         }catch (DataAccessException e){
             e.printStackTrace();
-            throw new CarRepositoryException("Something went wrong in the Car Repository");
+            throw new CarOperationException("Something went wrong in the Car Repository");
         }
         for (Car car : carCollection) {
             carVOCollection.add(CarToVOConverter.carViewObjectFromCar(car));
@@ -123,7 +123,7 @@ public class CarServiceImpl implements CarService {
             insertableCar = CarToVOConverter.carFromCarViewObject(carVO);
         } catch (DataAccessException e){
             e.printStackTrace();
-            throw new CarRepositoryException("Something went wrong in the Car Repository");
+            throw new CarOperationException("Something went wrong in the Car Repository");
         }
         if (carRepository.existByCarParameters(insertableCar.getMake(), insertableCar.getModel(),
                 insertableCar.getCarType(), insertableCar.getSeats(),
@@ -144,7 +144,7 @@ public class CarServiceImpl implements CarService {
             optionalCar = carRepository.findById(carId);
         } catch (DataAccessException e){
             e.printStackTrace();
-            throw new CarRepositoryException("Something went wrong in the Car Repository");
+            throw new CarOperationException("Something went wrong in the Car Repository");
         }
         if (!optionalCar.isPresent()) {
             throw new CarNotFoundException();

@@ -57,7 +57,7 @@ public interface CarService {
     void insertNewCar(CarVO carVO);
 
     /**
-     * Updates the Car object in the database, with the parameters specified in the request body.
+     * Updates the Car object in the database.
      *
      * @param carId         the updateable car's id
      * @param carVO  the new parameters of the car

@@ -3,7 +3,7 @@ package com.epam.internship.carrental.api;
 import com.epam.internship.carrental.service.reservation.ReservationServiceImpl;
 import com.epam.internship.carrental.service.reservation.ReservationVO;
 import com.epam.internship.carrental.service.reservation.exception.ReservationNotFoundException;
-import com.epam.internship.carrental.service.reservation.exception.ReservationRepositoryException;
+import com.epam.internship.carrental.service.reservation.exception.ReservationOperationException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -62,7 +62,7 @@ public class ReservationController {
         try {
             rentedCarService.bookCarRental(reservationVO);
             httpStatus = HttpStatus.OK;
-        } catch (ReservationRepositoryException e) {
+        } catch (ReservationOperationException e) {
             e.printStackTrace();
             httpStatus = HttpStatus.FORBIDDEN;
         }
@@ -88,16 +88,16 @@ public class ReservationController {
                                                  @RequestHeader("Authorization") final String authorization) {
         HttpStatus httpStatus;
         if (!authorization.equals(AUTH_TOKEN)) {
-            httpStatus = HttpStatus.FORBIDDEN;
-        } else {
-            try {
-                rentedCarService.endCarRental(id);
-                httpStatus = HttpStatus.OK;
-            } catch (ReservationNotFoundException | ReservationRepositoryException e) {
-                e.printStackTrace();
-                httpStatus = HttpStatus.FORBIDDEN;
-            }
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
+        try {
+            rentedCarService.endCarRental(id);
+            httpStatus = HttpStatus.OK;
+        } catch (ReservationNotFoundException | ReservationOperationException e) {
+            e.printStackTrace();
+            httpStatus = HttpStatus.FORBIDDEN;
+        }
+
         return new ResponseEntity(httpStatus);
     }
 
@@ -122,16 +122,16 @@ public class ReservationController {
                                                     @RequestHeader("Authorization") final String authorization) {
         HttpStatus httpStatus;
         if (!authorization.equals(AUTH_TOKEN)) {
-            httpStatus = HttpStatus.FORBIDDEN;
-        } else {
-            try {
-                rentedCarService.modifyCarRental(id, reservationVO);
-                httpStatus = HttpStatus.OK;
-            } catch (ReservationNotFoundException | ReservationRepositoryException e) {
-                e.printStackTrace();
-                httpStatus = HttpStatus.FORBIDDEN;
-            }
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
+        try {
+            rentedCarService.modifyCarRental(id, reservationVO);
+            httpStatus = HttpStatus.OK;
+        } catch (ReservationNotFoundException | ReservationOperationException e) {
+            e.printStackTrace();
+            httpStatus = HttpStatus.FORBIDDEN;
+        }
+
         return new ResponseEntity(httpStatus);
     }
 
@@ -165,16 +165,16 @@ public class ReservationController {
         HttpStatus httpStatus;
         Page<ReservationVO> reservations = null;
         if (!authorization.equals(AUTH_TOKEN)) {
-            httpStatus = HttpStatus.FORBIDDEN;
-        }else{
-            try {
-                reservations = rentedCarService.listAllCarRental(pageable);
-                httpStatus = HttpStatus.OK;
-            }catch (ReservationRepositoryException e){
-                e.printStackTrace();
-                httpStatus = HttpStatus.FORBIDDEN;
-            }
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-        return new ResponseEntity<>(reservations,httpStatus);
+        try {
+            reservations = rentedCarService.listAllCarRental(pageable);
+            httpStatus = HttpStatus.OK;
+        } catch (ReservationOperationException e) {
+            e.printStackTrace();
+            httpStatus = HttpStatus.FORBIDDEN;
+        }
+
+        return new ResponseEntity<>(reservations, httpStatus);
     }
 }

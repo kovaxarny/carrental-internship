@@ -1,9 +1,9 @@
 package com.epam.internship.carrental.service.car.exception;
 
-public class CarRepositoryException extends RuntimeException{
+public class CarOperationException extends RuntimeException{
     private String exceptionMsg;
 
-    public CarRepositoryException(String exceptionMsg) {
+    public CarOperationException(String exceptionMsg) {
         this.exceptionMsg = exceptionMsg;
     }
     public String getExceptionMsg(){

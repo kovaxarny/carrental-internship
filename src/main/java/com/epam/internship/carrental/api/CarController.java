@@ -4,7 +4,7 @@ import com.epam.internship.carrental.service.car.CarServiceImpl;
 import com.epam.internship.carrental.service.car.CarVO;
 import com.epam.internship.carrental.service.car.exception.CarAlreadyExistsException;
 import com.epam.internship.carrental.service.car.exception.CarNotFoundException;
-import com.epam.internship.carrental.service.car.exception.CarRepositoryException;
+import com.epam.internship.carrental.service.car.exception.CarOperationException;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -74,7 +74,7 @@ public class CarController {
         try {
             page = carService.getAllCars(pageable);
             httpStatus = HttpStatus.OK;
-        } catch (CarRepositoryException e) {
+        } catch (CarOperationException e) {
             httpStatus = HttpStatus.FORBIDDEN;
         }
         return new ResponseEntity<>(page, httpStatus);
@@ -101,7 +101,7 @@ public class CarController {
         try {
             iterable = carService.getCarsByMake(make);
             httpStatus = HttpStatus.OK;
-        } catch (CarRepositoryException e) {
+        } catch (CarOperationException e) {
             httpStatus = HttpStatus.FORBIDDEN;
         }
         return new ResponseEntity<>(iterable, httpStatus);
@@ -138,7 +138,7 @@ public class CarController {
         try {
             page = carService.getAllFreeCars(pageable);
             httpStatus = HttpStatus.OK;
-        } catch (CarRepositoryException e) {
+        } catch (CarOperationException e) {
             httpStatus = HttpStatus.FORBIDDEN;
         }
         return new ResponseEntity<>(page, httpStatus);
@@ -166,15 +166,14 @@ public class CarController {
                                                  @RequestHeader("Authorization") final String authorization) {
         HttpStatus httpStatus;
         if (!authorization.equals(AUTH_TOKEN)) {
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        }
+        try {
+            carService.insertNewCar(carVO);
+            httpStatus = HttpStatus.OK;
+        } catch (CarAlreadyExistsException | CarOperationException e) {
+            e.printStackTrace();
             httpStatus = HttpStatus.FORBIDDEN;
-        } else {
-            try {
-                carService.insertNewCar(carVO);
-                httpStatus = HttpStatus.OK;
-            } catch (CarAlreadyExistsException | CarRepositoryException e) {
-                e.printStackTrace();
-                httpStatus = HttpStatus.FORBIDDEN;
-            }
         }
         return new ResponseEntity(httpStatus);
     }
@@ -211,16 +210,16 @@ public class CarController {
         HttpStatus httpStatus;
         Page<CarVO> page = null;
         if (!authorization.equals(AUTH_TOKEN)) {
-            httpStatus = HttpStatus.FORBIDDEN;
-        } else {
-            try {
-                page = carService.getAllFreeCars(pageable);
-                httpStatus = HttpStatus.OK;
-            } catch (CarRepositoryException e) {
-                e.printStackTrace();
-                httpStatus = HttpStatus.FORBIDDEN;
-            }
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
+        try {
+            page = carService.getAllFreeCars(pageable);
+            httpStatus = HttpStatus.OK;
+        } catch (CarOperationException e) {
+            e.printStackTrace();
+            httpStatus = HttpStatus.FORBIDDEN;
+        }
+
         return new ResponseEntity<>(page, httpStatus);
     }
 
@@ -246,16 +245,16 @@ public class CarController {
         HttpStatus httpStatus;
         CarVO carVO = null;
         if (!authorization.equals(AUTH_TOKEN)) {
-            httpStatus = HttpStatus.FORBIDDEN;
-        } else {
-            try {
-                carVO = carService.getCarById(carId);
-                httpStatus = HttpStatus.OK;
-            } catch (CarNotFoundException | CarRepositoryException e) {
-                e.printStackTrace();
-                httpStatus = HttpStatus.FORBIDDEN;
-            }
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
+        try {
+            carVO = carService.getCarById(carId);
+            httpStatus = HttpStatus.OK;
+        } catch (CarNotFoundException | CarOperationException e) {
+            e.printStackTrace();
+            httpStatus = HttpStatus.FORBIDDEN;
+        }
+
         return new ResponseEntity<>(carVO, httpStatus);
     }
 
@@ -284,15 +283,14 @@ public class CarController {
         HttpStatus httpStatus;
         CarVO carVO = null;
         if (!authorization.equals(AUTH_TOKEN)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        try {
+            carVO = carService.updateCarWithParameters(carId, newCarParams);
+            httpStatus = HttpStatus.OK;
+        } catch (CarNotFoundException | CarOperationException e) {
+            e.printStackTrace();
             httpStatus = HttpStatus.FORBIDDEN;
-        } else {
-            try {
-                carVO = carService.updateCarWithParameters(carId, newCarParams);
-                httpStatus = HttpStatus.OK;
-            } catch (CarNotFoundException | CarRepositoryException e) {
-                e.printStackTrace();
-                httpStatus = HttpStatus.FORBIDDEN;
-            }
         }
         return new ResponseEntity<>(carVO, httpStatus);
     }
