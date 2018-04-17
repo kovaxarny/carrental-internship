@@ -1,8 +1,9 @@
 package com.epam.internship.carrental.api;
 
-import com.epam.internship.carrental.service.reservation.exception.ReservationNotFoundException;
 import com.epam.internship.carrental.service.reservation.ReservationServiceImpl;
 import com.epam.internship.carrental.service.reservation.ReservationVO;
+import com.epam.internship.carrental.service.reservation.exception.ReservationNotFoundException;
+import com.epam.internship.carrental.service.reservation.exception.ReservationRepositoryException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -50,14 +51,22 @@ public class ReservationController {
      * </pre>
      * Sample call /api/v1/reservation/reserve
      *
-     * @param reservationVO     ReservationVO object
+     * @param reservationVO ReservationVO object
      * @return ResponseEntity with Response Code 200 on success
      */
     @PutMapping(path = "/reserve", consumes = "application/json")
     public @ResponseBody
-    ResponseEntity bookCarRental(@RequestBody final ReservationVO reservationVO){
-        rentedCarService.bookCarRental(reservationVO);
-        return new ResponseEntity(HttpStatus.OK);
+    ResponseEntity bookCarRental(@RequestBody final ReservationVO reservationVO) {
+
+        HttpStatus httpStatus;
+        try {
+            rentedCarService.bookCarRental(reservationVO);
+            httpStatus = HttpStatus.OK;
+        } catch (ReservationRepositoryException e) {
+            e.printStackTrace();
+            httpStatus = HttpStatus.FORBIDDEN;
+        }
+        return new ResponseEntity(httpStatus);
     }
 
     /**
@@ -77,17 +86,19 @@ public class ReservationController {
     public @ResponseBody
     ResponseEntity endCarRentalWithAuthorization(@PathVariable final Long id,
                                                  @RequestHeader("Authorization") final String authorization) {
+        HttpStatus httpStatus;
         if (!authorization.equals(AUTH_TOKEN)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }else {
+            httpStatus = HttpStatus.FORBIDDEN;
+        } else {
             try {
                 rentedCarService.endCarRental(id);
-                return new ResponseEntity(HttpStatus.OK);
-            }catch (ReservationNotFoundException e){
+                httpStatus = HttpStatus.OK;
+            } catch (ReservationNotFoundException | ReservationRepositoryException e) {
                 e.printStackTrace();
-                return new ResponseEntity(HttpStatus.FORBIDDEN);
+                httpStatus = HttpStatus.FORBIDDEN;
             }
         }
+        return new ResponseEntity(httpStatus);
     }
 
     /**
@@ -99,7 +110,7 @@ public class ReservationController {
      * </pre>
      * Sample call /api/v1/reservation/modify/1
      *
-     * @param id updateable record's id
+     * @param id            updateable record's id
      * @param reservationVO updatable parameters
      * @param authorization authorization token from the header of the request
      * @return ResponseEntity with Response Code 200 on success, or 403 if unauthorized or the id doesn't exist
@@ -108,17 +119,20 @@ public class ReservationController {
     public @ResponseBody
     ResponseEntity modifyCarRentalWithAuthorization(@PathVariable final Long id,
                                                     @RequestBody final ReservationVO reservationVO,
-                                                    @RequestHeader("Authorization") final String authorization){
+                                                    @RequestHeader("Authorization") final String authorization) {
+        HttpStatus httpStatus;
         if (!authorization.equals(AUTH_TOKEN)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }try {
-            rentedCarService.modifyCarRental(id, reservationVO);
-            return new ResponseEntity(HttpStatus.OK);
-        }catch (ReservationNotFoundException e){
-            e.printStackTrace();
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
+            httpStatus = HttpStatus.FORBIDDEN;
+        } else {
+            try {
+                rentedCarService.modifyCarRental(id, reservationVO);
+                httpStatus = HttpStatus.OK;
+            } catch (ReservationNotFoundException | ReservationRepositoryException e) {
+                e.printStackTrace();
+                httpStatus = HttpStatus.FORBIDDEN;
+            }
         }
-
+        return new ResponseEntity(httpStatus);
     }
 
     /**
@@ -129,7 +143,8 @@ public class ReservationController {
      *     URL /api/v1/reservation/reservations
      * </pre>
      * Sample call /api/v1/reservation/reservations?page=0
-     * @param pageable standard paging parameters in the request
+     *
+     * @param pageable      standard paging parameters in the request
      * @param authorization authorization token from the header of the request
      * @return ResponseEntity containing Page of RentedCars with Response Code 200 on success, or 403 if unauthorized
      */
@@ -146,12 +161,20 @@ public class ReservationController {
     })
     public @ResponseBody
     ResponseEntity<Page<ReservationVO>> listAllCarRentalWithAuthorization(@PageableDefault final Pageable pageable,
-                                                                          @RequestHeader("Authorization") final String authorization){
+                                                                          @RequestHeader("Authorization") final String authorization) {
+        HttpStatus httpStatus;
+        Page<ReservationVO> reservations = null;
         if (!authorization.equals(AUTH_TOKEN)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            httpStatus = HttpStatus.FORBIDDEN;
+        }else{
+            try {
+                reservations = rentedCarService.listAllCarRental(pageable);
+                httpStatus = HttpStatus.OK;
+            }catch (ReservationRepositoryException e){
+                e.printStackTrace();
+                httpStatus = HttpStatus.FORBIDDEN;
+            }
         }
-        return new ResponseEntity<>(rentedCarService.listAllCarRental(pageable),HttpStatus.OK);
+        return new ResponseEntity<>(reservations,httpStatus);
     }
-
-
 }

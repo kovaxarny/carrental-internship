@@ -74,7 +74,7 @@ public class CarController {
         try {
             page = carService.getAllCars(pageable);
             httpStatus = HttpStatus.OK;
-        }catch (CarRepositoryException e){
+        } catch (CarRepositoryException e) {
             httpStatus = HttpStatus.FORBIDDEN;
         }
         return new ResponseEntity<>(page, httpStatus);
@@ -96,7 +96,15 @@ public class CarController {
     @GetMapping(path = "/cars/make")
     public @ResponseBody
     ResponseEntity<Iterable<CarVO>> getCarsByMake(@RequestParam final String make) {
-        return new ResponseEntity<>(carService.getCarsByMake(make), HttpStatus.OK);
+        HttpStatus httpStatus;
+        Iterable<CarVO> iterable = null;
+        try {
+            iterable = carService.getCarsByMake(make);
+            httpStatus = HttpStatus.OK;
+        } catch (CarRepositoryException e) {
+            httpStatus = HttpStatus.FORBIDDEN;
+        }
+        return new ResponseEntity<>(iterable, httpStatus);
     }
 
     /**
@@ -125,7 +133,15 @@ public class CarController {
     @GetMapping(path = "/free")
     public @ResponseBody
     ResponseEntity<Page<CarVO>> getAllFreeCars(@PageableDefault final Pageable pageable) {
-        return new ResponseEntity<>(carService.getAllFreeCars(pageable), HttpStatus.OK);
+        HttpStatus httpStatus;
+        Page<CarVO> page = null;
+        try {
+            page = carService.getAllFreeCars(pageable);
+            httpStatus = HttpStatus.OK;
+        } catch (CarRepositoryException e) {
+            httpStatus = HttpStatus.FORBIDDEN;
+        }
+        return new ResponseEntity<>(page, httpStatus);
     }
 
     /**
@@ -148,17 +164,19 @@ public class CarController {
     public @ResponseBody
     ResponseEntity insertNewCarWithAuthorization(@RequestBody final CarVO carVO,
                                                  @RequestHeader("Authorization") final String authorization) {
+        HttpStatus httpStatus;
         if (!authorization.equals(AUTH_TOKEN)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            httpStatus = HttpStatus.FORBIDDEN;
+        } else {
+            try {
+                carService.insertNewCar(carVO);
+                httpStatus = HttpStatus.OK;
+            } catch (CarAlreadyExistsException | CarRepositoryException e) {
+                e.printStackTrace();
+                httpStatus = HttpStatus.FORBIDDEN;
+            }
         }
-        try {
-            carService.insertNewCar(carVO);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (CarAlreadyExistsException e) {
-            e.printStackTrace();
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
-        }
-
+        return new ResponseEntity(httpStatus);
     }
 
     /**
@@ -190,10 +208,20 @@ public class CarController {
     public @ResponseBody
     ResponseEntity<Page<CarVO>> getAllCarsWithAuthorization(@PageableDefault final Pageable pageable,
                                                             @RequestHeader("Authorization") final String authorization) {
+        HttpStatus httpStatus;
+        Page<CarVO> page = null;
         if (!authorization.equals(AUTH_TOKEN)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            httpStatus = HttpStatus.FORBIDDEN;
+        } else {
+            try {
+                page = carService.getAllFreeCars(pageable);
+                httpStatus = HttpStatus.OK;
+            } catch (CarRepositoryException e) {
+                e.printStackTrace();
+                httpStatus = HttpStatus.FORBIDDEN;
+            }
         }
-        return new ResponseEntity<>(carService.getAllCars(pageable), HttpStatus.OK);
+        return new ResponseEntity<>(page, httpStatus);
     }
 
     /**
@@ -215,16 +243,20 @@ public class CarController {
     public @ResponseBody
     ResponseEntity<CarVO> getCarByIdWithAuthorization(@PathVariable final Long carId,
                                                       @RequestHeader("Authorization") final String authorization) {
+        HttpStatus httpStatus;
+        CarVO carVO = null;
         if (!authorization.equals(AUTH_TOKEN)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            httpStatus = HttpStatus.FORBIDDEN;
         } else {
             try {
-                return new ResponseEntity<>(carService.getCarById(carId), HttpStatus.OK);
-            } catch (CarNotFoundException e) {
+                carVO = carService.getCarById(carId);
+                httpStatus = HttpStatus.OK;
+            } catch (CarNotFoundException | CarRepositoryException e) {
                 e.printStackTrace();
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                httpStatus = HttpStatus.FORBIDDEN;
             }
         }
+        return new ResponseEntity<>(carVO, httpStatus);
     }
 
     /**
@@ -249,15 +281,19 @@ public class CarController {
     ResponseEntity<CarVO> updateCarByGivenParametersWithAuthorization(@PathVariable final Long carId,
                                                                       @RequestBody final CarVO newCarParams,
                                                                       @RequestHeader("Authorization") final String authorization) {
+        HttpStatus httpStatus;
+        CarVO carVO = null;
         if (!authorization.equals(AUTH_TOKEN)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            httpStatus = HttpStatus.FORBIDDEN;
         } else {
             try {
-                return new ResponseEntity<>(carService.updateCarWithParameters(carId, newCarParams), HttpStatus.OK);
-            } catch (CarNotFoundException e) {
+                carVO = carService.updateCarWithParameters(carId, newCarParams);
+                httpStatus = HttpStatus.OK;
+            } catch (CarNotFoundException | CarRepositoryException e) {
                 e.printStackTrace();
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                httpStatus = HttpStatus.FORBIDDEN;
             }
         }
+        return new ResponseEntity<>(carVO, httpStatus);
     }
 }
