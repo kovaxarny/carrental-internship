@@ -19,6 +19,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/**").permitAll()
                 .antMatchers("/actuator/health").hasRole("ENDPOINT_ADMIN")
                 .antMatchers("/actuator/shutdown").hasRole("ENDPOINT_ADMIN");
+        http.csrf().disable();
     }
 
     @Autowired

@@ -1,8 +1,6 @@
 package com.epam.internship.carrental.configuration;
 
-import com.epam.internship.carrental.car.Car;
-import com.epam.internship.carrental.car.enums.CarGearbox;
-import com.epam.internship.carrental.car.enums.CarType;
+import com.epam.internship.carrental.service.car.Car;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -94,10 +92,10 @@ public class BatchConfig {
                     .id(resultSet.getLong("id"))
                     .make(resultSet.getString("make"))
                     .model(resultSet.getString("model"))
-                    .carType(CarType.valueOf(resultSet.getString("car_type")))
+                    .carType(Car.CarType.valueOf(resultSet.getString("car_type")))
                     .seats(resultSet.getInt("seats"))
                     .fuelUsage(resultSet.getDouble("fuel_usage"))
-                    .gearbox(CarGearbox.valueOf(resultSet.getString("gearbox")))
+                    .gearbox(Car.CarGearbox.valueOf(resultSet.getString("gearbox")))
                     .build();
         }
     }

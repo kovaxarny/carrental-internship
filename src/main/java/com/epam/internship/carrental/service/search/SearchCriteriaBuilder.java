@@ -9,9 +9,9 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.validation.constraints.NotNull;
 
-public class SearchSpecification {
+public class SearchCriteriaBuilder {
 
-    private SearchSpecification() {
+    private SearchCriteriaBuilder() {
     }
 
     public static Specification<Car> filterByMaker(@NotNull String make) {
