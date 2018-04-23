@@ -36,7 +36,6 @@ public class SearchServiceImplTest {
         public SearchServiceImpl searchService() {
             return new SearchServiceImpl(carRepository());
         }
-
     }
 
     @Autowired
