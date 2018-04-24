@@ -24,7 +24,7 @@ import java.sql.SQLException;
 
 @Configuration
 @EnableBatchProcessing
-public class BatchConfig {
+public class ExportCarsBatchConfig {
 
     @Autowired
     public JobBuilderFactory jobBuilderFactory;

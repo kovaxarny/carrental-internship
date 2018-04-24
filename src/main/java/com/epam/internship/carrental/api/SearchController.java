@@ -2,6 +2,7 @@ package com.epam.internship.carrental.api;
 
 import com.epam.internship.carrental.service.car.CarVO;
 import com.epam.internship.carrental.service.search.Search;
+import com.epam.internship.carrental.service.search.SearchOperationException;
 import com.epam.internship.carrental.service.search.SearchServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,7 +36,12 @@ public class SearchController {
     public @ResponseBody
     ResponseEntity<Page<CarVO>> searchCarWithSpec(@PageableDefault final Pageable pageable,
                                                   @RequestBody final Search search) {
-        return new ResponseEntity<>(searchService.searchCarsWithSpec(search,pageable), HttpStatus.OK);
+        try {
+            Page<CarVO> carVOPage = searchService.searchCarsWithSpec(search,pageable);
+            return new ResponseEntity<>(carVOPage, HttpStatus.OK);
+        }catch (SearchOperationException e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

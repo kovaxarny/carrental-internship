@@ -31,7 +31,11 @@ public class JobScheduler {
 
     @Autowired
     @Qualifier(value = "exportCarsJob")
-    private Job job;
+    private Job exportCarsJob;
+
+    @Autowired
+    @Qualifier(value = "notifySubscribersJob")
+    private Job notifySubscribersJob;
 
     @Value("${job.run}")
     private boolean isJobEnabled;
@@ -39,21 +43,41 @@ public class JobScheduler {
     @Scheduled(cron = "${job.schedule}")
     public void runJobsOnCondition() {
         if (isJobEnabled) {
-            jobScheduler();
+            exportCarsJobScheduler();
         }
     }
 
-    public void jobScheduler() {
+    @Scheduled(cron = "*/5 * * * * *")
+    public void runNotifySubscribersJob() {
+        notifySubscribersJobScheduler();
+    }
+
+    public void exportCarsJobScheduler() {
         JobParameters jobParameters = new JobParametersBuilder()
                 .addLong("Time", System.currentTimeMillis()).toJobParameters();
 
         try {
-            JobExecution jobExecution = jobLauncher.run(job, jobParameters);
+            JobExecution jobExecution = jobLauncher.run(exportCarsJob, jobParameters);
         } catch (JobInstanceAlreadyCompleteException |
                 JobExecutionAlreadyRunningException |
                 JobParametersInvalidException |
                 JobRestartException e) {
             LOGGER.error("There was a problem executing the exportCarsJob " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void notifySubscribersJobScheduler() {
+        JobParameters jobParameters = new JobParametersBuilder()
+                .addLong("Time", System.currentTimeMillis()).toJobParameters();
+
+        try {
+            JobExecution jobExecution = jobLauncher.run(notifySubscribersJob, jobParameters);
+        } catch (JobInstanceAlreadyCompleteException |
+                JobExecutionAlreadyRunningException |
+                JobParametersInvalidException |
+                JobRestartException e) {
+            LOGGER.error("There was a problem executing the notifySubscribersJob " + e.getMessage());
             e.printStackTrace();
         }
     }

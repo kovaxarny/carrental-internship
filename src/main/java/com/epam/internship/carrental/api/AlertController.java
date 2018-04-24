@@ -34,7 +34,7 @@ public class AlertController {
             alertService.subscribeUser(search);
             return new ResponseEntity(HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity(HttpStatus.METHOD_NOT_ALLOWED);
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
     }

@@ -6,10 +6,14 @@ import com.epam.internship.carrental.service.car.CarToVOConverter;
 import com.epam.internship.carrental.service.car.CarVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.epam.internship.carrental.service.search.SearchCriteriaBuilder.*;
 
@@ -19,9 +23,13 @@ public class SearchServiceImpl implements SearchService {
 
     private final CarRepository carRepository;
 
+    private final SearchRepository searchRepository;
+
     @Autowired
-    public SearchServiceImpl(final CarRepository carRepository) {
+    public SearchServiceImpl(final CarRepository carRepository,
+                             final SearchRepository searchRepository) {
         this.carRepository = carRepository;
+        this.searchRepository = searchRepository;
     }
 
 
@@ -33,13 +41,56 @@ public class SearchServiceImpl implements SearchService {
         Specification<Car> seatsSpec = filterBySeats(search.getSearchedSeats());
         Specification<Car> gearboxSpec = filterByGearbox(search.getSearchedGearbox());
         Specification<Car> typeSpec = filterByType(search.getSearchedCarType());
-        return carRepository.findAll(Specification
-                .where(makeSpec)
-                .and(modelSpec)
-                .and(fuelUsageSpec)
-                .and(seatsSpec)
-                .and(gearboxSpec)
-                .and(typeSpec),pageable)
-                .map(CarToVOConverter::carViewObjectFromCar);
+        try {
+            return carRepository.findAll(Specification
+                    .where(makeSpec)
+                    .and(modelSpec)
+                    .and(fuelUsageSpec)
+                    .and(seatsSpec)
+                    .and(gearboxSpec)
+                    .and(typeSpec), pageable)
+                    .map(CarToVOConverter::carViewObjectFromCar);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            throw new SearchOperationException("Something went wrong with searching");
+        }
+
+    }
+
+    @Override
+    public void saveSearchInformation(Search search) {
+        try {
+            searchRepository.save(search);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            throw new SearchOperationException("Something went wrong with searching");
+        }
+    }
+
+    @Override
+    public List<CarVO> searchCarsWithSpecList(Search search) {
+        Specification<Car> makeSpec = filterByMaker(search.getSearchedMake());
+        Specification<Car> modelSpec = filterByModel(search.getSearchedModel());
+        Specification<Car> fuelUsageSpec = filterByFuelUsage(search.getSearchedFuelUsage());
+        Specification<Car> seatsSpec = filterBySeats(search.getSearchedSeats());
+        Specification<Car> gearboxSpec = filterByGearbox(search.getSearchedGearbox());
+        Specification<Car> typeSpec = filterByType(search.getSearchedCarType());
+        try {
+            List<CarVO> carVOList = new ArrayList<>();
+            List<Car> carList = carRepository.findAll(Specification
+                    .where(makeSpec)
+                    .and(modelSpec)
+                    .and(fuelUsageSpec)
+                    .and(seatsSpec)
+                    .and(gearboxSpec)
+                    .and(typeSpec));
+            for (Car car : carList) {
+                carVOList.add(CarToVOConverter.carViewObjectFromCar(car));
+            }
+            return carVOList;
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            throw new SearchOperationException("Something went wrong with searching");
+        }
     }
 }

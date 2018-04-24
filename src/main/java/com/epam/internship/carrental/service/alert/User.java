@@ -28,6 +28,6 @@ class User {
     /**
      *  The userEmail field stores the users email address.
      */
-    @Column(nullable = false)
+    @Column(nullable = false,unique = true)
     private String userEmail;
 }

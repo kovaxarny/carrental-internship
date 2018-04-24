@@ -30,18 +30,19 @@ class Search {
     /**
      * The user who made this search.
      */
-    @ManyToOne(targetEntity = User.class)
+    @ManyToOne(targetEntity = User.class,cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
     private User user;
     /**
      * The searchedMake field is used for defining the car maker we want to search to.
      */
-    @Column(nullable = false)
+    @Column()
     private String searchedMake;
 
     /**
      * The searchedModel field is used for defining the car model we want to search to.
      */
-    @Column(nullable = false)
+    @Column()
     private String searchedModel;
 
     /**
@@ -54,13 +55,13 @@ class Search {
     /**
      * The searchedSeats field holds the number of seats in a car.
      */
-    @Column(nullable = false)
+    @Column()
     private int searchedSeats;
 
     /**
      * The field searchedFuelUsage has the cars fuel usage per 100 km.
      */
-    @Column(nullable = false)
+    @Column()
     private double searchedFuelUsage;
 
     /**

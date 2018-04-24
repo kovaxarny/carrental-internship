@@ -6,6 +6,7 @@ import com.epam.internship.carrental.service.car.CarRepository;
 import com.epam.internship.carrental.service.car.CarToVOConverter;
 import com.epam.internship.carrental.service.car.CarVO;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration
@@ -33,8 +36,13 @@ public class SearchServiceImplTest {
         }
 
         @Bean
+        public SearchRepository searchRepository() {
+            return mock(SearchRepository.class);
+        }
+
+        @Bean
         public SearchServiceImpl searchService() {
-            return new SearchServiceImpl(carRepository());
+            return new SearchServiceImpl(carRepository(),searchRepository());
         }
     }
 
@@ -43,6 +51,8 @@ public class SearchServiceImplTest {
 
     @Autowired
     private CarRepository carRepository = mock(CarRepository.class, Mockito.RETURNS_DEEP_STUBS);
+    @Autowired
+    private SearchRepository searchRepository = mock(SearchRepository.class, Mockito.RETURNS_DEEP_STUBS);
 
     private Car car;
     private Page<Car> page;
@@ -79,20 +89,18 @@ public class SearchServiceImplTest {
         carVOList = Collections.singletonList(CarToVOConverter.carViewObjectFromCar(car));
     }
 
+    @Test
+    public void saveSearchInformation() {
+        searchService.saveSearchInformation(search);
+        verify(searchRepository,times(1)).save(Mockito.any(Search.class));
+    }
+
 //    @Test
 //    public void searchCars() {
 //        Mockito.when(carRepository.findAll(Mockito.any(Pageable.class))).thenReturn(page);
-//        Mockito.when(searchService.searchCars(Mockito.any(Pageable.class),search)).thenReturn(voPage);
-//        Page<CarVO> resultPage = searchService.searchCars(Mockito.any(Pageable.class), search);
+//        Mockito.when(searchService.searchCarsWithSpec(Mockito.any(Search.class),Mockito.any(Pageable.class))).thenReturn(voPage);
+//        Page<CarVO> resultPage = searchService.searchCarsWithSpec(Mockito.any(Search.class),Mockito.any(Pageable.class));
 //        verify(carRepository, times(1)).findAll(Mockito.any(Pageable.class));
 //        Assert.assertEquals(resultPage, voPage);
-//    }
-
-//    @Test
-//    public void searchCarsNoPage() {
-//        Mockito.when(carRepository.findAll()).thenReturn(carList);
-//        Iterable<CarVO> resultIterable = searchService.searchCarsNoPage(search);
-//        verify(carRepository, times(1)).findAll();
-//        Assert.assertEquals(resultIterable, carVOList);
 //    }
 }
