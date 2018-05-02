@@ -2,6 +2,7 @@ package com.epam.internship.carrental.configuration;
 
 import com.epam.internship.carrental.service.alert.User;
 import com.epam.internship.carrental.service.alert.UserRepository;
+import com.epam.internship.carrental.service.car.Car;
 import com.epam.internship.carrental.service.car.CarVO;
 import com.epam.internship.carrental.service.search.Search;
 import com.epam.internship.carrental.service.search.SearchServiceImpl;
@@ -61,11 +62,11 @@ public class NotifySubscribersBatchConfig {
 
 
     @Bean
-    public FlatFileItemWriter<AbstractMap.SimpleEntry<User,List<CarVO>>> writer() {
-        FlatFileItemWriter<AbstractMap.SimpleEntry<User,List<CarVO>>> writer = new FlatFileItemWriter<>();
+    public FlatFileItemWriter<AbstractMap.SimpleEntry<User, List<CarVO>>> writer() {
+        FlatFileItemWriter<AbstractMap.SimpleEntry<User, List<CarVO>>> writer = new FlatFileItemWriter<>();
         writer.setResource(new FileSystemResource("subscriptions.csv"));
 
-        DelimitedLineAggregator<AbstractMap.SimpleEntry<User,List<CarVO>>> lineAggregator = new DelimitedLineAggregator<>();
+        DelimitedLineAggregator<AbstractMap.SimpleEntry<User, List<CarVO>>> lineAggregator = new DelimitedLineAggregator<>();
         lineAggregator.setDelimiter(",");
 //
 //        BeanWrapperFieldExtractor<AbstractMap.SimpleEntry<User,List<CarVO>>> fieldExtractor = new BeanWrapperFieldExtractor<>();
@@ -80,7 +81,7 @@ public class NotifySubscribersBatchConfig {
     @Bean
     public Step step1() {
         return stepBuilderFactory.get("step1")
-                .<Search, AbstractMap.SimpleEntry<User,List<CarVO>>>chunk(100)
+                .<Search, AbstractMap.SimpleEntry<User, List<CarVO>>>chunk(100)
                 .reader(reader())
                 .processor(processor())
                 .writer(writer())
@@ -99,23 +100,30 @@ public class NotifySubscribersBatchConfig {
     private class SearchRowMapper<T> implements RowMapper<Search> {
         @Override
         public Search mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
-            return Search.builder()
+            System.out.println(resultSet.getString("searched_car_type"));
+            System.out.println(resultSet.getString("searched_model"));
+            Search search = Search.builder()
                     .id(resultSet.getLong("id"))
                     .user(userRepository.findById(resultSet.getLong("user_id")).get())
                     .searchedMake(resultSet.getString("searched_make"))
                     .searchedModel(resultSet.getString("searched_model"))
-//                    .searchedCarType(Car.CarType.valueOf(resultSet.getString("searched_car_type")))
                     .searchedFuelUsage(resultSet.getDouble("searched_fuel_usage"))
                     .searchedSeats(resultSet.getInt("searched_seats"))
-//                    .searchedGearbox(Car.CarGearbox.valueOf(resultSet.getString("searched_gearbox")))
                     .build();
+            if (resultSet.getString("searched_gearbox") != null){
+                search.setSearchedGearbox(Car.CarGearbox.valueOf(resultSet.getString("searched_gearbox")));
+            }
+            if (resultSet.getString("searched_car_type") != null){
+                search.setSearchedCarType(Car.CarType.valueOf(resultSet.getString("searched_car_type")));
+            }
+            return search;
         }
     }
 
-    private class SearchItemProcessor implements ItemProcessor<Search, AbstractMap.SimpleEntry<User,List<CarVO>>> {
+    private class SearchItemProcessor implements ItemProcessor<Search, AbstractMap.SimpleEntry<User, List<CarVO>>> {
         @Override
-        public AbstractMap.SimpleEntry<User,List<CarVO>> process(Search search) throws Exception {
-            return new AbstractMap.SimpleEntry<>(search.getUser(),searchService.searchCarsWithSpecList(search));
+        public AbstractMap.SimpleEntry<User, List<CarVO>> process(Search search) throws Exception {
+            return new AbstractMap.SimpleEntry<>(search.getUser(), searchService.searchCarsWithSpecList(search));
         }
     }
 }
