@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class CarrentalApplication{
-    public static final Logger LOGGER = LogManager.getLogger(CarrentalApplication.class);
+    private static final Logger LOGGER = LogManager.getLogger(CarrentalApplication.class);
 
     public static void main(String[] args) {
         SpringApplication.run(CarrentalApplication.class, args);

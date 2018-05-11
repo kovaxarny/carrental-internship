@@ -16,15 +16,18 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+/**
+ * The class schedules all Jobs.
+ */
 @Component
+
 //Remove these PropertySources before creating JAR
-@PropertySources({
-        @PropertySource("classpath:bar.properties"),
-        @PropertySource(value = "classpath:bar.properties", ignoreResourceNotFound = true)
-})
+@PropertySource("classpath:bar.properties")
+@PropertySource(value = "classpath:bar.properties", ignoreResourceNotFound = true)
+
 @EnableScheduling
 public class JobScheduler {
-    final static Logger LOGGER = LogManager.getLogger(JobScheduler.class);
+    static final Logger LOGGER = LogManager.getLogger(JobScheduler.class);
 
     @Autowired
     private JobLauncher jobLauncher;
@@ -47,7 +50,7 @@ public class JobScheduler {
         }
     }
 
-    @Scheduled(cron = "*/5 * * * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     public void runNotifySubscribersJob() {
         notifySubscribersJobScheduler();
     }
@@ -57,13 +60,12 @@ public class JobScheduler {
                 .addLong("Time", System.currentTimeMillis()).toJobParameters();
 
         try {
-            JobExecution jobExecution = jobLauncher.run(exportCarsJob, jobParameters);
+            jobLauncher.run(exportCarsJob, jobParameters);
         } catch (JobInstanceAlreadyCompleteException |
                 JobExecutionAlreadyRunningException |
                 JobParametersInvalidException |
                 JobRestartException e) {
-            LOGGER.error("There was a problem executing the exportCarsJob " + e.getMessage());
-            e.printStackTrace();
+            LOGGER.error("There was a problem executing the exportCarsJob " + e);
         }
     }
 
@@ -72,13 +74,12 @@ public class JobScheduler {
                 .addLong("Time", System.currentTimeMillis()).toJobParameters();
 
         try {
-            JobExecution jobExecution = jobLauncher.run(notifySubscribersJob, jobParameters);
+            jobLauncher.run(notifySubscribersJob, jobParameters);
         } catch (JobInstanceAlreadyCompleteException |
                 JobExecutionAlreadyRunningException |
                 JobParametersInvalidException |
                 JobRestartException e) {
-            LOGGER.error("There was a problem executing the notifySubscribersJob " + e.getMessage());
-            e.printStackTrace();
+            LOGGER.error("There was a problem executing the notifySubscribersJob " + e);
         }
     }
 }

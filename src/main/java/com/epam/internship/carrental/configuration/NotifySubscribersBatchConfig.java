@@ -27,7 +27,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.AbstractMap;
 import java.util.List;
-
+/**
+ * Configuration class for a Job which exports user subscriptions with their search results to a CSV file.
+ */
 @Configuration
 @EnableBatchProcessing
 public class NotifySubscribersBatchConfig {
@@ -51,7 +53,7 @@ public class NotifySubscribersBatchConfig {
         JdbcCursorItemReader<Search> cursorItemReader = new JdbcCursorItemReader<>();
         cursorItemReader.setDataSource(dataSource);
         cursorItemReader.setSql("SELECT id,searched_make,searched_model,searched_car_type,searched_fuel_usage,searched_gearbox,searched_seats,user_id FROM db_car_test.search");
-        cursorItemReader.setRowMapper(new SearchRowMapper<Search>());
+        cursorItemReader.setRowMapper(new SearchRowMapper());
         return cursorItemReader;
     }
 
@@ -68,11 +70,6 @@ public class NotifySubscribersBatchConfig {
 
         DelimitedLineAggregator<AbstractMap.SimpleEntry<User, List<CarVO>>> lineAggregator = new DelimitedLineAggregator<>();
         lineAggregator.setDelimiter(",");
-//
-//        BeanWrapperFieldExtractor<AbstractMap.SimpleEntry<User,List<CarVO>>> fieldExtractor = new BeanWrapperFieldExtractor<>();
-//        fieldExtractor.setNames(new String[]{"fullName", "seats", "fuelUsage", "gearbox"});
-//
-//        lineAggregator.setFieldExtractor(fieldExtractor);
 
         writer.setLineAggregator(lineAggregator);
         return writer;
@@ -97,11 +94,9 @@ public class NotifySubscribersBatchConfig {
                 .build();
     }
 
-    private class SearchRowMapper<T> implements RowMapper<Search> {
+    private class SearchRowMapper implements RowMapper<Search> {
         @Override
         public Search mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
-            System.out.println(resultSet.getString("searched_car_type"));
-            System.out.println(resultSet.getString("searched_model"));
             Search search = Search.builder()
                     .id(resultSet.getLong("id"))
                     .user(userRepository.findById(resultSet.getLong("user_id")).get())

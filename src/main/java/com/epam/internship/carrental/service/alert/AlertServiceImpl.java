@@ -1,7 +1,10 @@
 package com.epam.internship.carrental.service.alert;
 
+import com.epam.internship.carrental.CarrentalApplication;
 import com.epam.internship.carrental.service.search.Search;
 import com.epam.internship.carrental.service.search.SearchServiceImpl;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
@@ -13,6 +16,7 @@ import java.util.List;
 @Service
 @Qualifier("alertService")
 public class AlertServiceImpl implements AlertService {
+    private static final Logger LOGGER = LogManager.getLogger(CarrentalApplication.class);
 
     private final UserRepository userRepository;
 
@@ -25,6 +29,9 @@ public class AlertServiceImpl implements AlertService {
         this.searchService = searchService;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void subscribeUser(Search search) {
         try{
@@ -38,7 +45,7 @@ public class AlertServiceImpl implements AlertService {
             }
 
         }catch (DataAccessException e){
-            e.printStackTrace();
+            LOGGER.error(e);
             throw new UserAlreadyExistsException("Something went wrong in the User Repository, while subscribing");
         }
     }

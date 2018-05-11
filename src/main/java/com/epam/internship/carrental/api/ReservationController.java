@@ -1,5 +1,6 @@
 package com.epam.internship.carrental.api;
 
+import com.epam.internship.carrental.CarrentalApplication;
 import com.epam.internship.carrental.service.reservation.ReservationServiceImpl;
 import com.epam.internship.carrental.service.reservation.ReservationVO;
 import com.epam.internship.carrental.service.reservation.exception.ReservationNotFoundException;
@@ -7,6 +8,8 @@ import com.epam.internship.carrental.service.reservation.exception.ReservationOp
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,12 +20,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * ReservationController provides a REST API endpoint for managing the Reservation repository.
+ * ReservationController provides a REST API endpoint for managing reservations.
  */
 @Api(tags = "Rental Controls")
 @Controller
 @RequestMapping(path = "/api/v1/reservation")
 public class ReservationController {
+    private static final Logger LOGGER = LogManager.getLogger(CarrentalApplication.class);
+
 
     private static final String AUTH_HEADER = "Token ";
     private static final String AUTH_TOKEN = AUTH_HEADER + "employee_token";
@@ -60,10 +65,10 @@ public class ReservationController {
 
         HttpStatus httpStatus;
         try {
-            rentedCarService.bookCarRental(reservationVO);
+            rentedCarService.bookCarReservation(reservationVO);
             httpStatus = HttpStatus.OK;
         } catch (ReservationOperationException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
             httpStatus = HttpStatus.FORBIDDEN;
         }
         return new ResponseEntity(httpStatus);
@@ -91,10 +96,10 @@ public class ReservationController {
             return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
         try {
-            rentedCarService.endCarRental(id);
+            rentedCarService.endCarReservation(id);
             httpStatus = HttpStatus.OK;
         } catch (ReservationNotFoundException | ReservationOperationException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
             httpStatus = HttpStatus.FORBIDDEN;
         }
 
@@ -125,10 +130,10 @@ public class ReservationController {
             return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
         try {
-            rentedCarService.modifyCarRental(id, reservationVO);
+            rentedCarService.modifyCarReservation(id, reservationVO);
             httpStatus = HttpStatus.OK;
         } catch (ReservationNotFoundException | ReservationOperationException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
             httpStatus = HttpStatus.FORBIDDEN;
         }
 
@@ -171,7 +176,7 @@ public class ReservationController {
             reservations = rentedCarService.listAllCarRental(pageable);
             httpStatus = HttpStatus.OK;
         } catch (ReservationOperationException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
             httpStatus = HttpStatus.FORBIDDEN;
         }
 

@@ -9,11 +9,19 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.validation.constraints.NotNull;
 
+/**
+ * Criteria builder for Search database queries.
+ */
 public class SearchCriteriaBuilder {
 
     private SearchCriteriaBuilder() {
     }
 
+    /**
+     * Creates a query criteria which allows filtering by car maker.
+     * @param make email to filter by
+     * @return equal criteria
+     */
     public static Specification<Car> filterByMaker(@NotNull String make) {
         return new Specification<Car>() {
             @Override
@@ -26,6 +34,11 @@ public class SearchCriteriaBuilder {
         };
     }
 
+    /**
+     * Creates a query criteria which allows filtering by car model.
+     * @param model email to filter by
+     * @return like criteria
+     */
     public static Specification<Car> filterByModel(@NotNull String model) {
         return new Specification<Car>() {
             @Override
@@ -38,6 +51,11 @@ public class SearchCriteriaBuilder {
         };
     }
 
+    /**
+     * Creates a query criteria which allows filtering by carType.
+     * @param carType email to filter by
+     * @return equal criteria
+     */
     public static Specification<Car> filterByType(@NotNull Car.CarType carType) {
         return new Specification<Car>() {
             @Override
@@ -50,6 +68,11 @@ public class SearchCriteriaBuilder {
         };
     }
 
+    /**
+     * Creates a query criteria which allows filtering by number of seats.
+     * @param seats email to filter by
+     * @return equal criteria
+     */
     public static Specification<Car> filterBySeats(@NotNull int seats) {
         return new Specification<Car>() {
             @Override
@@ -62,6 +85,11 @@ public class SearchCriteriaBuilder {
         };
     }
 
+    /**
+     * Creates a query criteria which allows filtering by car's fuelUsage.
+     * @param fuelUsage email to filter by
+     * @return lower than criteria
+     */
     public static Specification<Car> filterByFuelUsage(@NotNull double fuelUsage) {
         return new Specification<Car>() {
             @Override
@@ -74,6 +102,11 @@ public class SearchCriteriaBuilder {
         };
     }
 
+    /**
+     * Creates a query criteria which allows filtering by gearbox.
+     * @param gearbox gearbox to filter by
+     * @return equal criteria
+     */
     public static Specification<Car> filterByGearbox(@NotNull Car.CarGearbox gearbox) {
         return new Specification<Car>() {
             @Override

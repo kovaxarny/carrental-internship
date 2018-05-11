@@ -1,9 +1,12 @@
 package com.epam.internship.carrental.service.search;
 
+import com.epam.internship.carrental.CarrentalApplication;
 import com.epam.internship.carrental.service.car.Car;
 import com.epam.internship.carrental.service.car.CarRepository;
 import com.epam.internship.carrental.service.car.CarToVOConverter;
 import com.epam.internship.carrental.service.car.CarVO;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
@@ -20,6 +23,7 @@ import static com.epam.internship.carrental.service.search.SearchCriteriaBuilder
 @Service
 @Qualifier("searchService")
 public class SearchServiceImpl implements SearchService {
+    private static final Logger LOGGER = LogManager.getLogger(CarrentalApplication.class);
 
     private final CarRepository carRepository;
 
@@ -32,7 +36,9 @@ public class SearchServiceImpl implements SearchService {
         this.searchRepository = searchRepository;
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Page<CarVO> searchCarsWithSpec(Search search, Pageable pageable) {
         Specification<Car> makeSpec = filterByMaker(search.getSearchedMake());
@@ -51,22 +57,28 @@ public class SearchServiceImpl implements SearchService {
                     .and(typeSpec), pageable)
                     .map(CarToVOConverter::carViewObjectFromCar);
         } catch (DataAccessException e) {
-            e.printStackTrace();
-            throw new SearchOperationException("Something went wrong with searching");
+            LOGGER.error(e);
+            throw new SearchOperationException("Something went wrong with searching while searching with specs, and paging");
         }
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void saveSearchInformation(Search search) {
         try {
             searchRepository.save(search);
         } catch (DataAccessException e) {
-            e.printStackTrace();
-            throw new SearchOperationException("Something went wrong with searching");
+            LOGGER.error(e);
+            throw new SearchOperationException("Something went wrong with searching while saving search info");
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<CarVO> searchCarsWithSpecList(Search search) {
         Specification<Car> makeSpec = filterByMaker(search.getSearchedMake());
@@ -89,8 +101,8 @@ public class SearchServiceImpl implements SearchService {
             }
             return carVOList;
         } catch (DataAccessException e) {
-            e.printStackTrace();
-            throw new SearchOperationException("Something went wrong with searching");
+            LOGGER.error(e);
+            throw new SearchOperationException("Something went wrong with searching with specs");
         }
     }
 }

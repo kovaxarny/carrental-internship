@@ -19,13 +19,13 @@ public class ReservationUtil {
      * @return modified Rented Car
      */
     public static Reservation modifyRentedCar(@NotNull Reservation modifiableReservation, @NotNull Reservation paramsReservation){
-        if (!paramsReservation.getCarId().equals(null)){
+        if (paramsReservation.getCarId() != null){
             modifiableReservation.setCarId(paramsReservation.getCarId());
         }
-        if (!paramsReservation.getEndOfRental().equals(null)){
+        if (paramsReservation.getEndOfRental() != null){
             modifiableReservation.setEndOfRental(paramsReservation.getEndOfRental());
         }
-        if (!paramsReservation.getStartOfRental().equals(null)){
+        if (paramsReservation.getStartOfRental() != null){
             modifiableReservation.setStartOfRental(paramsReservation.getStartOfRental());
         }
         return modifiableReservation;

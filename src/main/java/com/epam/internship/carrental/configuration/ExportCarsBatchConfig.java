@@ -22,6 +22,9 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Configuration class for a Job which exports all cars to a CSV file.
+ */
 @Configuration
 @EnableBatchProcessing
 public class ExportCarsBatchConfig {
@@ -40,7 +43,7 @@ public class ExportCarsBatchConfig {
         JdbcCursorItemReader<Car> cursorItemReader = new JdbcCursorItemReader<>();
         cursorItemReader.setDataSource(dataSource);
         cursorItemReader.setSql("SELECT id,make,model,car_type,fuel_usage,gearbox,seats FROM db_car_test.car");
-        cursorItemReader.setRowMapper(new CarRowMapper<Car>());
+        cursorItemReader.setRowMapper(new CarRowMapper());
         return cursorItemReader;
     }
 
@@ -85,7 +88,7 @@ public class ExportCarsBatchConfig {
                 .build();
     }
 
-    private class CarRowMapper<T> implements RowMapper<Car> {
+    private class CarRowMapper implements RowMapper<Car> {
         @Override
         public Car mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
             return Car.builder()

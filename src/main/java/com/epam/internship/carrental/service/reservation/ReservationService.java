@@ -12,21 +12,21 @@ public interface ReservationService {
      *
      * @param reservationVO     the insertable reservationVO
      */
-    void bookCarRental(ReservationVO reservationVO);
+    void bookCarReservation(ReservationVO reservationVO);
 
     /**
      * Deletes a record form the Reservation database.
      *
      * @param id            id of the removable record
      */
-    void endCarRental(Long id);
+    void endCarReservation(Long id);
 
     /**
      * Modifies a record in the Reservation database.
      *
      * @param id modifiable rented car records is
      */
-    ReservationVO modifyCarRental(Long id, ReservationVO reservationVO);
+    ReservationVO modifyCarReservation(Long id, ReservationVO reservationVO);
 
 
 

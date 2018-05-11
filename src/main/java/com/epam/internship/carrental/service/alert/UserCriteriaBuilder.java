@@ -8,11 +8,19 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.validation.constraints.NotNull;
 
+/**
+ * CriteriaBuilder class for querying the users.
+ */
 public class UserCriteriaBuilder {
 
     private UserCriteriaBuilder() {
     }
 
+    /**
+     * Creates a query criteria which allows filtering by user's email address.
+     * @param email email to filter by
+     * @return equal criteria
+     */
     public static Specification<User> filterByUserEmail(@NotNull String email) {
         return new Specification<User>() {
             @Override
