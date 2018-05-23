@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * ReservationController provides a REST API endpoint for managing reservations.
  */
-@Api(tags = "Rental Controls")
+@Api(tags = "Reservation Controls")
 @Controller
 @RequestMapping(path = "/api/v1/reservation")
 public class ReservationController {
@@ -35,7 +35,7 @@ public class ReservationController {
     /**
      * Stores and instance of a ReservationService.
      */
-    private ReservationServiceImpl rentedCarService;
+    private ReservationServiceImpl reservationService;
 
     /**
      * Autowired constructor for the class.
@@ -44,11 +44,11 @@ public class ReservationController {
      */
     @Autowired
     public ReservationController(final ReservationServiceImpl reservationService) {
-        this.rentedCarService = reservationService;
+        this.reservationService = reservationService;
     }
 
     /**
-     * Provides endpoint for renting a Car.
+     * Provides endpoint for reserving a Car.
      * Available to authorized users only
      * <pre>
      *     Method PUT
@@ -61,11 +61,11 @@ public class ReservationController {
      */
     @PutMapping(path = "/reserve", consumes = "application/json")
     public @ResponseBody
-    ResponseEntity bookCarRental(@RequestBody final ReservationVO reservationVO) {
+    ResponseEntity bookReservation(@RequestBody final ReservationVO reservationVO) {
 
         HttpStatus httpStatus;
         try {
-            rentedCarService.bookCarReservation(reservationVO);
+            reservationService.bookCarReservation(reservationVO);
             httpStatus = HttpStatus.OK;
         } catch (ReservationOperationException e) {
             LOGGER.error(e);
@@ -89,14 +89,14 @@ public class ReservationController {
      */
     @PostMapping(path = "/end/{id}")
     public @ResponseBody
-    ResponseEntity endCarRentalWithAuthorization(@PathVariable final Long id,
-                                                 @RequestHeader("Authorization") final String authorization) {
+    ResponseEntity endReservationWithAuthorization(@PathVariable final Long id,
+                                                   @RequestHeader("Authorization") final String authorization) {
         HttpStatus httpStatus;
         if (!authorization.equals(AUTH_TOKEN)) {
             return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
         try {
-            rentedCarService.endCarReservation(id);
+            reservationService.endCarReservation(id);
             httpStatus = HttpStatus.OK;
         } catch (ReservationNotFoundException | ReservationOperationException e) {
             LOGGER.error(e);
@@ -107,7 +107,7 @@ public class ReservationController {
     }
 
     /**
-     * Provides endpoint for modifying a rent's parameters defined in the request body.
+     * Provides endpoint for modifying a reservations parameters defined in the request body.
      * Available to authorized users only
      * <pre>
      *     Method POST
@@ -122,15 +122,15 @@ public class ReservationController {
      */
     @PostMapping(path = "/modify/{id}", consumes = "application/json")
     public @ResponseBody
-    ResponseEntity modifyCarRentalWithAuthorization(@PathVariable final Long id,
-                                                    @RequestBody final ReservationVO reservationVO,
-                                                    @RequestHeader("Authorization") final String authorization) {
+    ResponseEntity modifyReservationWithAuthorization(@PathVariable final Long id,
+                                                      @RequestBody final ReservationVO reservationVO,
+                                                      @RequestHeader("Authorization") final String authorization) {
         HttpStatus httpStatus;
         if (!authorization.equals(AUTH_TOKEN)) {
             return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
         try {
-            rentedCarService.modifyCarReservation(id, reservationVO);
+            reservationService.modifyCarReservation(id, reservationVO);
             httpStatus = HttpStatus.OK;
         } catch (ReservationNotFoundException | ReservationOperationException e) {
             LOGGER.error(e);
@@ -141,7 +141,7 @@ public class ReservationController {
     }
 
     /**
-     * Provides endpoint for listing all rented Car.
+     * Provides endpoint for listing all Reservations.
      * Available to authorized users only
      * <pre>
      *     Method GET
@@ -151,7 +151,7 @@ public class ReservationController {
      *
      * @param pageable      standard paging parameters in the request
      * @param authorization authorization token from the header of the request
-     * @return ResponseEntity containing Page of RentedCars with Response Code 200 on success, or 403 if unauthorized
+     * @return ResponseEntity containing Page of Reservations with Response Code 200 on success, or 403 if unauthorized
      */
     @GetMapping(path = "/reservations")
     @ApiImplicitParams({
@@ -165,15 +165,15 @@ public class ReservationController {
                             "Multiple sort criteria are supported.")
     })
     public @ResponseBody
-    ResponseEntity<Page<ReservationVO>> listAllCarRentalWithAuthorization(@PageableDefault final Pageable pageable,
-                                                                          @RequestHeader("Authorization") final String authorization) {
+    ResponseEntity<Page<ReservationVO>> listAllReservationWithAuthorization(@PageableDefault final Pageable pageable,
+                                                                            @RequestHeader("Authorization") final String authorization) {
         HttpStatus httpStatus;
         Page<ReservationVO> reservations = null;
         if (!authorization.equals(AUTH_TOKEN)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         try {
-            reservations = rentedCarService.listAllCarRental(pageable);
+            reservations = reservationService.listAllReservation(pageable);
             httpStatus = HttpStatus.OK;
         } catch (ReservationOperationException e) {
             LOGGER.error(e);

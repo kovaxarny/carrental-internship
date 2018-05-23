@@ -13,17 +13,17 @@ public @Data
 @AllArgsConstructor
 class ReservationVO {
     /**
-     * The rented car's ID.
+     * The reserved car's ID.
      */
     private Long carId;
 
     /**
-     * The date when the rent of the car begins.
+     * The date when the reservation of the car begins.
      */
-    private Date startOfRental;
+    private Date startOfReservation;
 
     /**
-     * The date when the rent ends.
+     * The date when the reservation ends.
      */
-    private Date endOfRental;
+    private Date endOfReservation;
 }

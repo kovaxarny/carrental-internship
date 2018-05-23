@@ -18,7 +18,7 @@ import java.util.Optional;
  * Implementation of the {@link ReservationService} interface.
  */
 @Service
-@Qualifier("rentedCarService")
+@Qualifier("reservationService")
 public class ReservationServiceImpl implements ReservationService {
     private static final Logger LOGGER = LogManager.getLogger(CarrentalApplication.class);
 
@@ -35,7 +35,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public void bookCarReservation(final ReservationVO reservationVO) {
         try {
-            reservationRepository.save(ReservationToVOConverter.rentedCarFromRentedCarViewObject(reservationVO));
+            reservationRepository.save(ReservationToVOConverter.reservationFromReservationVO(reservationVO));
         } catch (DataAccessException e) {
             LOGGER.error(e);
             throw new ReservationOperationException("Something went wrong in the Reservation Repository while booking");
@@ -47,14 +47,14 @@ public class ReservationServiceImpl implements ReservationService {
      */
     @Override
     public void endCarReservation(final Long id) {
-        Optional<Reservation> optionalRentedCar;
+        Optional<Reservation> optionalReservation;
         try {
-            optionalRentedCar = reservationRepository.findById(id);
+            optionalReservation = reservationRepository.findById(id);
         } catch (DataAccessException e) {
             LOGGER.error(e);
-            throw new ReservationOperationException("Something went wrong in the Reservation Repository while ending rental");
+            throw new ReservationOperationException("Something went wrong in the Reservation Repository while ending reservation");
         }
-        if (!optionalRentedCar.isPresent()) {
+        if (!optionalReservation.isPresent()) {
             throw new ReservationNotFoundException("No reservation found");
         }
         reservationRepository.deleteById(id);
@@ -66,20 +66,20 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public ReservationVO modifyCarReservation(final Long id,
                                               final ReservationVO reservationVO) {
-        Optional<Reservation> optionalRentedCar;
+        Optional<Reservation> optionalReservation;
         try {
-            optionalRentedCar = reservationRepository.findById(id);
+            optionalReservation = reservationRepository.findById(id);
         } catch (DataAccessException e) {
             LOGGER.error(e);
-            throw new ReservationOperationException("Something went wrong in the Reservation Repository while modifying rental");
+            throw new ReservationOperationException("Something went wrong in the Reservation Repository while modifying reservation");
         }
-        if (!optionalRentedCar.isPresent()) {
+        if (!optionalReservation.isPresent()) {
             throw new ReservationNotFoundException("Given reservation not found");
         }
-        Reservation modifiableReservation = optionalRentedCar.get();
-        Reservation updatedReservation = ReservationToVOConverter.rentedCarFromRentedCarViewObject(reservationVO);
-        Reservation modifiedReservation = ReservationUtil.modifyRentedCar(modifiableReservation, updatedReservation);
-        return ReservationToVOConverter.rentedCarViewObjectFromRentedCar(reservationRepository.save(modifiedReservation));
+        Reservation modifiableReservation = optionalReservation.get();
+        Reservation updatedReservation = ReservationToVOConverter.reservationFromReservationVO(reservationVO);
+        Reservation modifiedReservation = ReservationUtil.modifyReservation(modifiableReservation, updatedReservation);
+        return ReservationToVOConverter.reservationVOFromReservation(reservationRepository.save(modifiedReservation));
 
     }
 
@@ -87,13 +87,13 @@ public class ReservationServiceImpl implements ReservationService {
      * {@inheritDoc}
      */
     @Override
-    public Page<ReservationVO> listAllCarRental(final Pageable pageable) {
+    public Page<ReservationVO> listAllReservation(final Pageable pageable) {
         try {
             return reservationRepository.findAll(pageable)
-                    .map(ReservationToVOConverter::rentedCarViewObjectFromRentedCar);
+                    .map(ReservationToVOConverter::reservationVOFromReservation);
         } catch (DataAccessException e) {
             LOGGER.error(e);
-            throw new ReservationOperationException("Something went wrong in the Reservation Repository while getting rentals");
+            throw new ReservationOperationException("Something went wrong in the Reservation Repository while getting the reservations");
         }
     }
 }
