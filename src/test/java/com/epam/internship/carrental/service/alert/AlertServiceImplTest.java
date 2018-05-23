@@ -5,6 +5,8 @@ import com.epam.internship.carrental.service.car.CarRepository;
 import com.epam.internship.carrental.service.search.Search;
 import com.epam.internship.carrental.service.search.SearchRepository;
 import com.epam.internship.carrental.service.search.SearchServiceImpl;
+import com.epam.internship.carrental.service.user.User;
+import com.epam.internship.carrental.service.user.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

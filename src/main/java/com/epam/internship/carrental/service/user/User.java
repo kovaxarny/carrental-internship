@@ -1,4 +1,4 @@
-package com.epam.internship.carrental.service.alert;
+package com.epam.internship.carrental.service.user;
 
 import lombok.*;
 

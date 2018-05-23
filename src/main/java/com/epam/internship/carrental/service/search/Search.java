@@ -1,6 +1,6 @@
 package com.epam.internship.carrental.service.search;
 
-import com.epam.internship.carrental.service.alert.User;
+import com.epam.internship.carrental.service.user.User;
 import com.epam.internship.carrental.service.car.Car;
 import lombok.*;
 

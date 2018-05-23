@@ -1,4 +1,4 @@
-package com.epam.internship.carrental.service.alert;
+package com.epam.internship.carrental.service.user;
 
 public class UserAlreadyExistsException  extends RuntimeException{
     private final String exceptionMsg;

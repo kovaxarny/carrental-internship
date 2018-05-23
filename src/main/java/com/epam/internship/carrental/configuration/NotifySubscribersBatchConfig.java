@@ -1,7 +1,7 @@
 package com.epam.internship.carrental.configuration;
 
-import com.epam.internship.carrental.service.alert.User;
-import com.epam.internship.carrental.service.alert.UserRepository;
+import com.epam.internship.carrental.service.user.User;
+import com.epam.internship.carrental.service.user.UserRepository;
 import com.epam.internship.carrental.service.car.Car;
 import com.epam.internship.carrental.service.car.CarVO;
 import com.epam.internship.carrental.service.search.Search;

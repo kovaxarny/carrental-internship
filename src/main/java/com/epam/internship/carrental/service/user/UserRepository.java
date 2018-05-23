@@ -1,5 +1,6 @@
-package com.epam.internship.carrental.service.alert;
+package com.epam.internship.carrental.service.user;
 
+import com.epam.internship.carrental.service.user.User;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
