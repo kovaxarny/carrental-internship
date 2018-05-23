@@ -284,9 +284,9 @@ public class CarController {
     @ApiOperation(value = "", tags = "Car Modification")
     @PostMapping(path = "/update/{carId}", consumes = "application/json")
     public @ResponseBody
-    ResponseEntity<CarVO> updateCarByGivenParametersWithAuthorization(@PathVariable final Long carId,
-                                                                      @RequestBody final CarVO newCarParams,
-                                                                      @RequestHeader("Authorization") final String authorization) {
+    ResponseEntity<CarVO> updateCarByParametersWithAuthorization(@PathVariable final Long carId,
+                                                                 @RequestBody final CarVO newCarParams,
+                                                                 @RequestHeader("Authorization") final String authorization) {
         HttpStatus httpStatus;
         CarVO carVO = null;
         if (!authorization.equals(AUTH_TOKEN)) {
