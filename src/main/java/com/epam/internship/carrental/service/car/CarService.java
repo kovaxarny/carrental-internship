@@ -52,7 +52,6 @@ public interface CarService {
      * Inserts a new Car into the database
      *
      * @param carVO           CarVO object to be added to the database
-     * @return The inserted CarVO
      */
     void insertNewCar(CarVO carVO);
 

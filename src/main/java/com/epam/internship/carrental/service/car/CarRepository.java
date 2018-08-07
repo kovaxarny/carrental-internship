@@ -2,6 +2,7 @@ package com.epam.internship.carrental.service.car;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Repository;
  * Interface to access the database of cars.
  */
 @Repository
-public interface CarRepository extends PagingAndSortingRepository<Car, Long> {
+public interface CarRepository extends PagingAndSortingRepository<Car, Long>, JpaSpecificationExecutor<Car> {
 
     /**
      * The query retrieves all cars made by the maker specified in the parameter.

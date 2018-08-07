@@ -1,5 +1,6 @@
 package com.epam.internship.carrental.api;
 
+import com.epam.internship.carrental.CarrentalApplication;
 import com.epam.internship.carrental.service.car.CarServiceImpl;
 import com.epam.internship.carrental.service.car.CarVO;
 import com.epam.internship.carrental.service.car.exception.CarAlreadyExistsException;
@@ -8,6 +9,8 @@ import com.epam.internship.carrental.service.car.exception.CarOperationException
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,11 +21,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * CarController providing a REST API endpoints.
+ * CarController providing REST API endpoints for managing cars.
  */
 @Controller
 @RequestMapping(path = "/api/v1/car")
 public class CarController {
+    private static final Logger LOGGER = LogManager.getLogger(CarrentalApplication.class);
 
     private static final String AUTH_HEADER = "Token ";
     private static final String AUTH_TOKEN = AUTH_HEADER + "token";
@@ -75,6 +79,7 @@ public class CarController {
             page = carService.getAllCars(pageable);
             httpStatus = HttpStatus.OK;
         } catch (CarOperationException e) {
+            LOGGER.error(e);
             httpStatus = HttpStatus.FORBIDDEN;
         }
         return new ResponseEntity<>(page, httpStatus);
@@ -102,6 +107,7 @@ public class CarController {
             iterable = carService.getCarsByMake(make);
             httpStatus = HttpStatus.OK;
         } catch (CarOperationException e) {
+            LOGGER.error(e);
             httpStatus = HttpStatus.FORBIDDEN;
         }
         return new ResponseEntity<>(iterable, httpStatus);
@@ -139,6 +145,7 @@ public class CarController {
             page = carService.getAllFreeCars(pageable);
             httpStatus = HttpStatus.OK;
         } catch (CarOperationException e) {
+            LOGGER.error(e);
             httpStatus = HttpStatus.FORBIDDEN;
         }
         return new ResponseEntity<>(page, httpStatus);
@@ -172,7 +179,7 @@ public class CarController {
             carService.insertNewCar(carVO);
             httpStatus = HttpStatus.OK;
         } catch (CarAlreadyExistsException | CarOperationException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
             httpStatus = HttpStatus.FORBIDDEN;
         }
         return new ResponseEntity(httpStatus);
@@ -216,7 +223,7 @@ public class CarController {
             page = carService.getAllFreeCars(pageable);
             httpStatus = HttpStatus.OK;
         } catch (CarOperationException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
             httpStatus = HttpStatus.FORBIDDEN;
         }
 
@@ -251,7 +258,7 @@ public class CarController {
             carVO = carService.getCarById(carId);
             httpStatus = HttpStatus.OK;
         } catch (CarNotFoundException | CarOperationException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
             httpStatus = HttpStatus.FORBIDDEN;
         }
 
@@ -277,9 +284,9 @@ public class CarController {
     @ApiOperation(value = "", tags = "Car Modification")
     @PostMapping(path = "/update/{carId}", consumes = "application/json")
     public @ResponseBody
-    ResponseEntity<CarVO> updateCarByGivenParametersWithAuthorization(@PathVariable final Long carId,
-                                                                      @RequestBody final CarVO newCarParams,
-                                                                      @RequestHeader("Authorization") final String authorization) {
+    ResponseEntity<CarVO> updateCarByParametersWithAuthorization(@PathVariable final Long carId,
+                                                                 @RequestBody final CarVO newCarParams,
+                                                                 @RequestHeader("Authorization") final String authorization) {
         HttpStatus httpStatus;
         CarVO carVO = null;
         if (!authorization.equals(AUTH_TOKEN)) {
@@ -289,7 +296,7 @@ public class CarController {
             carVO = carService.updateCarWithParameters(carId, newCarParams);
             httpStatus = HttpStatus.OK;
         } catch (CarNotFoundException | CarOperationException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
             httpStatus = HttpStatus.FORBIDDEN;
         }
         return new ResponseEntity<>(carVO, httpStatus);
