@@ -27,20 +27,20 @@ class Reservation {
     private Long id;
 
     /**
-     * The rented car's ID.
+     * The reserved car's ID.
      */
     @Column(nullable = false)
     private Long carId;
 
     /**
-     * The date when the rent of the car begins.
+     * The date when the reservation of the car begins.
      */
     @Column(nullable = false)
-    private Date startOfRental;
+    private Date startOfReservation;
 
     /**
-     * The date when the rent ends.
+     * The date when the reservation ends.
      */
     @Column(nullable = false)
-    private Date endOfRental;
+    private Date endOfReservation;
 }

@@ -39,8 +39,8 @@ public class ReservationControllerTest {
 
         reservationVOJSONObject = new JSONObject();
         reservationVOJSONObject.put("carId", 1);
-        reservationVOJSONObject.put("startOfRental", date.getTime());
-        reservationVOJSONObject.put("endOfRental", date.getTime());
+        reservationVOJSONObject.put("startOfReservation", date.getTime());
+        reservationVOJSONObject.put("endOfReservation", date.getTime());
     }
 
     @Test

@@ -17,11 +17,11 @@ public final class ReservationToVOConverter {
      * @param reservationVO ReservationVO to be converted
      * @return converted Reservation
      */
-    public static Reservation rentedCarFromRentedCarViewObject(@NotNull final ReservationVO reservationVO){
+    public static Reservation reservationFromReservationVO(@NotNull final ReservationVO reservationVO){
         return Reservation.builder()
                 .carId(reservationVO.getCarId())
-                .startOfRental(reservationVO.getStartOfRental())
-                .endOfRental(reservationVO.getEndOfRental())
+                .startOfReservation(reservationVO.getStartOfReservation())
+                .endOfReservation(reservationVO.getEndOfReservation())
                 .build();
     }
 
@@ -31,11 +31,11 @@ public final class ReservationToVOConverter {
      * @param reservation Reservation to be converted
      * @return converted ReservationVO
      */
-    public static ReservationVO rentedCarViewObjectFromRentedCar(@NotNull final Reservation reservation){
+    public static ReservationVO reservationVOFromReservation(@NotNull final Reservation reservation){
         return ReservationVO.builder()
                 .carId(reservation.getCarId())
-                .startOfRental(reservation.getStartOfRental())
-                .endOfRental(reservation.getEndOfRental())
+                .startOfReservation(reservation.getStartOfReservation())
+                .endOfReservation(reservation.getEndOfReservation())
                 .build();
     }
 }

@@ -1,5 +1,6 @@
 package com.epam.internship.carrental.api;
 
+import com.epam.internship.carrental.CarrentalApplication;
 import com.epam.internship.carrental.service.reservation.ReservationServiceImpl;
 import com.epam.internship.carrental.service.reservation.ReservationVO;
 import com.epam.internship.carrental.service.reservation.exception.ReservationNotFoundException;
@@ -7,6 +8,8 @@ import com.epam.internship.carrental.service.reservation.exception.ReservationOp
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,12 +20,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * ReservationController provides a REST API endpoint for managing the Reservation repository.
+ * ReservationController provides a REST API endpoint for managing reservations.
  */
-@Api(tags = "Rental Controls")
+@Api(tags = "Reservation Controls")
 @Controller
 @RequestMapping(path = "/api/v1/reservation")
 public class ReservationController {
+    private static final Logger LOGGER = LogManager.getLogger(CarrentalApplication.class);
+
 
     private static final String AUTH_HEADER = "Token ";
     private static final String AUTH_TOKEN = AUTH_HEADER + "employee_token";
@@ -30,7 +35,7 @@ public class ReservationController {
     /**
      * Stores and instance of a ReservationService.
      */
-    private ReservationServiceImpl rentedCarService;
+    private ReservationServiceImpl reservationService;
 
     /**
      * Autowired constructor for the class.
@@ -39,11 +44,11 @@ public class ReservationController {
      */
     @Autowired
     public ReservationController(final ReservationServiceImpl reservationService) {
-        this.rentedCarService = reservationService;
+        this.reservationService = reservationService;
     }
 
     /**
-     * Provides endpoint for renting a Car.
+     * Provides endpoint for reserving a Car.
      * Available to authorized users only
      * <pre>
      *     Method PUT
@@ -56,14 +61,14 @@ public class ReservationController {
      */
     @PutMapping(path = "/reserve", consumes = "application/json")
     public @ResponseBody
-    ResponseEntity bookCarRental(@RequestBody final ReservationVO reservationVO) {
+    ResponseEntity bookReservation(@RequestBody final ReservationVO reservationVO) {
 
         HttpStatus httpStatus;
         try {
-            rentedCarService.bookCarRental(reservationVO);
+            reservationService.bookCarReservation(reservationVO);
             httpStatus = HttpStatus.OK;
         } catch (ReservationOperationException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
             httpStatus = HttpStatus.FORBIDDEN;
         }
         return new ResponseEntity(httpStatus);
@@ -84,17 +89,17 @@ public class ReservationController {
      */
     @PostMapping(path = "/end/{id}")
     public @ResponseBody
-    ResponseEntity endCarRentalWithAuthorization(@PathVariable final Long id,
-                                                 @RequestHeader("Authorization") final String authorization) {
+    ResponseEntity endReservationWithAuthorization(@PathVariable final Long id,
+                                                   @RequestHeader("Authorization") final String authorization) {
         HttpStatus httpStatus;
         if (!authorization.equals(AUTH_TOKEN)) {
             return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
         try {
-            rentedCarService.endCarRental(id);
+            reservationService.endCarReservation(id);
             httpStatus = HttpStatus.OK;
         } catch (ReservationNotFoundException | ReservationOperationException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
             httpStatus = HttpStatus.FORBIDDEN;
         }
 
@@ -102,7 +107,7 @@ public class ReservationController {
     }
 
     /**
-     * Provides endpoint for modifying a rent's parameters defined in the request body.
+     * Provides endpoint for modifying a reservations parameters defined in the request body.
      * Available to authorized users only
      * <pre>
      *     Method POST
@@ -117,18 +122,18 @@ public class ReservationController {
      */
     @PostMapping(path = "/modify/{id}", consumes = "application/json")
     public @ResponseBody
-    ResponseEntity modifyCarRentalWithAuthorization(@PathVariable final Long id,
-                                                    @RequestBody final ReservationVO reservationVO,
-                                                    @RequestHeader("Authorization") final String authorization) {
+    ResponseEntity modifyReservationWithAuthorization(@PathVariable final Long id,
+                                                      @RequestBody final ReservationVO reservationVO,
+                                                      @RequestHeader("Authorization") final String authorization) {
         HttpStatus httpStatus;
         if (!authorization.equals(AUTH_TOKEN)) {
             return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
         try {
-            rentedCarService.modifyCarRental(id, reservationVO);
+            reservationService.modifyCarReservation(id, reservationVO);
             httpStatus = HttpStatus.OK;
         } catch (ReservationNotFoundException | ReservationOperationException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
             httpStatus = HttpStatus.FORBIDDEN;
         }
 
@@ -136,7 +141,7 @@ public class ReservationController {
     }
 
     /**
-     * Provides endpoint for listing all rented Car.
+     * Provides endpoint for listing all Reservations.
      * Available to authorized users only
      * <pre>
      *     Method GET
@@ -146,7 +151,7 @@ public class ReservationController {
      *
      * @param pageable      standard paging parameters in the request
      * @param authorization authorization token from the header of the request
-     * @return ResponseEntity containing Page of RentedCars with Response Code 200 on success, or 403 if unauthorized
+     * @return ResponseEntity containing Page of Reservations with Response Code 200 on success, or 403 if unauthorized
      */
     @GetMapping(path = "/reservations")
     @ApiImplicitParams({
@@ -160,18 +165,18 @@ public class ReservationController {
                             "Multiple sort criteria are supported.")
     })
     public @ResponseBody
-    ResponseEntity<Page<ReservationVO>> listAllCarRentalWithAuthorization(@PageableDefault final Pageable pageable,
-                                                                          @RequestHeader("Authorization") final String authorization) {
+    ResponseEntity<Page<ReservationVO>> listAllReservationWithAuthorization(@PageableDefault final Pageable pageable,
+                                                                            @RequestHeader("Authorization") final String authorization) {
         HttpStatus httpStatus;
         Page<ReservationVO> reservations = null;
         if (!authorization.equals(AUTH_TOKEN)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         try {
-            reservations = rentedCarService.listAllCarRental(pageable);
+            reservations = reservationService.listAllReservation(pageable);
             httpStatus = HttpStatus.OK;
         } catch (ReservationOperationException e) {
-            e.printStackTrace();
+            LOGGER.error(e);
             httpStatus = HttpStatus.FORBIDDEN;
         }
 

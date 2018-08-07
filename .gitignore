@@ -9,6 +9,9 @@ logs/
 .project
 .settings
 .springBeans
+logs
+cars.csv
+dep.txt
 
 ### IntelliJ IDEA ###
 .idea

@@ -13,6 +13,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.Collections;
 
+/**
+ * Swagger configuration class.
+ */
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
@@ -30,7 +33,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfo(
                 "Carrental REST API",
-                "Managing a carrental company.",
+                "Managing a Car rental company.",
                 "API TOS",
                 "Terms of service",
                 new Contact("Arnold Szilveszter Kovacs", "www.mylittlecarrentalcompany.com", "email@company.com"),
